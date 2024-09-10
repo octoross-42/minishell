@@ -12,27 +12,19 @@
 # include<string.h>
 # include<stdlib.h>
 
-# define UNDEFINED 0
-# define QUOTE 1
-# define DOUBLE 2
-# define EXPAND 3
-# define PIPE 4
-# define INPUT 5
-# define OUTPUT 6
-# define HERE_DOC 7
-# define APPEND 8
-# define FILE 9
-# define CMD 10
-# define ARG 11
-# define AMPER 12
-# define ESP 13
-# define LPAR 14
-# define RPAR 15
+# define PIPE 1
+# define OR 2
+# define AND 3
+# define INPUT 4
+# define OUTPUT 5
+# define HERE_DOC 6
+# define APPEND 7
+# define CMD 8
 
 typedef struct s_lexer
 {
 	void			*data;
-	char			token;
+	char			*token;
 	int             pos;
 	int             cmd_pos;
 	struct	s_lexer	*next;

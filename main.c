@@ -12,6 +12,18 @@ int	allow_all(char *s, int val)
 
 int move_i(char *s, int i)
 {
+	if (s[i] && s[i + 1])
+	{
+		if (s[i + 2])
+		{
+			if (((s[i] == '|' && s[i + 1] == '|') || (s[i] == '&' &&
+				s[i + 1] == '&')) && (s[i + 2] != '&' && s[i + 2] != '|'))
+				return (2);
+			else if (((s[i] == '|' && s[i + 1] == '|') || (s[i] == '&' &&
+				s[i + 1] == '&')) && (s[i + 2] == '&' || s[i + 2] == '|'))
+				return (0);
+		}
+	}
 	if (s[i] == '>' || s[i] == '<' || s[i] == '|' )
 		return (1);
 	while (s[i] && s[i] != 32 && s[i] != '>' && s[i] != '|')
@@ -33,6 +45,8 @@ char    *get_data(char *s)
 
 	i = 0;
 	j = move_i(s, 0);
+	if (!j)
+		return (NULL);
 	new = malloc(j + 1);
 	if (!new)
 		return (NULL);
@@ -52,8 +66,8 @@ t_lexer *lex_new(void *cont, t_parse p)
 	if (!new)
 		return (NULL);
 	new->data = cont;
-	new->cmd_pos = p.cmd;
-	new->pos = p.pos;
+	new->cmd_pos = p.pos;
+	new->pos = p.cmd;
 	new->next = NULL;
 	return (new);
 }
@@ -95,6 +109,30 @@ t_parse incr_pars(int a, t_parse p)
 	return (p);
 }
 
+void	*error_lex(t_lexer **lex)
+{
+	t_lexer	*cur;
+	t_lexer	*next;
+
+	cur = *lex;
+	next = cur->next;
+	while (cur)
+	{
+		free(cur->data);
+		cur = cur->next;
+	}
+	cur = *lex;
+	while (next)
+	{
+		free(cur);
+		cur = next;
+		next = next->next;
+	}
+	free(cur);
+	free(lex);
+	return (NULL);
+}
+
 t_lexer **lex_values(char *s, t_lexer **lex)
 {
 	t_parse p;
@@ -106,8 +144,10 @@ t_lexer **lex_values(char *s, t_lexer **lex)
 		i ++;
 	while (s[i])
 	{
-		queue_lex(lex, lex_new(get_data(&s[i]), p));//add une fn qui free tout si fail
+		queue_lex(lex, lex_new(get_data(&s[i]), p));
 		i = i + move_i(&s[i], 0);
+		if (!lex_last(*lex)->data)
+			return (error_lex(lex));
 		if (s[i] == 0)
 			break ;
 		while (s[i] == ' ')
@@ -117,9 +157,38 @@ t_lexer **lex_values(char *s, t_lexer **lex)
 	return (lex);
 }
 
+t_lexer	**lex_assign(t_lexer **lex)
+{
+	t_lexer	*cur;
+
+	cur = *lex;
+	while (cur)
+	{
+		if (!(strcmp(cur->data, "<")))
+			cur->token = "INPUT";
+		else if (!(strcmp(cur->data, ">")))
+			cur->token = "OUTPUT";
+		else if (!(strcmp(cur->data, "|")))
+			cur->token = "PIPE";
+		else if (!(strcmp(cur->data, "&&")))
+			cur->token = "AND";
+		else if (!(strcmp(cur->data, "||")))
+			cur->token = "OR";
+		else if (!(strcmp(cur->data, ">>")))//vérifie ca stp je suis pas sûr
+			cur->token = "APPEND";
+		else if (!(strcmp(cur->data, "<<")))
+			cur->token = "HERE_DOC";
+		else
+			cur->token = "DATA";
+		cur = cur->next;
+	}
+	return (lex);
+}
+
 // void	print_all(t_lexer *test)
 // {
-// 	printf("content = $$%s$$\n", (char *)test->data);
+// 	printf("content = %s\n", (char *)test->data);
+// 	printf("token =  %s\n", test->token);
 // 	printf("numero de la commande = %d\n", test->pos);
 // 	printf("emplacement dans la commande = %d\n", test->cmd_pos);
 // 	printf("fin de la node\n\n");
@@ -131,14 +200,18 @@ t_lexer **lex_values(char *s, t_lexer **lex)
 
 // 	lex = malloc(8);
 // 	if (!lex)
-// 		exit (EXIT_FAILURE);
+// 		exit(EXIT_FAILURE);
 // 	*lex = NULL;
-// 	lex = lex_values("test av|ec des et des> et <", lex);
+// 	lex = lex_values("test'ceci' av||ec des et des> et <", lex);
+// 	if (!lex)
+// 		exit(EXIT_FAILURE);
+// 	lex = lex_assign(lex);
 // 	t_lexer	*test = *lex;
 // 	while (test)
 // 	{
 // 		print_all(test);
 // 		test = test->next;
 // 	}
+// 	error_lex(lex);
 // 	return (0);
 // }
