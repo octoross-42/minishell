@@ -144,7 +144,7 @@ t_lexer **lex_values(char *s, t_lexer **lex)
 		i ++;
 	while (s[i])
 	{
-		queue_lex(lex, lex_new(get_data(&s[i]), p));
+		queue_lex(lex, lex_new(get_data(&s[i]), p)); // modif ca, sujet à gros crash si lex_new fail malloc
 		i = i + move_i(&s[i], 0);
 		if (!lex_last(*lex)->data)
 			return (error_lex(lex));
