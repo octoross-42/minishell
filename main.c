@@ -217,7 +217,10 @@ t_lexer	**change_data(t_lexer **lex)
 	while(cur)
 	{
 		if (strcmp(cur->token, "DATA"))
+		{
+			free(cur->data);
 			cur->data = NULL;
+		}
 		cur = cur->next;
 	}
 	return (lex);
