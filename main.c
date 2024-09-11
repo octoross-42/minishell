@@ -1,5 +1,22 @@
 #include "cringishell.h"
 
+int	ft_strcmp(char *s1, char *s2)
+{
+	int	i;
+
+	i = 0;
+	while (s1[i] && s2[i])
+	{
+		if (s1[i] == s2[i])
+			i ++;
+		else
+			return (s1[i] - s2[i]);
+	}
+	if (!s1[i] && !s2[i])
+		return (0);
+	else
+		return (s1[i] - s2[i]);
+}
 int	allow_all(char *s, int val)
 {
 	int	i;
@@ -109,7 +126,7 @@ t_parse incr_pars(int a, t_parse p)
 	return (p);
 }
 
-void	*error_lex(t_lexer **lex)
+void	*error_lex(t_lexer **lex, int i)
 {
 	t_lexer	*cur;
 	t_lexer	*next;
@@ -130,12 +147,17 @@ void	*error_lex(t_lexer **lex)
 	}
 	free(cur);
 	free(lex);
+	if (i == 1)
+		write(2, "Malloc error when processing data\n", 34);
+	if (i == 2)
+		write(2, "Parsing error, bad input detected\n", 34);
 	return (NULL);
 }
 
 t_lexer **lex_values(char *s, t_lexer **lex)
 {
 	t_parse p;
+	t_lexer	*l;
 	int     i;
 
 	i = 0;
@@ -144,10 +166,13 @@ t_lexer **lex_values(char *s, t_lexer **lex)
 		i ++;
 	while (s[i])
 	{
-		queue_lex(lex, lex_new(get_data(&s[i]), p)); // modif ca, sujet à gros crash si lex_new fail malloc
+		l = lex_new(get_data(&s[i]), p);
+		if (!l)
+			return (error_lex(lex, 1));
+		queue_lex(lex, l);
 		i = i + move_i(&s[i], 0);
 		if (!lex_last(*lex)->data)
-			return (error_lex(lex));
+			return (error_lex(lex, 2));
 		if (s[i] == 0)
 			break ;
 		while (s[i] == ' ')
@@ -164,19 +189,19 @@ t_lexer	**lex_assign(t_lexer **lex)
 	cur = *lex;
 	while (cur)
 	{
-		if (!(strcmp(cur->data, "<")))
+		if (!(ft_strcmp(cur->data, "<")))
 			cur->token = "INPUT";
-		else if (!(strcmp(cur->data, ">")))
+		else if (!(ft_strcmp(cur->data, ">")))
 			cur->token = "OUTPUT";
-		else if (!(strcmp(cur->data, "|")))
+		else if (!(ft_strcmp(cur->data, "|")))
 			cur->token = "PIPE";
-		else if (!(strcmp(cur->data, "&&")))
+		else if (!(ft_strcmp(cur->data, "&&")))
 			cur->token = "AND";
-		else if (!(strcmp(cur->data, "||")))
+		else if (!(ft_strcmp(cur->data, "||")))
 			cur->token = "OR";
-		else if (!(strcmp(cur->data, ">>")))//vérifie ca stp je suis pas sûr
+		else if (!(ft_strcmp(cur->data, ">>")))//vérifie ca stp je suis pas sûr
 			cur->token = "APPEND";
-		else if (!(strcmp(cur->data, "<<")))
+		else if (!(ft_strcmp(cur->data, "<<")))
 			cur->token = "HERE_DOC";
 		else
 			cur->token = "DATA";
@@ -184,34 +209,48 @@ t_lexer	**lex_assign(t_lexer **lex)
 	}
 	return (lex);
 }
+t_lexer	**change_data(t_lexer **lex)
+{
+	t_lexer	*cur;
 
-// void	print_all(t_lexer *test)
-// {
-// 	printf("content = %s\n", (char *)test->data);
-// 	printf("token =  %s\n", test->token);
-// 	printf("numero de la commande = %d\n", test->pos);
-// 	printf("emplacement dans la commande = %d\n", test->cmd_pos);
-// 	printf("fin de la node\n\n");
-// }
+	cur = *lex;
+	while(cur)
+	{
+		if (strcmp(cur->token, "DATA"))
+			cur->data = NULL;
+		cur = cur->next;
+	}
+	return (lex);
+}
 
-// int main(void)
-// {
-// 	t_lexer **lex;
+void	print_all(t_lexer *test)
+{
+	printf("content = %s\n", (char *)test->data);
+	printf("token =  %s\n", test->token);
+	printf("numero de la commande = %d\n", test->pos);
+	printf("emplacement dans la commande = %d\n", test->cmd_pos);
+	printf("fin de la node\n\n");
+}
 
-// 	lex = malloc(8);
-// 	if (!lex)
-// 		exit(EXIT_FAILURE);
-// 	*lex = NULL;
-// 	lex = lex_values("test'ceci' av||ec des et des> et <", lex);
-// 	if (!lex)
-// 		exit(EXIT_FAILURE);
-// 	lex = lex_assign(lex);
-// 	t_lexer	*test = *lex;
-// 	while (test)
-// 	{
-// 		print_all(test);
-// 		test = test->next;
-// 	}
-// 	error_lex(lex);
-// 	return (0);
-// }
+int main(void)
+{
+	t_lexer **lex;
+
+	lex = malloc(8);
+	if (!lex)
+		exit(EXIT_FAILURE);
+	*lex = NULL;
+	lex = lex_values("test'ceci' av||ec des et des> et <", lex);
+	if (!lex)
+		exit(EXIT_FAILURE);
+	lex = lex_assign(lex);
+	lex = change_data(lex);
+	t_lexer	*test = *lex;
+	while (test)
+	{
+		print_all(test);
+		test = test->next;
+	}
+	lex = error_lex(lex, 0);
+	return (0);
+}
