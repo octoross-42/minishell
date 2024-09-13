@@ -23,6 +23,12 @@
 # define APPEND 7
 # define CMD 8
 
+// ERR_AST is never supposed to be print
+# define ERR_AST "Bad parsing happenned :(\n"
+# define ERR_MALLOC "malloc failed\n"
+
+# include "utils.h"
+
 typedef struct s_lexer
 {
 	void			*data;
@@ -30,13 +36,21 @@ typedef struct s_lexer
 	struct	s_lexer	*next;
 }	t_lexer;
 
-// AST tree
-typedef struct t_ast
+typedef struct s_ast
 {
 	int				token;
 	void			*data;
-	t_lexer_tree	*left;
-	t_lexer_tree	*right;
+	struct s_ast	*left;
+	struct s_ast	*right;
+	struct s_ast	*parent;
 }	t_ast;
+
+static t_ast	*ft_new_ast(t_lexer *lexer);
+bool			ft_cmd_token(t_ast *new, t_ast *current);
+bool			ft_is_redir(int token);
+bool			ft_redic_token(t_ast *new, t_ast *current, t_ast **top);
+bool			ft_is_fork(int token);
+bool			ft_fork_token(t_ast *new, t_ast *current, t_ast	**top);
+t_ast			*ft_ast(t_lexer *lexer);
 
 #endif
