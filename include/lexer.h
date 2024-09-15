@@ -14,6 +14,8 @@
 
 # define LEXER_H
 
+# include "utils.h"
+
 # define PIPE 1
 # define OR 2
 # define AND 3
@@ -25,9 +27,6 @@
 
 // ERR_AST is never supposed to be print
 # define ERR_AST "Bad parsing happenned :(\n"
-# define ERR_MALLOC "malloc failed\n"
-
-# include "utils.h"
 
 typedef struct s_lexer
 {
@@ -45,12 +44,13 @@ typedef struct s_ast
 	struct s_ast	*parent;
 }	t_ast;
 
-static t_ast	*ft_new_ast(t_lexer *lexer);
-bool			ft_cmd_token(t_ast *new, t_ast *current);
-bool			ft_is_redir(int token);
-bool			ft_redic_token(t_ast *new, t_ast *current, t_ast **top);
+bool			ft_is_output(int token);
+bool			ft_output_token(t_ast *new, t_ast **current, t_ast **top);
 bool			ft_is_fork(int token);
-bool			ft_fork_token(t_ast *new, t_ast *current, t_ast	**top);
+bool			ft_fork_token(t_ast *new, t_ast **current, t_ast **top);
+bool			ft_append_ast(t_ast *new, t_ast **current);
+bool			ft_add_ast(t_ast *new, t_ast **current, t_ast **top);
 t_ast			*ft_ast(t_lexer *lexer);
+void			ft_clear_ast(t_ast *ast);
 
 #endif

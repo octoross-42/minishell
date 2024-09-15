@@ -1,31 +1,25 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   token.c                                            :+:      :+:    :+:   */
+/*   dev.h                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: octoross <octoross@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/09/13 23:45:24 by octoross          #+#    #+#             */
-/*   Updated: 2024/09/13 23:45:44 by octoross         ###   ########.fr       */
+/*   Created: 2024/09/14 12:21:14 by octoross          #+#    #+#             */
+/*   Updated: 2024/09/15 20:07:54 by octoross         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-char	*ft_token_of(int token)
-{
-	if (token == PIPE)
-		return ("PIPE");
-	if (token == OR)
-		return ("OR");
-	if (token == AND)
-		return ("AND");
-	if (token == INPUT)
-		return ("INPUT");
-	if (token == OUTPUT)
-		return ("OUTPUT");
-	if (token == HERE_DOC)
-		return ("HERE_DOC");
-	if (token == APPEND)
-		return ("APPEND");
-	if (token == CMD)
-		return ("CMD");
-}
+#ifndef DEV_H
+
+# define DEV_H
+
+# include "lexer.h"
+# include <string.h>
+
+char	*str_of_token(int token);
+int		token_of_str(char *token);
+void	print_ast(t_ast *ast, int n);
+void	printf_lexer(t_lexer *lexer);
+
+#endif
