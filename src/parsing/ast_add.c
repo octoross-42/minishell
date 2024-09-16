@@ -6,7 +6,7 @@
 /*   By: octoross <octoross@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/13 16:26:57 by octoross          #+#    #+#             */
-/*   Updated: 2024/09/15 20:08:28 by octoross         ###   ########.fr       */
+/*   Updated: 2024/09/15 20:14:12 by octoross         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,8 +24,6 @@ bool	ft_append_ast(t_ast *new, t_ast **current)
 	*current = new;
 	return (true);
 }
-
-#include "dev.h"
 
 bool	ft_fork_token(t_ast *new, t_ast **current, t_ast	**top)
 {

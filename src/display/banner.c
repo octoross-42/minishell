@@ -6,7 +6,7 @@
 /*   By: octoross <octoross@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/15 20:41:51 by octoross          #+#    #+#             */
-/*   Updated: 2024/09/16 15:27:30 by octoross         ###   ########.fr       */
+/*   Updated: 2024/09/16 16:42:19 by octoross         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,5 +32,5 @@ void	ft_print_banner(void)
 	printf("\t\t▀      ▀ ▀ ▀    ▀▀ ▀ ▀▀▀▀▀▀ ▀    ▀  ▀▀▀▀ ▀▀▀▀ ▀▀▀▀\n");
 	printf("\t\t──────────────────────────────────────────────────\n");
 	printf("\t\t%sBy: jermarti                          %sBy: octoross%s\n\n",
-		BLUE, WHITE, END);
+		BLUE, CYAN, END);
 }

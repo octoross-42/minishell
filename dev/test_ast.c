@@ -1,6 +1,18 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   test_ast.c                                         :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: octoross <octoross@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/09/15 20:14:27 by octoross          #+#    #+#             */
+/*   Updated: 2024/09/15 20:40:26 by octoross         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "dev.h"
 
-int	profondeur_ast(t_ast * ast)
+int	profondeur_ast(t_ast *ast)
 {
 	int	left;
 	int	right;
@@ -34,28 +46,35 @@ t_lexer	*ft_lexerof(int token, void *data)
 
 int	main(int argc, char **argv)
 {
-	int	i;
+	int		i;
 	t_lexer	*lexer;
 	t_lexer	*next;
 	t_ast	*ast;
+	char	*data;
 
 	i = 1;
 	lexer = NULL;
-	while (2 *i < argc)
+	while (i < argc)
 	{
+		if (ft_is_fork(token_of_str(argv[i])))
+			data = NULL;
+		else
+			data = argv[i + 1];
 		if (!lexer)
 		{
-			lexer = ft_lexerof(atoi(argv[2 * i - 1]), argv[2 * i]);
+			lexer = ft_lexerof(token_of_str(argv[i]), data);
 			next = lexer;
 		}
 		else
 		{
-			next->next = ft_lexerof(atoi(argv[2 * i - 1]), argv[2 * i]);
+			next->next = ft_lexerof(token_of_str(argv[i]), data);
 			next = next->next;
 		}
+		if (data)
+			i ++;
 		i ++;
 	}
-	printf_lexer(lexer);
+	// printf_lexer(lexer);
 	ast = ft_ast(lexer);
 	while (lexer)
 	{
