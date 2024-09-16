@@ -1,25 +1,18 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   dev.h                                              :+:      :+:    :+:   */
+/*   exec.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: octoross <octoross@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/09/14 12:21:14 by octoross          #+#    #+#             */
-/*   Updated: 2024/09/16 20:50:02 by octoross         ###   ########.fr       */
+/*   Created: 2024/09/16 21:21:49 by octoross          #+#    #+#             */
+/*   Updated: 2024/09/16 21:22:12 by octoross         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef DEV_H
+#include "minishell.h"
 
-# define DEV_H
-
-# include "lexer.h"
-# include <string.h>
-
-char	*str_of_token(int token);
-int		token_of_str(char *token);
-void	print_ast(t_ast *ast, int n);
-void	print_lexer(t_lexer *lexer);
-
-#endif
+void	ft_exec_ast(t_minishell *minishell)
+{
+	
+}

@@ -6,7 +6,7 @@
 /*   By: octoross <octoross@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/09 15:25:03 by octoross          #+#    #+#             */
-/*   Updated: 2024/09/15 20:06:56 by octoross         ###   ########.fr       */
+/*   Updated: 2024/09/16 21:18:06 by octoross         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,14 +60,22 @@ t_ast	*ft_ast(t_lexer *lexer)
 	{
 		new = ft_new_ast(lexer);
 		if (!new)
-			return (NULL);
+		{
+			ft_clear_ast(top);
+			// TODO rajouter free lexer ici
+			exit(EXIT_FAILURE);
+		}
 		if (!top)
 		{
 			top = new;
 			current = new;
 		}
 		else if (!ft_add_ast(new, &current, &top))
-			return (ft_clear_ast(top), NULL);
+		{
+			ft_clear_ast(top);
+			// TODO rajouter free lexer ici
+			exit(EXIT_FAILURE);
+		}
 		lexer = lexer->next;
 	}
 	return (top);

@@ -6,7 +6,7 @@
 /*   By: octoross <octoross@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/15 20:52:10 by octoross          #+#    #+#             */
-/*   Updated: 2024/09/16 17:27:59 by octoross         ###   ########.fr       */
+/*   Updated: 2024/09/16 20:50:44 by octoross         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,11 +24,11 @@
 # define CYAN "\e[0;36m"
 # define WHITE "\e[0;37m"
 
-# define PATH_SIZE 4
+# define PATH_SIZE 4096
 
-# define ERR_GETCWD "Error: buffer size was not sufficient to allocate current working directory"
+# define ERR_GETCWD "(Error: buffer size was not sufficient \
+	 to allocate current working directory)"
 
 void	ft_print_banner(void);
-void	ft_input_minishell(void);
 
 #endif

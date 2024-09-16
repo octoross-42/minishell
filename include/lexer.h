@@ -32,7 +32,7 @@ typedef struct s_lexer
 {
 	void			*data;
 	char			token;
-	struct	s_lexer	*next;
+	struct s_lexer	*next;
 }	t_lexer;
 
 typedef struct s_ast

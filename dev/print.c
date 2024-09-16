@@ -6,13 +6,13 @@
 /*   By: octoross <octoross@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/15 20:00:54 by octoross          #+#    #+#             */
-/*   Updated: 2024/09/15 20:07:49 by octoross         ###   ########.fr       */
+/*   Updated: 2024/09/16 20:49:57 by octoross         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "dev.h"
 
-void	printf_lexer(t_lexer *lexer)
+void	print_lexer(t_lexer *lexer)
 {
 	while (lexer)
 	{

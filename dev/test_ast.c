@@ -6,7 +6,7 @@
 /*   By: octoross <octoross@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/15 20:14:27 by octoross          #+#    #+#             */
-/*   Updated: 2024/09/15 20:40:26 by octoross         ###   ########.fr       */
+/*   Updated: 2024/09/16 20:34:03 by octoross         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,7 +74,6 @@ int	main(int argc, char **argv)
 			i ++;
 		i ++;
 	}
-	// printf_lexer(lexer);
 	ast = ft_ast(lexer);
 	while (lexer)
 	{

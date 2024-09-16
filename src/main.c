@@ -6,7 +6,7 @@
 /*   By: octoross <octoross@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/15 20:51:11 by octoross          #+#    #+#             */
-/*   Updated: 2024/09/16 17:34:22 by octoross         ###   ########.fr       */
+/*   Updated: 2024/09/16 20:37:51 by octoross         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,20 +23,20 @@ void	ft_init_input(t_minishell *minishell)
 		exit(EXIT_FAILURE);
 	}
 	else if (!pid)
-		ft_input_minishell();
+		ft_input_minishell(minishell);
 	else
 	{
-		wait(NULL);
-		if (!minishell->exit)
-			ft_init_input(minishell);
+		while (wait(NULL) != -1)
+			;
+		ft_init_input(minishell);
 	}
 }
 
-void	ft_init_minishell(void)
+void	ft_init_minishell(char **envp)
 {
 	t_minishell	minishell;
 
-	minishell.exit = false;
+	minishell.envp = envp;
 	ft_init_input(&minishell);
 }
 
@@ -44,7 +44,7 @@ int	main(int argc, char **argv, char **envp)
 {
 	(void)argc;
 	(void)argv;
-	(void)envp;
 	ft_print_banner();
-	ft_init_minishell();
+	ft_init_minishell(envp);
+	return (0);
 }
