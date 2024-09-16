@@ -1,0 +1,7 @@
+{
+    libreadline
+    Memcheck:Leak
+    match-leak-kinds: reachable
+    ...
+    obj:*/libreadline.so.*
+}
