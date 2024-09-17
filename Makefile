@@ -2,6 +2,7 @@ NAME = minishell
 
 SRCS = src/parsing/ast/ast_add.c \
 		src/parsing/ast/ast.c \
+		src/parsing/token_is.c \
 		src/display/banner.c \
 		src/display/input.c \
 		src/execution/exec.c \
