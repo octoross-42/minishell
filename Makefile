@@ -4,6 +4,8 @@ SRCS = src/parsing/ast/ast_add.c \
 		src/parsing/ast/ast.c \
 		src/display/banner.c \
 		src/display/input.c \
+		src/execution/exec.c \
+		src/utils/libc.c \
 		src/utils/utils.c \
 		src/utils/split.c \
 		src/main.c \

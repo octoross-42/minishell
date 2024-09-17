@@ -6,7 +6,7 @@
 /*   By: octoross <octoross@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/09 20:34:55 by octoross          #+#    #+#             */
-/*   Updated: 2024/09/16 21:23:02 by octoross         ###   ########.fr       */
+/*   Updated: 2024/09/17 11:25:24 by octoross         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,10 +26,13 @@
 
 typedef struct s_minishell
 {
+	pid_t		last_pid;
 	char		**envp;
-	t_minishell	*ast;
+	char		**path;
+	t_ast		*ast;
 }	t_minishell;
 
 void	ft_input_minishell(t_minishell *minishell);
+void	ft_exec_line(t_minishell *minishell);
 
 #endif
