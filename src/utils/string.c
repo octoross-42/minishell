@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   libc.c                                             :+:      :+:    :+:   */
+/*   string.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: octoross <octoross@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/17 11:30:41 by octoross          #+#    #+#             */
-/*   Updated: 2024/09/17 11:31:20 by octoross         ###   ########.fr       */
+/*   Updated: 2024/09/19 20:49:06 by octoross         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,6 +22,24 @@ size_t	ft_strlen(const char *s)
 	while (s[len])
 		len ++;
 	return (len);
+}
+
+char	*ft_strncpy(char *restrict dst, const char *restrict src, size_t n)
+{
+	int	i;
+
+	if (!dst)
+		return (NULL);
+	if (!src)
+		return (dst);
+	i = 0;
+	while (src[i] && (i < n))
+	{
+		dst[i] = src[i];
+		i ++;
+	}
+	dst[i] = '\0';
+	return (dst);
 }
 
 char	*ft_strcpy(char *restrict dst, const char *restrict src)
@@ -68,6 +86,12 @@ int	ft_strcmp(const char *s1, char *s2)
 {
 	size_t	i;
 
+	if (!s1 && !s2)
+		return (0);
+	if (!s1)
+		return (s2[0]);
+	if (!s2)
+		return (s1[0]);
 	i = 0;
 	while (s1[i] && s1[i] == s2[i])
 		i ++;

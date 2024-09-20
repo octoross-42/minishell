@@ -6,7 +6,7 @@
 /*   By: octoross <octoross@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/16 15:31:32 by octoross          #+#    #+#             */
-/*   Updated: 2024/09/16 21:23:32 by octoross         ###   ########.fr       */
+/*   Updated: 2024/09/17 16:26:26 by octoross         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -111,7 +111,7 @@ t_lexer	*ft_tmp_lexer(char **argv)
 	return (lexer);
 }
 
-void	ft_input_minishell(t_minishell *minishell)
+void	ft_minishell_input(t_minishell *minishell)
 {
 	char	*prompt;
 	char	*line;
@@ -122,11 +122,14 @@ void	ft_input_minishell(t_minishell *minishell)
 
 	prompt = ft_get_prompt();
 	if (!prompt)
-		exit (EXIT_FAILURE);
+	{
+		ft_free_until((void **)minishell->path, -1);
+		exit (EXIT_MALLOC);
+	}
 	line = readline(prompt);
 	free(prompt);
 	if (!line || ft_strlen(line) <= 0)
-		exit(EXIT_SUCCESS);
+		ft_minishell_input(minishell);
 	// TODO remplacer par parsing de Jerome
 	splited = ft_split(line, ' ');
 	free(line);
@@ -146,5 +149,5 @@ void	ft_input_minishell(t_minishell *minishell)
 	// TODO remplacer boucle pour free par fonction
 	print_ast(ast, 0);
 	minishell->ast = ast;
-	ft_exec_ast(minishell);
+	ft_exec_line(minishell);
 }
