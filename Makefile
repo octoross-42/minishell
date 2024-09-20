@@ -1,12 +1,18 @@
 NAME = minishell
 
-SRCS = src/parsing/ast/ast_add.c \
+SRCS = src/display/banner.c \
+		src/display/input.c \
+		src/parsing/ast/ast_add.c \
 		src/parsing/ast/ast.c \
 		src/parsing/token_is.c \
-		src/display/banner.c \
-		src/display/input.c \
+		src/parsing/lexer/expand_arg.c \
+		src/parsing/lexer/lexer.c \
+		src/parsing/lexer/parse_arg.c \
+		src/parsing/lexer/parse_cmd.c \
+		src/parsing/lexer/quotes.c \
 		src/execution/exec.c \
-		src/utils/libc.c \
+		src/utils/char.c \
+		src/utils/string.c \
 		src/utils/utils.c \
 		src/utils/split.c \
 		src/main.c \
