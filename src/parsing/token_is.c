@@ -6,7 +6,7 @@
 /*   By: octoross <octoross@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/17 12:30:07 by octoross          #+#    #+#             */
-/*   Updated: 2024/09/17 12:31:09 by octoross         ###   ########.fr       */
+/*   Updated: 2024/09/18 17:11:51 by octoross         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,6 +24,6 @@ bool	ft_is_output(int token)
 
 bool	ft_is_redir(int token)
 {
-	return ((token == INTPUT) || (token == HERE_DOC)
+	return ((token == INPUT) || (token == HERE_DOC)
 		|| ft_is_output(token));
 }

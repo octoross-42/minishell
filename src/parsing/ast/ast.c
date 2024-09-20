@@ -6,7 +6,7 @@
 /*   By: octoross <octoross@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/09 15:25:03 by octoross          #+#    #+#             */
-/*   Updated: 2024/09/16 21:18:06 by octoross         ###   ########.fr       */
+/*   Updated: 2024/09/18 17:11:33 by octoross         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,16 +28,6 @@ static t_ast	*ft_new_ast(t_lexer *lexer)
 	ast->right = NULL;
 	ast->parent = NULL;
 	return (ast);
-}
-
-bool	ft_is_fork(int token)
-{
-	return ((token == PIPE) || (token == OR) || (token == AND));
-}
-
-bool	ft_is_output(int token)
-{
-	return ((token == OUTPUT) || (token == APPEND));
 }
 
 void	ft_clear_ast(t_ast *ast)
@@ -63,7 +53,7 @@ t_ast	*ft_ast(t_lexer *lexer)
 		{
 			ft_clear_ast(top);
 			// TODO rajouter free lexer ici
-			exit(EXIT_FAILURE);
+			exit(EXIT_MALLOC);
 		}
 		if (!top)
 		{
@@ -74,7 +64,7 @@ t_ast	*ft_ast(t_lexer *lexer)
 		{
 			ft_clear_ast(top);
 			// TODO rajouter free lexer ici
-			exit(EXIT_FAILURE);
+			exit(EXIT_AST);
 		}
 		lexer = lexer->next;
 	}

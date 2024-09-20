@@ -1,259 +1,120 @@
-#include "cringishell.h"
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   lexer.c                                            :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: octoross <octoross@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/09/18 13:58:38 by octoross          #+#    #+#             */
+/*   Updated: 2024/09/20 01:06:07 by octoross         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
 
-int	ft_strcmp(char *s1, char *s2)
+#include "lexer.h"
+
+void	ft_clear_lexer(t_lexer *lexer)
 {
-	int	i;
+	if (!lexer)
+		return ;
+	if ((lexer)->next)
+		ft_clear_lexer(lexer->next);
+	ft_free_until((void **)lexer->data, -1);
+	free(lexer);
+}
 
-	i = 0;
-	while (s1[i] && s2[i])
-	{
-		if (s1[i] == s2[i])
-			i ++;
-		else
-			return (s1[i] - s2[i]);
-	}
-	if (!s1[i] && !s2[i])
-		return (0);
+bool	ft_parse_redir()
+{
+	if (ft_parse_arg())
+}
+
+static bool	ft_set_lexer(char **s, t_lexer *lexer)
+{
+	if (!ft_strncmp(*s, "||", 2))
+		return (lexer->token = OR, *s = *s + 2, true);
+	else if (!ft_strncmp(*s, "&&", 2))
+		return (lexer->token = AND, *s = *s + 2, true);
+	else if (!ft_strncmp(*s, "|", 1))
+		return (lexer->token = PIPE, *s = *s + 1, true);
+	else if (!ft_strncmp(*s, "<<", 2))
+		return (lexer->token = HERE_DOC, *s = *s + 2, true);
+	else if (!ft_strncmp(*s, ">>", 2))
+		return (lexer->token = APPEND, *s = *s + 2, true);
+	else if (!ft_strncmp(*s, "<", 1))
+		return (lexer->token = INPUT, *s = *s + 1, true);
+	else if (!ft_strncmp(*s, ">", 1))
+		return (lexer->token = OUTPUT, *s = *s + 1, true);
 	else
-		return (s1[i] - s2[i]);
-}
-int	allow_all(char *s, int val)
-{
-	int	i;
-
-	i = 0;
-	while(s[i] && s[i] != val)
-		i ++;
-	return (i + 1);
+		return (ft_parse_cmd(s, lexer));
 }
 
-int move_i(char *s, int i)
+bool	ft_add_lexer(t_lexer **top, t_lexer **last)
 {
-	if (s[i] && s[i + 1])
-	{
-		if (s[i + 2])
-		{
-			if (((s[i] == '|' && s[i + 1] == '|') || (s[i] == '&' &&
-				s[i + 1] == '&')) && (s[i + 2] != '&' && s[i + 2] != '|'))
-				return (2);
-			else if (((s[i] == '|' && s[i + 1] == '|') || (s[i] == '&' &&
-				s[i + 1] == '&')) && (s[i + 2] == '&' || s[i + 2] == '|'))
-				return (0);
-		}
-	}
-	if (s[i] == '>' || s[i] == '<' || s[i] == '|' )
-		return (1);
-	while (s[i] && s[i] != 32 && s[i] != '>' && s[i] != '|')
-	{
-		if (s[i] == 34 || s[i] == 39)
-			i = i + allow_all(&s[i], s[i]);
-		else
-			i ++;
-	}
-	return (i);
-}
+	t_lexer	*new;
 
-//ne fonctionnera PAS pour echo (e.g. echo "<>cat|><")
-char    *get_data(char *s)
-{
-	int     i;
-	int     j;
-	char    *new;
-
-	i = 0;
-	j = move_i(s, 0);
-	if (!j)
-		return (NULL);
-	new = malloc(j + 1);
+	new = (t_lexer *)malloc(sizeof(t_lexer));
 	if (!new)
-		return (NULL);
-	while (i < j)
-	{
-		new[i] = s[i];
-		i ++;
-	}
-	new[i] = 0;
-	return (new);
-}
-
-t_lexer *lex_new(void *cont, t_parse p)
-{
-	t_lexer *new;
-	new = malloc(sizeof(t_lexer));
-	if (!new)
-		return (NULL);
-	new->data = cont;
-	new->cmd_pos = p.pos;
-	new->pos = p.cmd;
+		return (ft_clear_lexer(*top), ft_fail(ERR_MALLOC), false);
+	new->data = NULL;
 	new->next = NULL;
-	return (new);
-}
-
-t_lexer	*lex_last(t_lexer *check)
-{
-	if (!check)
-		return (NULL);
-	while (check->next)
-		check = check->next;
-	return (check);
-}
-
-void    queue_lex(t_lexer **lex, t_lexer *add)
-{
-	if (!*lex)
-		*lex = add;
+	new->previous = *last;
+	new->token = 0;
+	if (!(*top))
+		*top = new;
 	else
-		lex_last(*lex)->next = add;
-	add->next = NULL;
+		(*last)->next = new;
+	*last = new;
+	return (true);
 }
 
-t_parse init_pars(t_parse p)
+bool	ft_is_compatible(t_lexer *l1, t_lexer *l2)
 {
-	p.cmd = 0;
-	p.pos = 0;
-	return (p);
-}
-
-t_parse incr_pars(int a, t_parse p)
-{
-	if (a == '&' || a == '|' || a == '>')
-	{
-		p.cmd ++;
-		p.pos = 0;
-	}
+	if (!l2 || !l1)
+		return (true);
+	if ((l1->token == CMD) && (l2->token == CMD))
+		return (ft_fail(ERR_PROG), false);
+	else if ((l1->token == CMD) || (l2->token == CMD))
+		return (true);
+	else if (ft_is_fork(l1->token) && ft_is_fork(l2->token))
+		return (ft_fail(ERR_SYNTAX), false);
 	else
-		p.pos ++;
-	return (p);
+		return (true);
 }
 
-void	*error_lex(t_lexer **lex, int i)
+t_lexer	*ft_lexer(char *line)
 {
-	t_lexer	*cur;
-	t_lexer	*next;
+	t_lexer	*top;
+	t_lexer	*lexer;
 
-	cur = *lex;
-	next = cur->next;
-	while (cur)
+	lexer = NULL;
+	top = NULL;
+	while (line && line[0])
 	{
-		free(cur->data);
-		cur = cur->next;
+		while (ft_isspace(*line))
+			line ++;
+		if (!line[0])
+			return (top);
+		if (!ft_add_lexer(&top, &lexer))
+			return (NULL);
+		if (!ft_set_lexer(&line, lexer))
+			return (ft_clear_lexer(top), NULL);
+		if (!ft_is_compatible(lexer, lexer->previous))
+			return (ft_clear_lexer(top), NULL);
 	}
-	cur = *lex;
-	while (next)
-	{
-		free(cur);
-		cur = next;
-		next = next->next;
-	}
-	free(cur);
-	free(lex);
-	if (i == 1)
-		write(2, "Malloc error when processing data\n", 34);
-	if (i == 2)
-		write(2, "Parsing error, bad input detected\n", 34);
-	return (NULL);
+	return (top);
 }
 
-t_lexer **lex_values(char *s, t_lexer **lex)
+#include "dev.h"
+
+int	main(int ac, char **av)
 {
-	t_parse p;
-	t_lexer	*l;
-	int     i;
+	t_lexer	*lexer;
 
-	i = 0;
-	p = init_pars(p);
-	while (s[i] == ' ')
-		i ++;
-	while (s[i])
-	{
-		l = lex_new(get_data(&s[i]), p);
-		if (!l)
-			return (error_lex(lex, 1));
-		queue_lex(lex, l);
-		i = i + move_i(&s[i], 0);
-		if (!lex_last(*lex)->data)
-			return (error_lex(lex, 2));
-		if (s[i] == 0)
-			break ;
-		while (s[i] == ' ')
-			i ++;
-		p = incr_pars(s[i], p);
-	}
-	return (lex);
-}
-
-t_lexer	**lex_assign(t_lexer **lex)
-{
-	t_lexer	*cur;
-
-	cur = *lex;
-	while (cur)
-	{
-		if (!(ft_strcmp(cur->data, "<")))
-			cur->token = "INPUT";
-		else if (!(ft_strcmp(cur->data, ">")))
-			cur->token = "OUTPUT";
-		else if (!(ft_strcmp(cur->data, "|")))
-			cur->token = "PIPE";
-		else if (!(ft_strcmp(cur->data, "&&")))
-			cur->token = "AND";
-		else if (!(ft_strcmp(cur->data, "||")))
-			cur->token = "OR";
-		else if (!(ft_strcmp(cur->data, ">>")))//vérifie ca stp je suis pas sûr
-			cur->token = "APPEND";
-		else if (!(ft_strcmp(cur->data, "<<")))
-			cur->token = "HERE_DOC";
-		else
-			cur->token = "DATA";
-		cur = cur->next;
-	}
-	return (lex);
-}
-t_lexer	**change_data(t_lexer **lex)
-{
-	t_lexer	*cur;
-
-	cur = *lex;
-	while(cur)
-	{
-		if (strcmp(cur->token, "DATA"))
-		{
-			free(cur->data);
-			cur->data = NULL;
-		}
-		cur = cur->next;
-	}
-	return (lex);
-}
-
-void	print_all(t_lexer *test)
-{
-	printf("content = %s\n", (char *)test->data);
-	printf("token =  %s\n", test->token);
-	printf("numero de la commande = %d\n", test->pos);
-	printf("emplacement dans la commande = %d\n", test->cmd_pos);
-	printf("fin de la node\n\n");
-}
-
-int main(void)
-{
-	t_lexer **lex;
-
-	lex = malloc(8);
-	if (!lex)
-		exit(EXIT_FAILURE);
-	*lex = NULL;
-	lex = lex_values("test'ceci' av||ec des et des> et <", lex);
-	if (!lex)
-		exit(EXIT_FAILURE);
-	lex = lex_assign(lex);
-	lex = change_data(lex);
-	t_lexer	*test = *lex;
-	while (test)
-	{
-		print_all(test);
-		test = test->next;
-	}
-	lex = error_lex(lex, 0);
+	if (ac != 2)
+		return (1);
+	lexer = ft_lexer(av[1]);
+	if (!lexer)
+		return (1);
+	print_lexer(lexer);
+	ft_clear_lexer(lexer);
 	return (0);
 }
