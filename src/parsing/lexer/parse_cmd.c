@@ -40,41 +40,43 @@ int	ft_nbr_args(char **s)
 	return (nbr_args);
 }
 
-bool	ft_init_parsing_cmd(char *s, char ***args)
+static int	ft_init_parsing_cmd(char *s, char ***args)
 {
 	int	nbr_args;
 
 	if (!args)
-		return (ft_fail(ERR_PROG, NULL), false);
+		return (ft_fail(ERR_PROG, NULL), STATUS_PROG);
 	nbr_args = ft_nbr_args(&s);
 	if (nbr_args <= 0)
-		return (ft_fail(ERR_SYNTAX, s), false);
+		return (ft_fail(ERR_SYNTAX, s), STATUS_SYNTAX);
 	*args = (char **)malloc((nbr_args + 1) * sizeof(char *));
 	if (!(*args))
-		return (ft_fail(ERR_MALLOC, NULL), false);
+		return (ft_fail(ERR_MALLOC, NULL), STATUS_MALLOC);
 	(*args)[nbr_args] = NULL;
-	return (true);
+	return (STATUS_OK);
 }
 
-bool	ft_parse_cmd(char **s, t_lexer *lexer)
+int	ft_parse_cmd(char **s, t_lexer *lexer)
 {
+	int			status;
 	int			nbr_args;
-	int			len;
 	char		**args;
 
 	lexer->token = CMD;
 	args = NULL;
-	if (!ft_init_parsing_cmd(*s, &args))
-		return (false);
+	status = ft_init_parsing_cmd(*s, &args);
+	if (status != STATUS_OK)
+		return (status);
 	nbr_args = 0;
 	while (**s && !ft_char_is_token(**s))
 	{
-		if (!ft_parse_arg(s, &(args[nbr_args])))
-			return (ft_free_until((void **)args, nbr_args), false);
+		status = ft_parse_arg(s, &(args[nbr_args]));
+		if (status != STATUS_OK)
+			return (ft_free_until((void **)args, nbr_args), status);
 		while (ft_isspace(**s))
 			(*s)++;
 		nbr_args ++;
 	}
 	lexer->data = (void *)args;
-	return (true);
+	return (STATUS_OK);
 }

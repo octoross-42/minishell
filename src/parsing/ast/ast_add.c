@@ -6,13 +6,13 @@
 /*   By: octoross <octoross@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/13 16:26:57 by octoross          #+#    #+#             */
-/*   Updated: 2024/09/21 00:08:30 by octoross         ###   ########.fr       */
+/*   Updated: 2024/09/21 18:45:25 by octoross         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "lexer.h"
 
-bool	ft_append_ast(t_ast *new, t_ast **current)
+int	ft_append_ast(t_ast *new, t_ast **current)
 {
 	new->parent = *current;
 	if (!(*current)->left)
@@ -20,12 +20,12 @@ bool	ft_append_ast(t_ast *new, t_ast **current)
 	else if (!(*current)->right)
 		(*current)->right = new;
 	else
-		return (ft_fail(ERR_AST, NULL), false);
+		return (ft_fail(ERR_PARSING, NULL), STATUS_PROG);
 	*current = new;
-	return (true);
+	return (STATUS_OK);
 }
 
-bool	ft_fork_token(t_ast *new, t_ast **current, t_ast	**top)
+int	ft_fork_token(t_ast *new, t_ast **current, t_ast **top)
 {
 	t_ast	*ast;
 
@@ -44,10 +44,10 @@ bool	ft_fork_token(t_ast *new, t_ast **current, t_ast	**top)
 	new->left = ast;
 	ast->parent = new;
 	*current = new;
-	return (true);
+	return (STATUS_OK);
 }
 
-bool	ft_output_token(t_ast *new, t_ast **current, t_ast **top)
+int	ft_output_token(t_ast *new, t_ast **current, t_ast **top)
 {
 	// HYPO : 2 cmd cannot succeed
 	if (((*current)->token == CMD))
@@ -61,14 +61,14 @@ bool	ft_output_token(t_ast *new, t_ast **current, t_ast **top)
 		new->parent = (*current)->parent;
 		new->left = (*current);
 		(*current)->parent = new;
-		return (true);
+		return (STATUS_OK);
 		// TODO enlever les bool return des add_token
 	}
 	else
 		return (ft_append_ast(new, current));
 }
 
-bool	ft_add_ast(t_ast *new, t_ast **current, t_ast **top)
+int	ft_add_ast(t_ast *new, t_ast **current, t_ast **top)
 {
 	if (ft_is_fork(new->token))
 		return (ft_fork_token(new, current, top));
@@ -79,5 +79,5 @@ bool	ft_add_ast(t_ast *new, t_ast **current, t_ast **top)
 		|| (new->token == CMD))
 		return (ft_append_ast(new, current));
 	else
-		return (ft_fail(ERR_AST, NULL), false);
+		return (ft_fail(ERR_PARSING, NULL), STATUS_PROG);
 }

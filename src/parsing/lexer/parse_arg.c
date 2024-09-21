@@ -12,7 +12,7 @@
 
 #include "lexer.h"
 
-int	ft_len_arg(char *s, t_expand **expand)
+int	ft_len_arg(char *s, t_expand **expand, int *status)
 {
 	int			i;
 	int			len;
@@ -20,45 +20,49 @@ int	ft_len_arg(char *s, t_expand **expand)
 
 	last = NULL;
 	len = 0;
+	*status = STATUS_OK;
 	while (*s && !ft_isspace(*s) && !ft_char_is_token(*s))
 	{
 		i = 1;
 		if (*s == '$')
-			i = ft_len_expand(&s, expand, &last);
+			i = ft_len_expand(&s, expand, &last, status);
 		else if (ft_char_is_quote(*s))
-			i = ft_len_quotes(&s, expand, &last);
+			i = ft_len_quotes(&s, expand, &last, status);
 		else
 			s ++;
 		if (i < 0)
-			return (ft_fail(ERR_MALLOC, NULL), -1);
+			return (-1);
 		len += i;
 	}
 	return (len);
 }
 
-bool	ft_init_parsing_arg(char *s, char **data, t_expand **expand)
+int	ft_init_parsing_arg(char *s, char **data, t_expand **expand)
 {
-	int			len;
+	int	len;
+	int	status;	
 
-	len = ft_len_arg(s, expand);
+	len = ft_len_arg(s, expand, &status);
 	if (len <= 0)
-		return (false);
+		return (status);
 	*data = (char *)malloc((len + 1) * sizeof(char));
 	if (!(*data))
-		return (ft_fail(ERR_MALLOC, NULL), false);
+		return (ft_fail(ERR_MALLOC, NULL), STATUS_MALLOC);
 	(*data)[len] = '\0';
-	return (true);
+	return (STATUS_OK);
 }
 
-bool	ft_parse_arg(char **s, char **data)
+int	ft_parse_arg(char **s, char **data)
 {
+	int			status;
 	int			i;
 	int			j;
 	t_expand	*expand;
 
 	expand = NULL;
-	if (!ft_init_parsing_arg(*s, data, &expand))
-		return (ft_clear_expand(expand), false);
+	status = ft_init_parsing_arg(*s, data, &expand);
+	if (status != STATUS_OK)
+		return (ft_clear_expand(expand), status);
 	i = 0;
 	while (**s && !ft_isspace(**s) && !ft_char_is_token(**s))
 	{
@@ -70,8 +74,8 @@ bool	ft_parse_arg(char **s, char **data)
 		else
 			(*data)[i ++] = *((*s)++);
 		if (j < 0)
-			return (false);
+			return (STATUS_PROG);
 		i += j;
 	}
-	return (true);
+	return (STATUS_OK);
 }

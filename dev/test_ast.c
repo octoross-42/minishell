@@ -6,7 +6,7 @@
 /*   By: octoross <octoross@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/15 20:14:27 by octoross          #+#    #+#             */
-/*   Updated: 2024/09/21 00:16:21 by octoross         ###   ########.fr       */
+/*   Updated: 2024/09/21 16:07:18 by octoross         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,18 +56,18 @@ int	main(int argc, char **argv)
 	lexer = NULL;
 	while (i < argc)
 	{
-		if (ft_is_fork(ft_token_os_str(argv[i])))
+		if (ft_is_fork(ft_token_of_str(argv[i])))
 			data = NULL;
 		else
 			data = argv[i + 1];
 		if (!lexer)
 		{
-			lexer = ft_lexerof(ft_token_os_str(argv[i]), data);
+			lexer = ft_lexerof(ft_token_of_str(argv[i]), data);
 			next = lexer;
 		}
 		else
 		{
-			next->next = ft_lexerof(ft_token_os_str(argv[i]), data);
+			next->next = ft_lexerof(ft_token_of_str(argv[i]), data);
 			next = next->next;
 		}
 		if (data)

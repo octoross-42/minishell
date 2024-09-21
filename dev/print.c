@@ -6,7 +6,7 @@
 /*   By: octoross <octoross@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/15 20:00:54 by octoross          #+#    #+#             */
-/*   Updated: 2024/09/21 00:15:51 by octoross         ###   ########.fr       */
+/*   Updated: 2024/09/21 19:10:40 by octoross         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,12 +26,12 @@ void	print_lexer(t_lexer *lexer)
 			{
 				args = (char **)lexer->data;
 				i = 0;
-				printf(" data : ");
+				printf(", data : ");
 				while (args[i])
 					printf("'%s' ", args[ i++]);
 			}
 			else if (ft_is_redir(lexer->token))
-				printf(" data : '%s'", (char *)lexer->data);
+				printf(", data : '%s'", (char *)lexer->data);
 			
 		}
 		printf("\n");
@@ -42,7 +42,8 @@ void	print_lexer(t_lexer *lexer)
 void	print_ast(t_ast *ast, int n)
 {
 	int	i;
-	int	left;
+	int		left;
+	char	**args;
 
 	if (!ast)
 		return ;
@@ -60,7 +61,18 @@ void	print_ast(t_ast *ast, int n)
 		printf("\\");
 	else if (n)
 		printf("/");
-	printf("%s %s\n", ft_str_of_token(ast->token), ast->data);
+	printf("%s", ft_str_of_token(ast->token));
+	if (ast->token == CMD)
+	{
+		printf(" :");
+		args = (char **)ast->data;
+		i = 0;
+		while (args[i])
+			printf(" '%s'", args[i ++]);
+	}
+	else if (ft_is_redir(ast->token))
+		printf(" : %s\n", (char *)ast->data);
+	printf("\n");
 	if (ast->left)
 		print_ast(ast->left, n + 1);
 }

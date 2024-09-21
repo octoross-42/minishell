@@ -31,16 +31,16 @@ bool	ft_add_expand(t_expand **expand, t_expand **last)
 	return (true);
 }
 
-int	ft_len_expand(char **s, t_expand **expand, t_expand **last)
+int	ft_len_expand(char **s, t_expand **expand, t_expand **last, int *status)
 {
 	t_expand	*new;
 	int			i;
 	char		*name;
 
 	if (!expand || !last)
-		return (ft_fail(ERR_PROG, NULL), -1);
+		return (*status = STATUS_PROG, ft_fail(ERR_PROG, NULL), -1);
 	if (!ft_add_expand(expand, last))
-		return (-1);
+		return (*status = STATUS_MALLOC, -1);
 	(*s)++;
 	i = 0;
 	while (ft_isname((*s)[i]))
@@ -49,7 +49,7 @@ int	ft_len_expand(char **s, t_expand **expand, t_expand **last)
 		return ((*last)->is_expand = false, 1);
 	name = (char *)malloc((i + 1) * sizeof(char));
 	if (!name)
-		return (ft_fail(ERR_MALLOC, NULL), -1);
+		return (*status = STATUS_MALLOC, ft_fail(ERR_MALLOC, NULL), -1);
 	ft_strncpy(name, *s, i);
 	(*last)->len_name = i;
 	*s += i;
@@ -88,11 +88,11 @@ int	ft_expand_arg(char **s, char *data, t_expand **expand)
 
 	len = 0;
 	if (!expand || !(*expand))
-		return (ft_fail(ERR_PROG, NULL), -1);
+		return (-1);
 	if ((*expand)->is_expand)
 	{
 		if (!(*expand)->value)
-			return (ft_clear_expand(*expand), ft_fail(ERR_PROG, NULL), -1);
+			return (ft_clear_expand(*expand), -1);
 		len = ft_strlen((*expand)->value);
 		ft_strcpy(data, (*expand)->value);
 	}

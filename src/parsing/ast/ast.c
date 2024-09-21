@@ -6,7 +6,7 @@
 /*   By: octoross <octoross@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/09 15:25:03 by octoross          #+#    #+#             */
-/*   Updated: 2024/09/21 00:08:35 by octoross         ###   ########.fr       */
+/*   Updated: 2024/09/21 19:09:29 by octoross         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@ static t_ast	*ft_new_ast(t_lexer *lexer)
 
 	ast = (t_ast *)malloc(sizeof(t_ast));
 	if (!ast)
-		return (ft_fail(ERR_MALLOC, NULL), NULL);
+		return (NULL);
 	ast->token = lexer->token;
 	if (ft_is_fork(ast->token))
 		ast->data = NULL;
@@ -36,35 +36,42 @@ void	ft_clear_ast(t_ast *ast)
 		return ;
 	ft_clear_ast(ast->left);
 	ft_clear_ast(ast->right);
+	if (ast->token == CMD)
+		ft_free_until((void **)ast->data, -1);
+	else if (ft_is_redir(ast->token))
+		free(ast->data);
 	free(ast);
 }
 
-t_ast	*ft_ast(t_lexer *lexer)
+#include "dev.h"
+
+t_ast	*ft_ast(t_lexer *lexer, int *status)
 {
 	t_ast	*new;
 	t_ast	*current;
 	t_ast	*top;
 
 	top = NULL;
+	*status = STATUS_OK;
 	while (lexer)
 	{
 		new = ft_new_ast(lexer);
 		if (!new)
 		{
-			ft_clear_ast(top);
-			// TODO rajouter free lexer ici
-			exit(EXIT_MALLOC);
+			*status = STATUS_MALLOC;
+			ft_fail(ERR_MALLOC, NULL);
+			return (ft_clear_ast(top), NULL);
 		}
 		if (!top)
 		{
 			top = new;
 			current = new;
 		}
-		else if (!ft_add_ast(new, &current, &top))
+		else
 		{
-			ft_clear_ast(top);
-			// TODO rajouter free lexer ici
-			exit(EXIT_AST);
+			*status = ft_add_ast(new, &current, &top);
+			if (*status != STATUS_OK)
+				return (ft_clear_ast(top), NULL);
 		}
 		lexer = lexer->next;
 	}

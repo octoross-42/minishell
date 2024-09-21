@@ -12,7 +12,7 @@
 
 #include "lexer.h"
 
-int	ft_len_quotes(char **s, t_expand **expand, t_expand **last)
+int	ft_len_quotes(char **s, t_expand **expand, t_expand **last, int *status)
 {
 	char	quote;
 	int		len;
@@ -26,7 +26,7 @@ int	ft_len_quotes(char **s, t_expand **expand, t_expand **last)
 		i = 1;
 		if ((quote != '\'') && (**s == '$'))
 		{
-			i = ft_len_expand(s, expand, last);
+			i = ft_len_expand(s, expand, last, status);
 			if (i < 0)
 				return (-1);
 			len += i;
@@ -36,7 +36,7 @@ int	ft_len_quotes(char **s, t_expand **expand, t_expand **last)
 		len += i;
 	}
 	if (**s != quote)
-		return (-1);
+		return (*status = STATUS_SYNTAX, -1);
 	(*s)++;
 	return (len);
 }

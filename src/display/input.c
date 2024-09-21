@@ -6,7 +6,7 @@
 /*   By: octoross <octoross@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/16 15:31:32 by octoross          #+#    #+#             */
-/*   Updated: 2024/09/21 00:16:21 by octoross         ###   ########.fr       */
+/*   Updated: 2024/09/21 19:06:48 by octoross         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,91 +63,27 @@ char	*ft_get_prompt(void)
 	return (prompt);
 }
 
-t_lexer	*ft_lexerof(int token, void *data)
-{
-	t_lexer	*lexer;
-
-	lexer = (t_lexer *)malloc(sizeof(t_lexer));
-	lexer->token = token;
-	if (ft_is_fork(lexer->token))
-		lexer->data = NULL;
-	else
-		lexer->data = data;
-	lexer->next = NULL;
-	return (lexer);
-}
-
 #include "dev.h"
-
-t_lexer	*ft_tmp_lexer(char **argv)
-{
-	int		i;
-	t_lexer	*lexer;
-	t_lexer	*next;
-	char	*data;
-
-	i = 0;
-	lexer = NULL;
-	while (argv[i])
-	{
-		if (ft_is_fork(ft_token_os_str(argv[i])))
-			data = NULL;
-		else
-			data = argv[i + 1];
-		if (!lexer)
-		{
-			lexer = ft_lexerof(ft_token_os_str(argv[i]), data);
-			next = lexer;
-		}
-		else
-		{
-			next->next = ft_lexerof(ft_token_os_str(argv[i]), data);
-			next = next->next;
-		}
-		if (data)
-			i ++;
-		i ++;
-	}
-	return (lexer);
-}
 
 void	ft_minishell_input(t_minishell *minishell)
 {
 	char	*prompt;
 	char	*line;
-	char	**splited;
 	t_lexer	*lexer;
-	t_lexer	*next;
-	t_ast	*ast;
 
 	prompt = ft_get_prompt();
 	if (!prompt)
-	{
-		ft_free_until((void **)minishell->path, -1);
-		exit (EXIT_MALLOC);
-	}
+		ft_exit_minishell(minishell, STATUS_MALLOC);
 	line = readline(prompt);
 	free(prompt);
-	if (!line || ft_strlen(line) <= 0)
-		ft_minishell_input(minishell);
-	// TODO remplacer par parsing de Jerome
-	splited = ft_split(line, ' ');
+	lexer = ft_lexer(line, &(minishell->status));
 	free(line);
-	lexer = ft_tmp_lexer(splited);
-	ft_free_until((void **)splited, -1);
-	// jusqu'ici
-	// TODO rajouter un exit failure dans le parsing pour qu'ici on n'arrive que si ya succes (penser à free line dedans)
-	if (!lexer)
-		exit(EXIT_SUCCESS);
-	ast = ft_ast(lexer);
-	while (lexer)
-	{
-		next = lexer->next;
-		free(lexer);
-		lexer = next;
-	}
-	// TODO remplacer boucle pour free par fonction
-	print_ast(ast, 0);
-	minishell->ast = ast;
+	if (!lexer || (minishell->status != STATUS_OK))
+		ft_minishell_input(minishell);
+	minishell->ast = ft_ast(lexer, &(minishell->status));
+	ft_clear_lexer(lexer, 0);
+	if (!minishell->ast || (minishell->status != STATUS_OK))
+		ft_minishell_input(minishell);
+	print_ast(minishell->ast, 0);
 	ft_exec_line(minishell);
 }
