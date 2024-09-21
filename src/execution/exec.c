@@ -6,7 +6,7 @@
 /*   By: octoross <octoross@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/16 21:21:49 by octoross          #+#    #+#             */
-/*   Updated: 2024/09/18 17:13:16 by octoross         ###   ########.fr       */
+/*   Updated: 2024/09/21 00:08:23 by octoross         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@ void	ft_exec_fork(t_ast *ast, t_minishell *minishell)
 	{
 		ft_free_until((void **)minishell->path, -1);
 		ft_clear_ast(minishell->ast);
-		ft_fail(ERR_FORK);
+		ft_fail(ERR_FORK, NULL);
 		exit(EXIT_FORK);
 	}
 }
@@ -47,7 +47,7 @@ void	ft_exec_ast(t_ast *ast, t_minishell *minishell)
 	{
 		ft_free_until((void **)minishell->path, -1);
 		ft_clear_ast(minishell->ast);
-		ft_fail(ERR_TOKEN);
+		ft_fail(ERR_TOKEN, NULL);
 		exit(EXIT_TOKEN);
 	}
 }
@@ -66,11 +66,11 @@ void	ft_exec_line(t_minishell *minishell)
 	if (minishell->last_pid == -1)
 	{
 		ft_free_until((void **)minishell->path, -1);
-		ft_fail(ERR_FORK);
+		ft_fail(ERR_FORK, NULL);
 		exit(EXIT_FORK);
 	}
 	else if (!minishell->last_pid)
-		ft_exec_ast(minishell->ast);
+		ft_exec_ast(minishell->ast, minishell);
 	else
 	{
 		waitpid(minishell->last_pid, &status, 0);

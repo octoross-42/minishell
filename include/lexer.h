@@ -46,7 +46,7 @@ int		ft_len_expand(char **s, t_expand **expand, t_expand **last);
 
 typedef struct s_lexer
 {
-	char			**data;
+	void			*data;
 	int				token;
 	struct s_lexer	*next;
 	struct s_lexer	*previous;

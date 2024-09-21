@@ -6,7 +6,7 @@
 /*   By: octoross <octoross@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/15 20:51:11 by octoross          #+#    #+#             */
-/*   Updated: 2024/09/17 16:24:43 by octoross         ###   ########.fr       */
+/*   Updated: 2024/09/21 00:07:53 by octoross         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,11 +27,11 @@ char	**ft_get_path(char **envp)
 		{
 			path = ft_strdup(envp[i] + 5);
 			if (!path)
-				return (ft_fail(ERR_PATH), NULL);
+				return (ft_fail(ERR_PATH, NULL), NULL);
 			paths = ft_split(path, ':');
 			free(path);
 			if (!paths)
-				return (ft_fail(ERR_PATH), NULL);
+				return (ft_fail(ERR_PATH, NULL), NULL);
 			return (paths);
 		}
 		i++;

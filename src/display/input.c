@@ -6,7 +6,7 @@
 /*   By: octoross <octoross@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/16 15:31:32 by octoross          #+#    #+#             */
-/*   Updated: 2024/09/17 16:26:26 by octoross         ###   ########.fr       */
+/*   Updated: 2024/09/21 00:16:21 by octoross         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,7 +57,7 @@ char	*ft_get_prompt(void)
 		len += ft_strlen(wd) + ft_strlen(BLUE);
 	prompt = (char *)malloc(sizeof(char) * (len + 1));
 	if (!prompt)
-		return (ft_fail(ERR_MALLOC), NULL);
+		return (ft_fail(ERR_MALLOC, NULL), NULL);
 	prompt[len] = '\0';
 	ft_strcpy_prompt(prompt, wd, err);
 	return (prompt);
@@ -90,18 +90,18 @@ t_lexer	*ft_tmp_lexer(char **argv)
 	lexer = NULL;
 	while (argv[i])
 	{
-		if (ft_is_fork(token_of_str(argv[i])))
+		if (ft_is_fork(ft_token_os_str(argv[i])))
 			data = NULL;
 		else
 			data = argv[i + 1];
 		if (!lexer)
 		{
-			lexer = ft_lexerof(token_of_str(argv[i]), data);
+			lexer = ft_lexerof(ft_token_os_str(argv[i]), data);
 			next = lexer;
 		}
 		else
 		{
-			next->next = ft_lexerof(token_of_str(argv[i]), data);
+			next->next = ft_lexerof(ft_token_os_str(argv[i]), data);
 			next = next->next;
 		}
 		if (data)

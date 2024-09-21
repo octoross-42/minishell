@@ -6,7 +6,7 @@
 /*   By: octoross <octoross@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/09 15:25:03 by octoross          #+#    #+#             */
-/*   Updated: 2024/09/18 17:11:33 by octoross         ###   ########.fr       */
+/*   Updated: 2024/09/21 00:08:35 by octoross         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@ static t_ast	*ft_new_ast(t_lexer *lexer)
 
 	ast = (t_ast *)malloc(sizeof(t_ast));
 	if (!ast)
-		return (ft_fail(ERR_MALLOC), NULL);
+		return (ft_fail(ERR_MALLOC, NULL), NULL);
 	ast->token = lexer->token;
 	if (ft_is_fork(ast->token))
 		ast->data = NULL;

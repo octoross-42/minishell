@@ -6,7 +6,7 @@
 /*   By: octoross <octoross@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/09 20:26:55 by octoross          #+#    #+#             */
-/*   Updated: 2024/09/19 20:50:24 by octoross         ###   ########.fr       */
+/*   Updated: 2024/09/21 00:15:31 by octoross         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,7 +41,7 @@ bool	ft_isalpha(int c);
 bool	ft_isspace(char c);
 bool	ft_isname(char c);
 
-void	ft_fail(char *err);
+void	ft_fail(char *err, void *err_value);
 void	ft_free_until(void **data, int n);
 
 char	**ft_split(char const *s, char c);
@@ -49,5 +49,7 @@ char	*ft_err(char *err, char *s);
 
 bool	ft_char_is_quote(char c);
 bool	ft_char_is_token(char c);
+char	*ft_str_of_token(int token);
+int		ft_token_of_str(char *token);
 
 #endif

@@ -6,11 +6,12 @@
 /*   By: octoross <octoross@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/09 20:30:08 by octoross          #+#    #+#             */
-/*   Updated: 2024/09/18 18:36:55 by octoross         ###   ########.fr       */
+/*   Updated: 2024/09/21 00:18:49 by octoross         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "utils.h"
+#include "lexer.h"
 
 void	ft_free_until(void **data, int n)
 {
@@ -33,26 +34,67 @@ void	ft_free_until(void **data, int n)
 	free(data);
 }
 
-void	ft_fail(char *err)
+void	ft_fail(char *err, void *err_value)
 {
+	char	*str;
+
 	write(STDERR_FILENO, "minishell: ", 11);
-	write(STDERR_FILENO, err, ft_strlen(err));
+	while (*err && (*err != '%'))
+		write(STDERR_FILENO, err++, 1);
+	if (*err == '%')
+	{
+		err ++;
+		if (*(err ++) == 's')
+		{
+			str = (char *)err_value;
+			while (str && *str)
+				write(STDERR_FILENO, str++, 1);
+		}
+	}
+	if (*err)
+		write(STDERR_FILENO, err, ft_strlen(err));
 }
 
-char	*ft_err(char *err, char *s)
+char	*ft_str_of_token(int token)
 {
-	char	*error;
-	int		i;
-	int		j;
+	if (token == PIPE)
+		return ("PIPE");
+	if (token == OR)
+		return ("OR");
+	if (token == AND)
+		return ("AND");
+	if (token == INPUT)
+		return ("INPUT");
+	if (token == OUTPUT)
+		return ("OUTPUT");
+	if (token == HERE_DOC)
+		return ("HERE_DOC");
+	if (token == APPEND)
+		return ("APPEND");
+	if (token == CMD)
+		return ("CMD");
+	else
+		return (NULL);
+}
 
-	i = 0;
-	while (err[i] && (err[i] != '%'))
-		i ++;
-	j = i;
-	if (err[i] != 's')
-		return (err);
-	error = (char *)malloc(sizeof(char) * (i + 1));
-	if (!err)
-		return (ft_fail(ERR_MALLOC), err);
-	return (error);
+int	ft_token_of_str(char *token)
+{
+	if (!ft_strcmp(token, "PIPE"))
+		return (PIPE);
+	if (!ft_strcmp(token, "OR"))
+		return (OR);
+	if (!ft_strcmp(token, "AND"))
+		return (AND);
+	if (!ft_strcmp(token, "INPUT"))
+		return (INPUT);
+	if (!ft_strcmp(token, "OUTPUT"))
+		return (OUTPUT);
+	if (!ft_strcmp(token, "HERE_DOC"))
+		return (HERE_DOC);
+	if (!ft_strcmp(token, "APPEND"))
+		return (APPEND);
+	if (!ft_strcmp(token, "CMD"))
+		return (CMD);
+	else
+		return (0);
 }

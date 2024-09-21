@@ -30,7 +30,7 @@ int	ft_len_arg(char *s, t_expand **expand)
 		else
 			s ++;
 		if (i < 0)
-			return (ft_fail(ERR_MALLOC), -1);
+			return (ft_fail(ERR_MALLOC, NULL), -1);
 		len += i;
 	}
 	return (len);
@@ -45,7 +45,7 @@ bool	ft_init_parsing_arg(char *s, char **data, t_expand **expand)
 		return (false);
 	*data = (char *)malloc((len + 1) * sizeof(char));
 	if (!(*data))
-		return (ft_fail(ERR_MALLOC), false);
+		return (ft_fail(ERR_MALLOC, NULL), false);
 	(*data)[len] = '\0';
 	return (true);
 }

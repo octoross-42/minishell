@@ -6,7 +6,7 @@
 /*   By: octoross <octoross@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/15 20:00:54 by octoross          #+#    #+#             */
-/*   Updated: 2024/09/19 21:03:19 by octoross         ###   ########.fr       */
+/*   Updated: 2024/09/21 00:15:51 by octoross         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,16 +14,25 @@
 
 void	print_lexer(t_lexer *lexer)
 {
-	int	i;
+	int		i;
+	char	**args;
+
 	while (lexer)
 	{
-		printf("token : %s", str_of_token(lexer->token));
+		printf("token : %s", ft_str_of_token(lexer->token));
 		if (lexer->data)
 		{
-			i = 0;
-			printf(" data : ");
-			while (lexer->data[i])
-				printf("'%s' ", lexer->data[ i++]);
+			if (lexer->token == CMD)
+			{
+				args = (char **)lexer->data;
+				i = 0;
+				printf(" data : ");
+				while (args[i])
+					printf("'%s' ", args[ i++]);
+			}
+			else if (ft_is_redir(lexer->token))
+				printf(" data : '%s'", (char *)lexer->data);
+			
 		}
 		printf("\n");
 		lexer = lexer->next;
@@ -51,7 +60,7 @@ void	print_ast(t_ast *ast, int n)
 		printf("\\");
 	else if (n)
 		printf("/");
-	printf("%s %s\n", str_of_token(ast->token), ast->data);
+	printf("%s %s\n", ft_str_of_token(ast->token), ast->data);
 	if (ast->left)
 		print_ast(ast->left, n + 1);
 }

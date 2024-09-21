@@ -6,7 +6,7 @@
 /*   By: octoross <octoross@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/13 16:26:57 by octoross          #+#    #+#             */
-/*   Updated: 2024/09/18 17:11:33 by octoross         ###   ########.fr       */
+/*   Updated: 2024/09/21 00:08:30 by octoross         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@ bool	ft_append_ast(t_ast *new, t_ast **current)
 	else if (!(*current)->right)
 		(*current)->right = new;
 	else
-		return (ft_fail(ERR_AST), false);
+		return (ft_fail(ERR_AST, NULL), false);
 	*current = new;
 	return (true);
 }
@@ -79,5 +79,5 @@ bool	ft_add_ast(t_ast *new, t_ast **current, t_ast **top)
 		|| (new->token == CMD))
 		return (ft_append_ast(new, current));
 	else
-		return (ft_fail(ERR_AST), false);
+		return (ft_fail(ERR_AST, NULL), false);
 }
