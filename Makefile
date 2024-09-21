@@ -17,7 +17,6 @@ SRCS = src/display/banner.c \
 		src/utils/split.c \
 		src/main.c \
 		dev/print.c \
-		dev/token_conversion.c
 
 OBJS = ${SRCS:.c=.o}
 
