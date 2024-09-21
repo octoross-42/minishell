@@ -6,7 +6,7 @@
 /*   By: octoross <octoross@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/15 20:00:54 by octoross          #+#    #+#             */
-/*   Updated: 2024/09/21 19:10:40 by octoross         ###   ########.fr       */
+/*   Updated: 2024/09/21 19:32:34 by octoross         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,32 +28,21 @@ void	print_lexer(t_lexer *lexer)
 				i = 0;
 				printf(", data : ");
 				while (args[i])
-					printf("'%s' ", args[ i++]);
+					printf("'%s' ", args[i ++]);
 			}
 			else if (ft_is_redir(lexer->token))
 				printf(", data : '%s'", (char *)lexer->data);
-			
 		}
 		printf("\n");
 		lexer = lexer->next;
 	}
 }
 
-void	print_ast(t_ast *ast, int n)
+void	print_node_ast(t_ast *ast, int n, int left)
 {
-	int	i;
-	int		left;
+	int		i;
 	char	**args;
 
-	if (!ast)
-		return ;
-	if (!n)
-		printf("\n");
-	left = (n > 0);
-	if (n < 0)
-		n = -n;
-	if (ast->right)
-		print_ast(ast->right, -n - 1);
 	i = 0;
 	while (i++ < n)
 		printf("\t");
@@ -73,6 +62,22 @@ void	print_ast(t_ast *ast, int n)
 	else if (ft_is_redir(ast->token))
 		printf(" : %s\n", (char *)ast->data);
 	printf("\n");
+}
+
+void	print_ast(t_ast *ast, int n)
+{
+	int		left;
+
+	if (!ast)
+		return ;
+	if (!n)
+		printf("\n");
+	left = (n > 0);
+	if (n < 0)
+		n = -n;
+	if (ast->right)
+		print_ast(ast->right, -n - 1);
+	print_node_ast(ast, n, left);
 	if (ast->left)
 		print_ast(ast->left, n + 1);
 }

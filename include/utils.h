@@ -6,7 +6,7 @@
 /*   By: octoross <octoross@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/09 20:26:55 by octoross          #+#    #+#             */
-/*   Updated: 2024/09/21 18:25:29 by octoross         ###   ########.fr       */
+/*   Updated: 2024/09/21 21:56:22 by octoross         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,16 +19,11 @@
 # include <stdlib.h>
 # include <unistd.h>
 
-# define STATUS_MALLOC 1
+# define STATUS_MALLOC 137
 # define STATUS_PROG 1
-# define STATUS_OK 0
 # define STATUS_SYNTAX 2
-
-# define EXIT_MALLOC 1
-# define EXIT_FORK 1
-# define EXIT_AST 1
-# define EXIT_TOKEN 1
-# define EXIT_SUCCESS 0
+# define STATUS_CMD 127
+# define STATUS_OK 0
 
 # define ERR_PROG "Bad programming happenned :(\n"
 # define ERR_MALLOC "malloc failed\n"

@@ -6,7 +6,7 @@
 /*   By: octoross <octoross@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/09 15:25:03 by octoross          #+#    #+#             */
-/*   Updated: 2024/09/21 19:09:29 by octoross         ###   ########.fr       */
+/*   Updated: 2024/09/21 21:56:57 by octoross         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,6 +43,26 @@ void	ft_clear_ast(t_ast *ast)
 	free(ast);
 }
 
+int	ft_add_new_ast(t_ast *new, t_ast **current, t_ast **top)
+{
+	int	status;
+
+	if (!top || !current)
+		return (ft_fail(ERR_PROG, NULL), STATUS_PROG);
+	if (!(*top))
+	{
+		*top = new;
+		*current = new;
+	}
+	else
+	{
+		status = ft_add_ast(new, current, top);
+		if (status != STATUS_OK)
+			return (ft_clear_ast(*top), status);
+	}
+	return (STATUS_OK);
+}
+
 #include "dev.h"
 
 t_ast	*ft_ast(t_lexer *lexer, int *status)
@@ -62,17 +82,9 @@ t_ast	*ft_ast(t_lexer *lexer, int *status)
 			ft_fail(ERR_MALLOC, NULL);
 			return (ft_clear_ast(top), NULL);
 		}
-		if (!top)
-		{
-			top = new;
-			current = new;
-		}
-		else
-		{
-			*status = ft_add_ast(new, &current, &top);
-			if (*status != STATUS_OK)
-				return (ft_clear_ast(top), NULL);
-		}
+		*status = ft_add_new_ast(new, &current, &top);
+		if (*status != STATUS_OK)
+			return (NULL);
 		lexer = lexer->next;
 	}
 	return (top);

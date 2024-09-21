@@ -31,17 +31,19 @@
 
 typedef struct s_expand
 {
-	bool	is_expand;
-	char	*value;
-	int		len_name;
+	bool			is_expand;
+	char			*value;
+	int				len_name;
 	struct s_expand	*next;
 }	t_expand;
 
 int		ft_close_quotes(char **s, char *data, t_expand **expand);
-int		ft_len_quotes(char **s, t_expand **expand, t_expand **last, int *status);
+int		ft_len_quotes(char **s, t_expand **expand, t_expand **last, \
+			int *status);
 int		ft_expand_arg(char **s, char *data, t_expand **expand);
 void	ft_clear_expand(t_expand *expand);
-int		ft_len_expand(char **s, t_expand **expand, t_expand **last, int *status);
+int		ft_len_expand(char **s, t_expand **expand, t_expand **last, \
+			int *status);
 
 typedef struct s_lexer
 {
@@ -51,6 +53,7 @@ typedef struct s_lexer
 	struct s_lexer	*previous;
 }	t_lexer;
 
+int		ft_parse_redir(char **s, t_lexer *lexer);
 int		ft_parse_arg(char **s, char **data);
 int		ft_parse_cmd(char **s, t_lexer *lexer);
 void	ft_clear_lexer(t_lexer *lexer, int erase_data);
@@ -65,14 +68,14 @@ typedef struct s_ast
 	struct s_ast	*parent;
 }	t_ast;
 
-bool			ft_is_redir(int token);
-bool			ft_is_output(int token);
-int				ft_output_token(t_ast *new, t_ast **current, t_ast **top);
-bool			ft_is_fork(int token);
-int				ft_fork_token(t_ast *new, t_ast **current, t_ast **top);
-int				ft_append_ast(t_ast *new, t_ast **current);
-int				ft_add_ast(t_ast *new, t_ast **current, t_ast **top);
-t_ast			*ft_ast(t_lexer *lexer, int *status);
-void			ft_clear_ast(t_ast *ast);
+bool	ft_is_redir(int token);
+bool	ft_is_output(int token);
+int		ft_output_token(t_ast *new, t_ast **current, t_ast **top);
+bool	ft_is_fork(int token);
+int		ft_fork_token(t_ast *new, t_ast **current, t_ast **top);
+int		ft_append_ast(t_ast *new, t_ast **current);
+int		ft_add_ast(t_ast *new, t_ast **current, t_ast **top);
+t_ast	*ft_ast(t_lexer *lexer, int *status);
+void	ft_clear_ast(t_ast *ast);
 
 #endif

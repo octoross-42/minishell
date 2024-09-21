@@ -6,7 +6,7 @@
 /*   By: octoross <octoross@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/18 13:58:38 by octoross          #+#    #+#             */
-/*   Updated: 2024/09/21 18:53:33 by octoross         ###   ########.fr       */
+/*   Updated: 2024/09/21 21:56:57 by octoross         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,25 +26,6 @@ void	ft_clear_lexer(t_lexer *lexer, int erase_data)
 			free(lexer->data);
 	}
 	free(lexer);
-}
-
-int	ft_parse_redir(char **s, t_lexer *lexer)
-{
-	char	*file;
-
-	if ((lexer->token == INPUT) || (lexer->token == OUTPUT))
-		(*s)++;
-	else if ((lexer->token == HERE_DOC) || (lexer->token == APPEND))
-		*s += 2;
-	else
-		return (ft_fail(ERR_PROG, NULL), STATUS_PROG);
-	while (ft_isspace(**s))
-		(*s)++;
-	file = NULL;
-	if (!ft_parse_arg(s, &file))
-		return (ft_fail(ERR_SYNTAX, *s), STATUS_SYNTAX);
-	lexer->data = (void *)file;
-	return (STATUS_OK);
 }
 
 static int	ft_set_lexer(char **s, t_lexer *lexer)

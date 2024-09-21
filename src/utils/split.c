@@ -6,22 +6,11 @@
 /*   By: octoross <octoross@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/04 22:34:46 by octoross          #+#    #+#             */
-/*   Updated: 2024/09/16 20:54:45 by octoross         ###   ########.fr       */
+/*   Updated: 2024/09/21 21:57:20 by octoross         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "utils.h"
-
-char	**free_until(char **tab, size_t index)
-{
-	size_t	i;
-
-	i = 0;
-	while (i < index)
-		free(tab[i++]);
-	free(tab);
-	return (0);
-}
 
 size_t	ft_nbr_words(char const *s, char c)
 {
@@ -84,7 +73,7 @@ char	**ft_split(char const *s, char c)
 	{
 		splited[nbr_words] = ft_next_word(s, &i, c);
 		if (!splited[nbr_words])
-			return (free_until(splited, nbr_words));
+			return (ft_free_until((void **)splited, nbr_words), NULL);
 		nbr_words ++;
 	}
 	return (splited);

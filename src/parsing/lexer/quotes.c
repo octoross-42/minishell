@@ -12,6 +12,11 @@
 
 #include "lexer.h"
 
+bool	ft_char_is_quote(char c)
+{
+	return ((c == '\'') || (c == '"'));
+}
+
 int	ft_len_quotes(char **s, t_expand **expand, t_expand **last, int *status)
 {
 	char	quote;

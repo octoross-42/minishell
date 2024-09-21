@@ -12,7 +12,7 @@
 
 #include "lexer.h"
 
-int	ft_len_arg(char *s, t_expand **expand, int *status)
+static int	ft_len_arg(char *s, t_expand **expand, int *status)
 {
 	int			i;
 	int			len;
@@ -37,7 +37,7 @@ int	ft_len_arg(char *s, t_expand **expand, int *status)
 	return (len);
 }
 
-int	ft_init_parsing_arg(char *s, char **data, t_expand **expand)
+static int	ft_init_parsing_arg(char *s, char **data, t_expand **expand)
 {
 	int	len;
 	int	status;	
@@ -77,5 +77,24 @@ int	ft_parse_arg(char **s, char **data)
 			return (STATUS_PROG);
 		i += j;
 	}
+	return (STATUS_OK);
+}
+
+int	ft_parse_redir(char **s, t_lexer *lexer)
+{
+	char	*file;
+
+	if ((lexer->token == INPUT) || (lexer->token == OUTPUT))
+		(*s)++;
+	else if ((lexer->token == HERE_DOC) || (lexer->token == APPEND))
+		*s += 2;
+	else
+		return (ft_fail(ERR_PROG, NULL), STATUS_PROG);
+	while (ft_isspace(**s))
+		(*s)++;
+	file = NULL;
+	if (!ft_parse_arg(s, &file))
+		return (ft_fail(ERR_SYNTAX, *s), STATUS_SYNTAX);
+	lexer->data = (void *)file;
 	return (STATUS_OK);
 }

@@ -6,7 +6,7 @@
 /*   By: octoross <octoross@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/16 21:21:49 by octoross          #+#    #+#             */
-/*   Updated: 2024/09/21 19:03:13 by octoross         ###   ########.fr       */
+/*   Updated: 2024/09/21 21:56:57 by octoross         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ void	ft_exec_fork(t_ast *ast, t_minishell *minishell)
 		ft_free_until((void **)minishell->path, -1);
 		ft_clear_ast(minishell->ast);
 		ft_fail(ERR_FORK, NULL);
-		exit(EXIT_FORK);
+		exit(1);
 	}
 }
 
@@ -48,7 +48,7 @@ void	ft_exec_ast(t_ast *ast, t_minishell *minishell)
 		ft_free_until((void **)minishell->path, -1);
 		ft_clear_ast(minishell->ast);
 		ft_fail(ERR_PARSING, NULL);
-		ft_exit_minishell(minishell, EXIT_TOKEN);
+		ft_exit_minishell(minishell, 1);
 	}
 }
 
@@ -57,4 +57,5 @@ void	ft_exec_line(t_minishell *minishell)
 	printf("executez le tralala\n");
 	ft_exit_minishell(minishell, STATUS_OK);
 	// minishell->last_pid = fork();
+	exit(42);
 }

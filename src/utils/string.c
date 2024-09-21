@@ -6,23 +6,11 @@
 /*   By: octoross <octoross@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/17 11:30:41 by octoross          #+#    #+#             */
-/*   Updated: 2024/09/19 20:49:06 by octoross         ###   ########.fr       */
+/*   Updated: 2024/09/21 19:53:10 by octoross         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "utils.h"
-
-size_t	ft_strlen(const char *s)
-{
-	size_t	len;
-
-	if (!s)
-		return (0);
-	len = 0;
-	while (s[len])
-		len ++;
-	return (len);
-}
 
 char	*ft_strncpy(char *restrict dst, const char *restrict src, size_t n)
 {

@@ -32,13 +32,3 @@ bool	ft_isname(char c)
 {
 	return (ft_isalpha(c) || ft_isdigit(c) || (c == '_'));
 }
-
-bool	ft_char_is_token(char c)
-{
-	return ((c == '<') || (c == '>') || (c == '|') || (c == '&'));
-}
-
-bool	ft_char_is_quote(char c)
-{
-	return ((c == '\'') || (c == '"'));
-}

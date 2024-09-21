@@ -6,12 +6,24 @@
 /*   By: octoross <octoross@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/09 20:30:08 by octoross          #+#    #+#             */
-/*   Updated: 2024/09/21 00:18:49 by octoross         ###   ########.fr       */
+/*   Updated: 2024/09/21 21:56:16 by octoross         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "utils.h"
 #include "lexer.h"
+
+size_t	ft_strlen(const char *s)
+{
+	size_t	len;
+
+	if (!s)
+		return (0);
+	len = 0;
+	while (s[len])
+		len ++;
+	return (len);
+}
 
 void	ft_free_until(void **data, int n)
 {
@@ -53,48 +65,4 @@ void	ft_fail(char *err, void *err_value)
 	}
 	if (*err)
 		write(STDERR_FILENO, err, ft_strlen(err));
-}
-
-char	*ft_str_of_token(int token)
-{
-	if (token == PIPE)
-		return ("PIPE");
-	if (token == OR)
-		return ("OR");
-	if (token == AND)
-		return ("AND");
-	if (token == INPUT)
-		return ("INPUT");
-	if (token == OUTPUT)
-		return ("OUTPUT");
-	if (token == HERE_DOC)
-		return ("HERE_DOC");
-	if (token == APPEND)
-		return ("APPEND");
-	if (token == CMD)
-		return ("CMD");
-	else
-		return (NULL);
-}
-
-int	ft_token_of_str(char *token)
-{
-	if (!ft_strcmp(token, "PIPE"))
-		return (PIPE);
-	if (!ft_strcmp(token, "OR"))
-		return (OR);
-	if (!ft_strcmp(token, "AND"))
-		return (AND);
-	if (!ft_strcmp(token, "INPUT"))
-		return (INPUT);
-	if (!ft_strcmp(token, "OUTPUT"))
-		return (OUTPUT);
-	if (!ft_strcmp(token, "HERE_DOC"))
-		return (HERE_DOC);
-	if (!ft_strcmp(token, "APPEND"))
-		return (APPEND);
-	if (!ft_strcmp(token, "CMD"))
-		return (CMD);
-	else
-		return (0);
 }

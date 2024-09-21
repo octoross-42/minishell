@@ -6,7 +6,7 @@
 /*   By: octoross <octoross@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/15 20:51:11 by octoross          #+#    #+#             */
-/*   Updated: 2024/09/21 19:08:55 by octoross         ###   ########.fr       */
+/*   Updated: 2024/09/21 21:56:57 by octoross         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,9 +61,6 @@ int	main(int argc, char **argv, char **envp)
 {
 	(void)argc;
 	(void)argv;
-	// int	i = 0;
-	// while (envp[i ++])
-	// 	printf("envp %d : %s\n", i, envp[i]);
 	ft_print_banner();
 	ft_init_minishell(envp);
 	return (0);
