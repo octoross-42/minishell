@@ -6,7 +6,7 @@
 /*   By: octoross <octoross@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/18 13:58:38 by octoross          #+#    #+#             */
-/*   Updated: 2024/09/23 02:20:55 by octoross         ###   ########.fr       */
+/*   Updated: 2024/09/23 17:26:12 by octoross         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,16 +81,20 @@ bool	ft_add_lexer(t_lexer **top, t_lexer **last)
 	return (true);
 }
 
-int	ft_is_compatible(t_lexer *l1, t_lexer *l2)
+int	ft_is_compatible(t_lexer *l, t_lexer *previous)
 {
-	if (!l2 || !l1)
+	if (!l)
+		return (ft_fail(ERR_PARSING, NULL), STATUS_PROG);
+	if (ft_is_fork(l->token) && !previous)
+		return (ft_fail(ERR_SYNTAX, ft_str_of_token(l->token)), STATUS_SYNTAX);
+	if (!previous)
 		return (STATUS_OK);
-	if ((l1->token == CMD) && (l2->token == CMD))
-		return (ft_fail(ERR_PROG, NULL), STATUS_PROG);
-	else if ((l1->token == CMD) || (l2->token == CMD))
+	if ((l->token == CMD) && (previous->token == CMD))
+		return (ft_fail(ERR_PARSING, NULL), STATUS_PROG);
+	else if ((l->token == CMD) || (previous->token == CMD))
 		return (STATUS_OK);
-	else if (ft_is_fork(l1->token) && ft_is_fork(l2->token))
-		return (ft_fail(ERR_SYNTAX, ft_str_of_token(l2->token)), STATUS_SYNTAX);
+	else if (ft_is_fork(l->token) && ft_is_fork(previous->token))
+		return (ft_fail(ERR_SYNTAX, ft_str_of_token(previous->token)), STATUS_SYNTAX);
 	else
 		return (STATUS_OK);
 }
@@ -119,7 +123,7 @@ t_lexer	*ft_lexer(char *line, int *status)
 		if (*status != STATUS_OK)
 			return (ft_clear_lexer(top, 1), NULL);
 	}
-	if (ft_is_fork(lexer->token))
+	if (lexer && ft_is_fork(lexer->token))
 		return (ft_clear_lexer(top, 1), ft_fail(ERR_SYNTAX, "newline"), NULL);
 	return (top);
 }
