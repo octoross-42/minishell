@@ -40,7 +40,7 @@ typedef struct s_expand
 int		ft_close_quotes(char **s, char *data, t_expand **expand);
 int		ft_len_quotes(char **s, t_expand **expand, t_expand **last, \
 			int *status);
-int		ft_expand_arg(char **s, char *data, t_expand **expand);
+int		ft_expand(char **s, char *data, t_expand **expand);
 void	ft_clear_expand(t_expand *expand);
 int		ft_len_expand(char **s, t_expand **expand, t_expand **last, \
 			int *status);
@@ -62,6 +62,7 @@ t_lexer	*ft_lexer(char *line, int *status);
 typedef struct s_ast
 {
 	int				token;
+	bool			cmd;
 	void			*data;
 	struct s_ast	*left;
 	struct s_ast	*right;

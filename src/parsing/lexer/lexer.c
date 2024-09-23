@@ -6,7 +6,7 @@
 /*   By: octoross <octoross@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/18 13:58:38 by octoross          #+#    #+#             */
-/*   Updated: 2024/09/21 21:56:57 by octoross         ###   ########.fr       */
+/*   Updated: 2024/09/23 02:20:55 by octoross         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,22 +30,36 @@ void	ft_clear_lexer(t_lexer *lexer, int erase_data)
 
 static int	ft_set_lexer(char **s, t_lexer *lexer)
 {
-	if (!ft_strncmp(*s, "||", 2))
-		return (lexer->token = OR, *s = *s + 2, STATUS_OK);
-	else if (!ft_strncmp(*s, "&&", 2))
-		return (lexer->token = AND, *s = *s + 2, STATUS_OK);
-	else if (!ft_strncmp(*s, "|", 1))
-		return (lexer->token = PIPE, *s = *s + 1, STATUS_OK);
-	else if (!ft_strncmp(*s, "<<", 2))
-		return (lexer->token = HERE_DOC, ft_parse_redir(s, lexer));
-	else if (!ft_strncmp(*s, ">>", 2))
-		return (lexer->token = APPEND, ft_parse_redir(s, lexer));
-	else if (!ft_strncmp(*s, "<", 1))
-		return (lexer->token = INPUT, ft_parse_redir(s, lexer));
-	else if (!ft_strncmp(*s, ">", 1))
-		return (lexer->token = OUTPUT, ft_parse_redir(s, lexer));
+	// if (!ft_strncmp(*s, "||", 2))
+	// 	return (lexer->token = OR, *s = *s + 2, STATUS_OK);
+	// else if (!ft_strncmp(*s, "&&", 2))
+	// 	return (lexer->token = AND, *s = *s + 2, STATUS_OK);
+	// else if (!ft_strncmp(*s, "|", 1))
+	// 	return (lexer->token = PIPE, *s = *s + 1, STATUS_OK);
+	// else if (!ft_strncmp(*s, "<<", 2))
+	// 	return (lexer->token = HERE_DOC, ft_parse_redir(s, lexer));
+	// else if (!ft_strncmp(*s, ">>", 2))
+	// 	return (lexer->token = APPEND, ft_parse_redir(s, lexer));
+	// else if (!ft_strncmp(*s, "<", 1))
+	// 	return (lexer->token = INPUT, ft_parse_redir(s, lexer));
+	// else if (!ft_strncmp(*s, ">", 1))
+	// 	return (lexer->token = OUTPUT, ft_parse_redir(s, lexer));
+	// else
+	// 	return (ft_parse_cmd(s, lexer));
+	lexer->token = ft_get_next_token(*s);
+	if ((lexer->token == OR) || (lexer->token == AND))
+		return (*s = *s + 2, STATUS_OK);
+	else if (lexer->token == PIPE)
+		return (*s = *s + 1, STATUS_OK);
+	else if (lexer->token == CMD)
+		return ft_parse_cmd(s, lexer);
+	else if ((lexer->token == INPUT) || (lexer->token == OUTPUT))
+		(*s)++;
+	else if ((lexer->token == HERE_DOC) || (lexer->token == APPEND))
+		*s += 2;
 	else
-		return (ft_parse_cmd(s, lexer));
+		return (ft_fail(ERR_PROG, NULL), STATUS_PROG);
+	return (ft_parse_redir(s, lexer));
 }
 
 bool	ft_add_lexer(t_lexer **top, t_lexer **last)
@@ -80,6 +94,7 @@ int	ft_is_compatible(t_lexer *l1, t_lexer *l2)
 	else
 		return (STATUS_OK);
 }
+#include "dev.h"
 
 t_lexer	*ft_lexer(char *line, int *status)
 {
@@ -104,6 +119,8 @@ t_lexer	*ft_lexer(char *line, int *status)
 		if (*status != STATUS_OK)
 			return (ft_clear_lexer(top, 1), NULL);
 	}
+	if (ft_is_fork(lexer->token))
+		return (ft_clear_lexer(top, 1), ft_fail(ERR_SYNTAX, "newline"), NULL);
 	return (top);
 }
 

@@ -43,7 +43,7 @@ static int	ft_init_parsing_arg(char *s, char **data, t_expand **expand)
 	int	status;	
 
 	len = ft_len_arg(s, expand, &status);
-	if (len <= 0)
+	if (len < 0)
 		return (status);
 	*data = (char *)malloc((len + 1) * sizeof(char));
 	if (!(*data))
@@ -68,7 +68,7 @@ int	ft_parse_arg(char **s, char **data)
 	{
 		j = 0;
 		if (**s == '$')
-			j = ft_expand_arg(s, &((*data)[i]), &expand);
+			j = ft_expand(s, &((*data)[i]), &expand);
 		else if (ft_char_is_quote(**s))
 			j = ft_close_quotes(s, &((*data)[i]), &expand);
 		else
@@ -83,18 +83,21 @@ int	ft_parse_arg(char **s, char **data)
 int	ft_parse_redir(char **s, t_lexer *lexer)
 {
 	char	*file;
+	int		status;
 
-	if ((lexer->token == INPUT) || (lexer->token == OUTPUT))
-		(*s)++;
-	else if ((lexer->token == HERE_DOC) || (lexer->token == APPEND))
-		*s += 2;
-	else
-		return (ft_fail(ERR_PROG, NULL), STATUS_PROG);
 	while (ft_isspace(**s))
 		(*s)++;
+	if (!(**s))
+		return (ft_fail(ERR_SYNTAX, "newline"), STATUS_SYNTAX);
+	else if (ft_char_is_token(**s))
+	{
+		ft_fail(ERR_SYNTAX, ft_str_of_token(ft_get_next_token(*s)));
+		return (STATUS_SYNTAX);
+	}
 	file = NULL;
-	if (!ft_parse_arg(s, &file))
-		return (ft_fail(ERR_SYNTAX, *s), STATUS_SYNTAX);
+	status = ft_parse_arg(s, &file);
+	if (status != STATUS_OK)
+		return (status);
 	lexer->data = (void *)file;
 	return (STATUS_OK);
 }

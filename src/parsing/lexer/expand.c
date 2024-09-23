@@ -42,6 +42,8 @@ int	ft_len_expand(char **s, t_expand **expand, t_expand **last, int *status)
 	if (!ft_add_expand(expand, last))
 		return (*status = STATUS_MALLOC, -1);
 	(*s)++;
+	if (ft_char_is_quote(**s))
+		return (0);
 	i = 0;
 	while (ft_isname((*s)[i]))
 		i ++;
@@ -82,21 +84,22 @@ static void	ft_next_expand(t_expand **expand)
 	ft_clear_expand(next);
 }
 
-int	ft_expand_arg(char **s, char *data, t_expand **expand)
+int	ft_expand(char **s, char *data, t_expand **expand)
 {
 	int	len;
 
 	len = 0;
 	if (!expand || !(*expand))
 		return (-1);
-	if ((*expand)->is_expand)
+	if ((*expand)->is_expand && (*expand)->len_name)
 	{
+		printf("whuy ?\n");
 		if (!(*expand)->value)
 			return (ft_clear_expand(*expand), -1);
 		len = ft_strlen((*expand)->value);
 		ft_strcpy(data, (*expand)->value);
 	}
-	else
+	else if (!(*expand)->is_expand)
 		data[len ++] = '$';
 	*s += (*expand)->len_name + 1;
 	ft_next_expand(expand);

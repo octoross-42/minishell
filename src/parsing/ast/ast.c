@@ -6,7 +6,7 @@
 /*   By: octoross <octoross@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/09 15:25:03 by octoross          #+#    #+#             */
-/*   Updated: 2024/09/21 21:56:57 by octoross         ###   ########.fr       */
+/*   Updated: 2024/09/23 00:26:17 by octoross         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,6 +27,7 @@ static t_ast	*ft_new_ast(t_lexer *lexer)
 	ast->left = NULL;
 	ast->right = NULL;
 	ast->parent = NULL;
+	ast->cmd = false;
 	return (ast);
 }
 
@@ -53,6 +54,8 @@ int	ft_add_new_ast(t_ast *new, t_ast **current, t_ast **top)
 	{
 		*top = new;
 		*current = new;
+		if (new->token == CMD)
+			(*current)->cmd = true;
 	}
 	else
 	{
@@ -72,6 +75,7 @@ t_ast	*ft_ast(t_lexer *lexer, int *status)
 	t_ast	*top;
 
 	top = NULL;
+	current = NULL;
 	*status = STATUS_OK;
 	while (lexer)
 	{

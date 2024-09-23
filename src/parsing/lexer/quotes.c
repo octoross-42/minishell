@@ -59,7 +59,7 @@ int	ft_close_quotes(char **s, char *data, t_expand **expand)
 	{
 		if ((quote != '\'') && (**s == '$'))
 		{
-			j = ft_expand_arg(s, data, expand);
+			j = ft_expand(s, data, expand);
 			if (j < 0)
 				return (-1);
 			i += j;

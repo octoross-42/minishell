@@ -6,7 +6,7 @@ SRCS = src/display/banner.c \
 		src/parsing/ast/ast.c \
 		src/parsing/token/token_is.c \
 		src/parsing/token/conversion.c \
-		src/parsing/lexer/expand_arg.c \
+		src/parsing/lexer/expand.c \
 		src/parsing/lexer/lexer.c \
 		src/parsing/lexer/parse_arg.c \
 		src/parsing/lexer/parse_cmd.c \

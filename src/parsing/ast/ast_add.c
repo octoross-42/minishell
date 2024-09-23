@@ -6,7 +6,7 @@
 /*   By: octoross <octoross@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/13 16:26:57 by octoross          #+#    #+#             */
-/*   Updated: 2024/09/21 18:45:25 by octoross         ###   ########.fr       */
+/*   Updated: 2024/09/23 00:32:09 by octoross         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,8 @@
 
 int	ft_append_ast(t_ast *new, t_ast **current)
 {
+	t_ast	*parent;
+
 	new->parent = *current;
 	if (!(*current)->left)
 		(*current)->left = new;
@@ -22,6 +24,16 @@ int	ft_append_ast(t_ast *new, t_ast **current)
 	else
 		return (ft_fail(ERR_PARSING, NULL), STATUS_PROG);
 	*current = new;
+	if ((*current)->token == CMD)
+	{
+		(*current)->cmd = true;
+		parent = (*current)->parent;
+		while (parent && !ft_is_fork(parent->token))
+		{
+			parent->cmd = true;
+			parent = parent->parent;
+		}
+	}
 	return (STATUS_OK);
 }
 
@@ -52,17 +64,22 @@ int	ft_output_token(t_ast *new, t_ast **current, t_ast **top)
 	// HYPO : 2 cmd cannot succeed
 	if (((*current)->token == CMD))
 	{
+		new->cmd = true;
 		if (*top == *current)
 			*top = new;
-		if ((*current)->parent->left == *current)
-			(*current)->parent->left = new;
 		else
-			(*current)->parent->right = new;
-		new->parent = (*current)->parent;
+		{
+			if ((*current)->parent->left == *current)
+				(*current)->parent->left = new;
+			else if ((*current)->parent->right == *current)
+				(*current)->parent->right = new;
+			else
+				return (ft_fail(ERR_PARSING, NULL), STATUS_PROG);
+			new->parent = (*current)->parent;
+		}
 		new->left = (*current);
 		(*current)->parent = new;
 		return (STATUS_OK);
-		// TODO enlever les bool return des add_token
 	}
 	else
 		return (ft_append_ast(new, current));

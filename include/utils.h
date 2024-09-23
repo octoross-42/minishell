@@ -6,7 +6,7 @@
 /*   By: octoross <octoross@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/09 20:26:55 by octoross          #+#    #+#             */
-/*   Updated: 2024/09/21 21:56:22 by octoross         ###   ########.fr       */
+/*   Updated: 2024/09/23 02:26:29 by octoross         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,6 +21,7 @@
 
 # define STATUS_MALLOC 137
 # define STATUS_PROG 1
+# define STATUS_FORK 1
 # define STATUS_SYNTAX 2
 # define STATUS_CMD 127
 # define STATUS_OK 0
@@ -50,6 +51,8 @@ char	*ft_err(char *err, char *s);
 bool	ft_char_is_quote(char c);
 bool	ft_char_is_token(char c);
 char	*ft_str_of_token(int token);
+char	*ft_name_of_token(int token);
 int		ft_token_of_str(char *token);
+int		ft_get_next_token(char *s);
 
 #endif

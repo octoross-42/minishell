@@ -6,13 +6,13 @@
 /*   By: octoross <octoross@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/21 19:49:29 by octoross          #+#    #+#             */
-/*   Updated: 2024/09/21 19:49:53 by octoross         ###   ########.fr       */
+/*   Updated: 2024/09/23 02:27:23 by octoross         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "lexer.h"
 
-char	*ft_str_of_token(int token)
+char	*ft_name_of_token(int token)
 {
 	if (token == PIPE)
 		return ("PIPE");
@@ -30,6 +30,25 @@ char	*ft_str_of_token(int token)
 		return ("APPEND");
 	if (token == CMD)
 		return ("CMD");
+	else
+		return (NULL);
+}
+char	*ft_str_of_token(int token)
+{
+	if (token == PIPE)
+		return ("|");
+	if (token == OR)
+		return ("||");
+	if (token == AND)
+		return ("&&");
+	if (token == INPUT)
+		return ("<");
+	if (token == OUTPUT)
+		return (">");
+	if (token == HERE_DOC)
+		return ("<<");
+	if (token == APPEND)
+		return (">>");
 	else
 		return (NULL);
 }
@@ -54,4 +73,24 @@ int	ft_token_of_str(char *token)
 		return (CMD);
 	else
 		return (0);
+}
+
+int	ft_get_next_token(char *s)
+{
+	if (!ft_strncmp(s, "||", 2))
+		return (OR);
+	else if (!ft_strncmp(s, "&&", 2))
+		return (AND);
+	else if (!ft_strncmp(s, "|", 1))
+		return (PIPE);
+	else if (!ft_strncmp(s, "<<", 2))
+		return (HERE_DOC);
+	else if (!ft_strncmp(s, ">>", 2))
+		return (APPEND);
+	else if (!ft_strncmp(s, "<", 1))
+		return (INPUT);
+	else if (!ft_strncmp(s, ">", 1))
+		return (OUTPUT);
+	else
+		return (CMD);
 }

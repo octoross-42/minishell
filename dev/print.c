@@ -6,7 +6,7 @@
 /*   By: octoross <octoross@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/15 20:00:54 by octoross          #+#    #+#             */
-/*   Updated: 2024/09/21 19:32:34 by octoross         ###   ########.fr       */
+/*   Updated: 2024/09/23 02:26:12 by octoross         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@ void	print_lexer(t_lexer *lexer)
 
 	while (lexer)
 	{
-		printf("token : %s", ft_str_of_token(lexer->token));
+		printf("token : %s", ft_name_of_token(lexer->token));
 		if (lexer->data)
 		{
 			if (lexer->token == CMD)
@@ -50,7 +50,9 @@ void	print_node_ast(t_ast *ast, int n, int left)
 		printf("\\");
 	else if (n)
 		printf("/");
-	printf("%s", ft_str_of_token(ast->token));
+	printf("%s", ft_name_of_token(ast->token), ast->cmd);
+	if (ast->cmd)
+		printf(" (cmd)");
 	if (ast->token == CMD)
 	{
 		printf(" :");
@@ -60,7 +62,7 @@ void	print_node_ast(t_ast *ast, int n, int left)
 			printf(" '%s'", args[i ++]);
 	}
 	else if (ft_is_redir(ast->token))
-		printf(" : %s\n", (char *)ast->data);
+		printf(" : '%s'\n", (char *)ast->data);
 	printf("\n");
 }
 

@@ -47,8 +47,8 @@ static int	ft_init_parsing_cmd(char *s, char ***args)
 	if (!args)
 		return (ft_fail(ERR_PROG, NULL), STATUS_PROG);
 	nbr_args = ft_nbr_args(&s);
-	if (nbr_args <= 0)
-		return (ft_fail(ERR_SYNTAX, s), STATUS_SYNTAX);
+	if (nbr_args < 0)
+		return (ft_fail(ERR_SYNTAX, "newline"), STATUS_SYNTAX);
 	*args = (char **)malloc((nbr_args + 1) * sizeof(char *));
 	if (!(*args))
 		return (ft_fail(ERR_MALLOC, NULL), STATUS_MALLOC);
