@@ -6,7 +6,7 @@
 /*   By: octoross <octoross@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/15 20:51:11 by octoross          #+#    #+#             */
-/*   Updated: 2024/09/21 21:56:57 by octoross         ###   ########.fr       */
+/*   Updated: 2024/09/24 19:39:43 by octoross         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,12 +46,63 @@ void	ft_exit_minishell(t_minishell *minishell, int status)
 	exit(status);
 }
 
+void	ft_clear_env(t_env *env)
+{
+	if (!env)
+		return ;
+	if (env->next)
+		ft_clear_env(env->next);
+	if (env->name)
+		free(env->name);
+	if (env->value)
+		free(env->value);
+}
+
+t_env	*ft_env_of(char **envp)
+{
+	t_env	*env;
+	t_env	*last;
+	t_env	*new;
+	int		i;
+	int		j;
+
+	if (!envp)
+		return (NULL);
+	env = NULL;
+	last = NULL;
+	i = 0;
+	while (envp[i])
+	{
+		new = (t_env *)malloc(sizeof(t_env));
+		if (!new)
+			return (ft_fail(ERR_MALLOC, NULL), ft_clear_env(env), NULL);
+		if (!env)
+			env = new;
+		if (last)
+			last->next = new;
+		last = new;
+		last->next = NULL;
+		j = 0;
+		while (envp[i][j] && envp[i][j] != '=')
+			j++;
+		last->name = ft_strndup(envp[i], j ++);
+		if (!last->name)
+			return (ft_fail(ERR_MALLOC, NULL), ft_clear_env(env), NULL);
+		last->value = ft_strdup(envp[i] + j);
+		if (!last->value)
+			return (ft_fail(ERR_MALLOC, NULL), ft_clear_env(env), NULL);
+		i++;
+	}
+	return (env);
+}
+
 void	ft_init_minishell(char **envp)
 {
 	t_minishell	minishell;
 
-	minishell.envp = envp;
+	minishell.env = ft_env_of(envp);
 	minishell.status = STATUS_OK;
+	minishell.parsing_status = STATUS_OK;
 	minishell.path = ft_get_path(envp);
 	minishell.ast = NULL;
 	ft_minishell_input(&minishell);
