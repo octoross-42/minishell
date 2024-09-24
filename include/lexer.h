@@ -45,13 +45,9 @@ typedef struct s_arg
 	struct s_arg	*next;
 }	t_arg;
 
-int		ft_close_quotes(char **s, char *data, t_expand **expand);
-int		ft_len_quotes(char **s, t_expand **expand, t_expand **last, \
-			int *status);
-// int		ft_expand(char **s, char *data, t_expand **expand);
-// void	ft_clear_expand(t_expand *expand);
-// int		ft_len_expand(char **s, t_expand **expand, t_expand **last, \
-			int *status);
+int		ft_arg_expand(char **s, t_arg *arg);
+int		ft_len_quotes(char **s, char *quote);
+int		ft_close_quotes(char **s, char *data, char *quote);
 
 typedef struct s_lexer
 {
@@ -62,7 +58,7 @@ typedef struct s_lexer
 }	t_lexer;
 
 int		ft_parse_redir(char **s, t_lexer *lexer);
-int		ft_parse_arg(char **s, char **data);
+int		ft_parse_arg(char **s, t_arg **data);
 int		ft_parse_cmd(char **s, t_lexer *lexer);
 void	ft_clear_lexer(t_lexer *lexer, int erase_data);
 t_lexer	*ft_lexer(char *line, int *status);

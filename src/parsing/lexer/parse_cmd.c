@@ -40,7 +40,7 @@ int	ft_nbr_args(char **s)
 	return (nbr_args);
 }
 
-static int	ft_init_parsing_cmd(char *s, char ***args)
+static int	ft_init_parsing_cmd(char *s, t_arg ***args)
 {
 	int	nbr_args;
 
@@ -49,7 +49,7 @@ static int	ft_init_parsing_cmd(char *s, char ***args)
 	nbr_args = ft_nbr_args(&s);
 	if (nbr_args < 0)
 		return (ft_fail(ERR_SYNTAX, "newline"), STATUS_SYNTAX);
-	*args = (char **)malloc((nbr_args + 1) * sizeof(char *));
+	*args = (t_arg **)malloc((nbr_args + 1) * sizeof(t_arg *));
 	if (!(*args))
 		return (ft_fail(ERR_MALLOC, NULL), STATUS_MALLOC);
 	(*args)[nbr_args] = NULL;
@@ -60,7 +60,7 @@ int	ft_parse_cmd(char **s, t_lexer *lexer)
 {
 	int			status;
 	int			nbr_args;
-	char		**args;
+	t_arg		**args;
 
 	lexer->token = CMD;
 	args = NULL;
@@ -70,9 +70,11 @@ int	ft_parse_cmd(char **s, t_lexer *lexer)
 	nbr_args = 0;
 	while (**s && !ft_char_is_token(**s))
 	{
+		// printf("parse cmd : %s\n", *s);
 		status = ft_parse_arg(s, &(args[nbr_args]));
 		if (status != STATUS_OK)
-			return (ft_free_until((void **)args, nbr_args), status);
+		// TODO rajouter boucle pour clear tous les args
+			return (status);
 		while (ft_isspace(**s))
 			(*s)++;
 		nbr_args ++;

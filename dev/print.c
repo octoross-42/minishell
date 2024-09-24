@@ -6,7 +6,7 @@
 /*   By: octoross <octoross@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/15 20:00:54 by octoross          #+#    #+#             */
-/*   Updated: 2024/09/23 18:27:01 by octoross         ###   ########.fr       */
+/*   Updated: 2024/09/24 23:48:00 by octoross         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,7 +41,8 @@ void	print_lexer(t_lexer *lexer)
 void	print_node_ast(t_ast *ast, int n, int left)
 {
 	int		i;
-	char	**args;
+	t_arg	**args;
+	t_arg	*arg;
 
 	i = 0;
 	while (i++ < n)
@@ -56,10 +57,21 @@ void	print_node_ast(t_ast *ast, int n, int left)
 	if (ast->token == CMD)
 	{
 		printf(" :");
-		args = (char **)ast->data;
+		args = ast->data;
 		i = 0;
 		while (args[i])
-			printf(" '%s'", args[i ++]);
+		{
+			arg = args[i ++];
+			printf(" \"");
+			while (arg)
+			{
+				if (arg->expand)
+					printf(" expand :");
+				printf(" '%s'", arg->data);
+				arg = arg->next;
+			}
+			printf("\"");
+		}
 	}
 	else if (ft_is_redir(ast->token))
 		printf(" : '%s'\n", (char *)ast->data);

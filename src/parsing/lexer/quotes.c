@@ -17,59 +17,42 @@ bool	ft_char_is_quote(char c)
 	return ((c == '\'') || (c == '"'));
 }
 
-int	ft_len_quotes(char **s, t_expand **expand, t_expand **last, int *status)
+int	ft_len_quotes(char **s, char *quote)
 {
-	char	quote;
-	int		len;
-	int		i;
+	int	len;
 
-	quote = **s;
+	*quote = **s;
+	(*s)++;
 	len = 0;
-	(*s)++;
-	while (**s && (**s != quote))
+	while (**s)
 	{
-		i = 1;
-		if ((quote != '\'') && (**s == '$'))
-		{
-			i = ft_len_expand(s, expand, last, status);
-			if (i < 0)
-				return (-1);
-			len += i;
-		}
+		if ((**s == '$') && ft_isname(*(*s + 1)) && (*quote != '\''))
+			return ((*s)--, len);
+		else if (**s == *quote)
+			return (*quote = 0, len);
 		else
-			(*s)++;
-		len += i;
+			len ++;
+		(*s)++;
 	}
-	if (**s != quote)
-		return (*status = STATUS_SYNTAX, -1);
-	(*s)++;
-	return (len);
+	return (ft_fail(ERR_SYNTAX, "newline"), -1);
 }
 
-int	ft_close_quotes(char **s, char *data, t_expand **expand)
+int	ft_close_quotes(char **s, char *data, char *quote)
 {
-	char	quote;
-	int		i;
-	int		j;
+	int	len;
 
-	quote = **s;
+	*quote = **s;
 	(*s)++;
-	i = 0;
-	while (**s && (**s != quote))
-	{
-		if ((quote != '\'') && (**s == '$'))
-		{
-			j = ft_expand(s, data, expand);
-			if (j < 0)
-				return (-1);
-			i += j;
-		}
+	len = 0;
+	while (**s)
+	{	
+		if ((**s == '$') && ft_isname(*(*s + 1)) && (*quote != '\''))
+			return ((*s)--, STATUS_OK);
+		else if (**s == *quote)
+			return (*quote = 0, STATUS_OK);
 		else
-		{
-			data[i ++] = **s;
-			(*s)++;
-		}
+			data[len ++] = **s;
+		(*s)++;
 	}
-	(*s)++;
-	return (i);
+	return (ft_fail(ERR_SYNTAX, "newline"), -1);
 }

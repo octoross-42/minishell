@@ -6,7 +6,7 @@
 /*   By: octoross <octoross@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/15 20:51:11 by octoross          #+#    #+#             */
-/*   Updated: 2024/09/24 19:45:26 by octoross         ###   ########.fr       */
+/*   Updated: 2024/09/24 22:44:24 by octoross         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,7 +75,7 @@ t_env	*ft_env_of(char **envp)
 	{
 		new = (t_env *)malloc(sizeof(t_env));
 		if (!new)
-			return (ft_fail(ERR_MALLOC, NULL), ft_clear_env(env), *status = STATUS_MALLOC, NULL);
+			return (ft_fail(ERR_MALLOC, NULL), ft_clear_env(env), NULL);
 		if (!env)
 			env = new;
 		if (last)

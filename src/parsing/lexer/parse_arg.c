@@ -12,77 +12,148 @@
 
 #include "lexer.h"
 
-static int	ft_len_arg(char *s, t_expand **expand, int *status)
+int	ft_add_new_arg(t_arg **last, t_arg **top)
 {
-	int			i;
-	int			len;
-	t_expand	*last;
+	t_arg	*new;
 
-	last = NULL;
+	if (!last || !top)
+		return (ft_fail(ERR_PROG, NULL), STATUS_PROG);
+	new = (t_arg *)malloc(sizeof(t_arg) );
+	if (!new)
+		return (ft_fail(ERR_MALLOC, NULL), STATUS_MALLOC);
+	new->data = NULL;
+	new->next = NULL;
+	new->expand = false;
+	new->wildcard = false;
+	if (!(*top))
+		*top = new;
+	if (*last)
+		(*last)->next = new;
+	*last = new;
+	return (STATUS_OK);
+}
+
+int	ft_len_arg(char *s, char quote, int *status)
+{
+	int	len;
+	int	len_quotes;
+
 	len = 0;
 	*status = STATUS_OK;
 	while (*s && !ft_isspace(*s) && !ft_char_is_token(*s))
-	{
-		i = 1;
-		if (*s == '$')
-			i = ft_len_expand(&s, expand, &last, status);
-		else if (ft_char_is_quote(*s))
-			i = ft_len_quotes(&s, expand, &last, status);
+	{	
+		if ((*s == '$') && ft_isname(*(s + 1)) && (quote != '\''))
+			return (len);
+		else if ((*s == '$') && ft_char_is_quote(*(s + 1)) && !quote)
+			;
+		else if (ft_char_is_quote(*s) && !quote)
+		{
+			len_quotes = ft_len_quotes(&s, &quote);
+			if (len_quotes < 0)
+				return (*status = STATUS_SYNTAX, -1);
+			len += len_quotes;
+		}
+		else if (*s == quote)
+			quote = 0;
 		else
-			s ++;
-		if (i < 0)
-			return (-1);
-		len += i;
+			len ++;
+		s ++;
 	}
 	return (len);
 }
 
-static int	ft_init_parsing_arg(char *s, char **data, t_expand **expand)
+int	ft_fill_arg(char **s, char *data, char *quote)
 {
-	int	len;
-	int	status;	
+	int	i;
+	int	status;
 
-	len = ft_len_arg(s, expand, &status);
-	if (len < 0)
-		return (status);
-	*data = (char *)malloc((len + 1) * sizeof(char));
-	if (!(*data))
-		return (ft_fail(ERR_MALLOC, NULL), STATUS_MALLOC);
-	(*data)[len] = '\0';
+	i = 0;
+	while (**s && !ft_isspace(**s) && !ft_char_is_token(**s))
+	{	
+		if ((**s == '$') && ft_isname(*(*s + 1)) && (*quote != '\''))
+			return (STATUS_OK);
+		else if ((**s == '$') && ft_char_is_quote(*(*s + 1)) && !(*quote))
+			;
+		else if (ft_char_is_quote(**s) && !(*quote))
+		{
+			status = ft_close_quotes(s, data, quote);
+			if (status != STATUS_OK)
+				return (status);
+		}
+		else if (**s == *quote)
+			*quote = 0;
+		else
+			data[i ++] = **s;
+		(*s)++;
+	}
 	return (STATUS_OK);
 }
 
-int	ft_parse_arg(char **s, char **data)
+int	ft_set_arg(char **s, t_arg *arg, char *quote)
+{
+	int	status;
+	int	len;
+
+	status = STATUS_OK;
+	if ((**s == '$') && ft_char_is_quote(*(*s + 1)) && !(*quote))
+		(*s)++;
+	if ((**s == '$') && ft_isname(*(*s + 1)) && (*quote != '\''))
+		return (ft_arg_expand(s, arg));
+	else
+	{
+		// printf("little arg : %s in quote : %c\n", *s, *quote);
+		len = ft_len_arg(*s, *quote, &status);
+		if (len < 0)
+			return (status);
+		printf("len little arg : %d\n", len);
+		arg->data = (char *)malloc((len + 1) * sizeof(char));
+		if (!arg->data)
+			return (ft_fail(ERR_MALLOC, NULL), STATUS_MALLOC);
+		arg->data[len] = 0;
+		status = ft_fill_arg(s, arg->data, quote);
+		if (status != STATUS_OK)
+			return (status);
+	}
+}
+
+void	ft_clear_arg(t_arg *arg)
+{
+	if (!arg)
+		return ;
+	if (arg->next)
+		ft_clear_arg(arg->next);
+	if (arg->data)
+		free(arg->data);
+	free(arg);
+}
+
+int	ft_parse_arg(char **s, t_arg **data)
 {
 	int			status;
-	int			i;
-	int			j;
-	t_expand	*expand;
+	t_arg		*last;
+	char		quote;
 
-	expand = NULL;
-	status = ft_init_parsing_arg(*s, data, &expand);
-	if (status != STATUS_OK)
-		return (ft_clear_expand(expand), status);
-	i = 0;
+	*data = NULL;
+	last = NULL;
+	quote = 0;
 	while (**s && !ft_isspace(**s) && !ft_char_is_token(**s))
 	{
-		j = 0;
-		if (**s == '$')
-			j = ft_expand(s, &((*data)[i]), &expand);
-		else if (ft_char_is_quote(**s))
-			j = ft_close_quotes(s, &((*data)[i]), &expand);
-		else
-			(*data)[i ++] = *((*s)++);
-		if (j < 0)
-			return (STATUS_PROG);
-		i += j;
+		// printf("parse arg : %s\n", *s);
+		status = ft_add_new_arg(&last, data);
+		if (status != STATUS_OK)
+			return (ft_clear_arg(*data), status);
+		status = ft_set_arg(s, last, &quote);
+		if (status != STATUS_OK)
+			return (ft_clear_arg(*data), status);
 	}
+	if (quote)
+		return (ft_clear_arg(*data), ft_fail(ERR_SYNTAX, "newline"), STATUS_SYNTAX);
 	return (STATUS_OK);
 }
 
 int	ft_parse_redir(char **s, t_lexer *lexer)
 {
-	char	*file;
+	t_arg	*file;
 	int		status;
 
 	while (ft_isspace(**s))
