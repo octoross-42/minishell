@@ -11,7 +11,10 @@ SRCS = src/display/banner.c \
 		src/parsing/lexer/parse_arg.c \
 		src/parsing/lexer/parse_cmd.c \
 		src/parsing/lexer/quotes.c \
+		src/execution/cmd.c \
 		src/execution/exec.c \
+		src/execution/fork.c \
+		src/execution/redir.c \
 		src/utils/char.c \
 		src/utils/string.c \
 		src/utils/utils.c \

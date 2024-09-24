@@ -6,7 +6,7 @@
 /*   By: octoross <octoross@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/18 13:58:38 by octoross          #+#    #+#             */
-/*   Updated: 2024/09/23 17:26:12 by octoross         ###   ########.fr       */
+/*   Updated: 2024/09/23 19:11:57 by octoross         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,22 +30,6 @@ void	ft_clear_lexer(t_lexer *lexer, int erase_data)
 
 static int	ft_set_lexer(char **s, t_lexer *lexer)
 {
-	// if (!ft_strncmp(*s, "||", 2))
-	// 	return (lexer->token = OR, *s = *s + 2, STATUS_OK);
-	// else if (!ft_strncmp(*s, "&&", 2))
-	// 	return (lexer->token = AND, *s = *s + 2, STATUS_OK);
-	// else if (!ft_strncmp(*s, "|", 1))
-	// 	return (lexer->token = PIPE, *s = *s + 1, STATUS_OK);
-	// else if (!ft_strncmp(*s, "<<", 2))
-	// 	return (lexer->token = HERE_DOC, ft_parse_redir(s, lexer));
-	// else if (!ft_strncmp(*s, ">>", 2))
-	// 	return (lexer->token = APPEND, ft_parse_redir(s, lexer));
-	// else if (!ft_strncmp(*s, "<", 1))
-	// 	return (lexer->token = INPUT, ft_parse_redir(s, lexer));
-	// else if (!ft_strncmp(*s, ">", 1))
-	// 	return (lexer->token = OUTPUT, ft_parse_redir(s, lexer));
-	// else
-	// 	return (ft_parse_cmd(s, lexer));
 	lexer->token = ft_get_next_token(*s);
 	if ((lexer->token == OR) || (lexer->token == AND))
 		return (*s = *s + 2, STATUS_OK);

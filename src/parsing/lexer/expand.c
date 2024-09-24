@@ -93,7 +93,6 @@ int	ft_expand(char **s, char *data, t_expand **expand)
 		return (-1);
 	if ((*expand)->is_expand && (*expand)->len_name)
 	{
-		printf("whuy ?\n");
 		if (!(*expand)->value)
 			return (ft_clear_expand(*expand), -1);
 		len = ft_strlen((*expand)->value);

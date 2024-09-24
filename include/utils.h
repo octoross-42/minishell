@@ -6,7 +6,7 @@
 /*   By: octoross <octoross@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/09 20:26:55 by octoross          #+#    #+#             */
-/*   Updated: 2024/09/23 02:26:29 by octoross         ###   ########.fr       */
+/*   Updated: 2024/09/24 02:23:44 by octoross         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,15 +21,22 @@
 
 # define STATUS_MALLOC 137
 # define STATUS_PROG 1
-# define STATUS_FORK 1
+# define STATUS_FORK 71
 # define STATUS_SYNTAX 2
-# define STATUS_CMD 127
+# define STATUS_EXECVE 127
 # define STATUS_OK 0
+# define STATUS_CMD 126
+# define STATUS_OPEN 66
+# define STATUS_DUP2 71
 
 # define ERR_PROG "Bad programming happenned :(\n"
 # define ERR_MALLOC "malloc failed\n"
 # define ERR_FORK "fork failed\n"
 # define ERR_PATH "No PATH retrieved : malloc failed\n"
+# define ERR_CMD "Command not found\n"
+# define ERR_PIPE "Pipe failed\n"
+# define ERR_DUP2 "dup2 failed\n"
+# define ERR_EXECVE "execve failed\n"
 
 size_t	ft_strlen(const char *s);
 char	*ft_strcpy(char *restrict dst, const char *restrict src);

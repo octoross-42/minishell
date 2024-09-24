@@ -6,7 +6,7 @@
 /*   By: octoross <octoross@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/09 15:25:03 by octoross          #+#    #+#             */
-/*   Updated: 2024/09/23 00:26:17 by octoross         ###   ########.fr       */
+/*   Updated: 2024/09/23 18:27:28 by octoross         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,7 +66,7 @@ int	ft_add_new_ast(t_ast *new, t_ast **current, t_ast **top)
 	return (STATUS_OK);
 }
 
-#include "dev.h"
+// #include "dev.h"
 
 t_ast	*ft_ast(t_lexer *lexer, int *status)
 {
@@ -90,6 +90,7 @@ t_ast	*ft_ast(t_lexer *lexer, int *status)
 		if (*status != STATUS_OK)
 			return (NULL);
 		lexer = lexer->next;
+		// print_ast(top, 0);
 	}
 	return (top);
 }
