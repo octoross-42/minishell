@@ -6,7 +6,7 @@
 /*   By: octoross <octoross@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/09 20:34:55 by octoross          #+#    #+#             */
-/*   Updated: 2024/09/24 02:18:54 by octoross         ###   ########.fr       */
+/*   Updated: 2024/09/24 19:27:20 by octoross         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,7 +41,8 @@ typedef struct s_minishell
 	int			pipe;
 	int			previous_fork;
 	int			status;
-	char		**envp;
+	int			parsing_status;
+	t_env		*env;
 	char		**path;
 	t_ast		*ast;
 }	t_minishell;

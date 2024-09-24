@@ -32,17 +32,25 @@
 typedef struct s_expand
 {
 	bool			is_expand;
-	char			*value;
+	char			*name;
 	int				len_name;
 	struct s_expand	*next;
 }	t_expand;
 
+typedef struct s_arg
+{
+	bool			expand;
+	bool			wildcard;
+	char			*data;
+	struct s_arg	*next;
+}	t_arg;
+
 int		ft_close_quotes(char **s, char *data, t_expand **expand);
 int		ft_len_quotes(char **s, t_expand **expand, t_expand **last, \
 			int *status);
-int		ft_expand(char **s, char *data, t_expand **expand);
-void	ft_clear_expand(t_expand *expand);
-int		ft_len_expand(char **s, t_expand **expand, t_expand **last, \
+// int		ft_expand(char **s, char *data, t_expand **expand);
+// void	ft_clear_expand(t_expand *expand);
+// int		ft_len_expand(char **s, t_expand **expand, t_expand **last, \
 			int *status);
 
 typedef struct s_lexer

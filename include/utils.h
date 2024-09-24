@@ -6,7 +6,7 @@
 /*   By: octoross <octoross@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/09 20:26:55 by octoross          #+#    #+#             */
-/*   Updated: 2024/09/24 02:23:44 by octoross         ###   ########.fr       */
+/*   Updated: 2024/09/24 19:36:23 by octoross         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,6 +42,7 @@ size_t	ft_strlen(const char *s);
 char	*ft_strcpy(char *restrict dst, const char *restrict src);
 char	*ft_strncpy(char *restrict dst, const char *restrict src, size_t n);
 char	*ft_strdup(const char *s);
+char	*ft_strndup(const char *s, size_t n);
 int		ft_strcmp(const char *s1, char *s2);
 int		ft_strncmp(const char *s1, const char *s2, size_t n);
 bool	ft_isdigit(int c);
