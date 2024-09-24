@@ -6,7 +6,7 @@
 /*   By: octoross <octoross@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/09 20:26:55 by octoross          #+#    #+#             */
-/*   Updated: 2024/09/24 19:36:23 by octoross         ###   ########.fr       */
+/*   Updated: 2024/09/24 19:46:01 by octoross         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,6 +37,7 @@
 # define ERR_PIPE "Pipe failed\n"
 # define ERR_DUP2 "dup2 failed\n"
 # define ERR_EXECVE "execve failed\n"
+# define ERR_ENV "Warning : No env retrieved\n"
 
 size_t	ft_strlen(const char *s);
 char	*ft_strcpy(char *restrict dst, const char *restrict src);

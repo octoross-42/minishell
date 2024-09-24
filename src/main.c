@@ -6,7 +6,7 @@
 /*   By: octoross <octoross@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/15 20:51:11 by octoross          #+#    #+#             */
-/*   Updated: 2024/09/24 19:39:43 by octoross         ###   ########.fr       */
+/*   Updated: 2024/09/24 19:45:26 by octoross         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,7 +75,7 @@ t_env	*ft_env_of(char **envp)
 	{
 		new = (t_env *)malloc(sizeof(t_env));
 		if (!new)
-			return (ft_fail(ERR_MALLOC, NULL), ft_clear_env(env), NULL);
+			return (ft_fail(ERR_MALLOC, NULL), ft_clear_env(env), *status = STATUS_MALLOC, NULL);
 		if (!env)
 			env = new;
 		if (last)
@@ -85,6 +85,8 @@ t_env	*ft_env_of(char **envp)
 		j = 0;
 		while (envp[i][j] && envp[i][j] != '=')
 			j++;
+		if (!envp[i][j])
+			return (ft_clear_env(env), NULL);
 		last->name = ft_strndup(envp[i], j ++);
 		if (!last->name)
 			return (ft_fail(ERR_MALLOC, NULL), ft_clear_env(env), NULL);
@@ -101,6 +103,8 @@ void	ft_init_minishell(char **envp)
 	t_minishell	minishell;
 
 	minishell.env = ft_env_of(envp);
+	if (!minishell.env)
+		ft_fail(ERR_ENV, NULL);
 	minishell.status = STATUS_OK;
 	minishell.parsing_status = STATUS_OK;
 	minishell.path = ft_get_path(envp);
