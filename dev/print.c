@@ -6,16 +6,29 @@
 /*   By: octoross <octoross@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/15 20:00:54 by octoross          #+#    #+#             */
-/*   Updated: 2024/09/24 23:48:00 by octoross         ###   ########.fr       */
+/*   Updated: 2024/09/26 00:05:59 by octoross         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "dev.h"
 
+void	print_arg(t_arg *arg)
+{
+	printf(" \"");
+	while (arg)
+	{
+		if (arg->expand)
+			printf(" expand :");
+		printf(" '%s'", arg->str);
+		arg = arg->next;
+	}
+	printf("\"");
+}
+
 void	print_lexer(t_lexer *lexer)
 {
 	int		i;
-	char	**args;
+	t_arg	**args;
 
 	while (lexer)
 	{
@@ -24,14 +37,14 @@ void	print_lexer(t_lexer *lexer)
 		{
 			if (lexer->token == CMD)
 			{
-				args = (char **)lexer->data;
+				args = (t_args **)lexer->data;
 				i = 0;
 				printf(", data : ");
 				while (args[i])
-					printf("'%s' ", args[i ++]);
+					print_arg(args[i ++]);
 			}
 			else if (ft_is_redir(lexer->token))
-				printf(", data : '%s'", (char *)lexer->data);
+				print_arg((t_arg *)lexer->data);
 		}
 		printf("\n");
 		lexer = lexer->next;
@@ -42,7 +55,6 @@ void	print_node_ast(t_ast *ast, int n, int left)
 {
 	int		i;
 	t_arg	**args;
-	t_arg	*arg;
 
 	i = 0;
 	while (i++ < n)
@@ -54,27 +66,17 @@ void	print_node_ast(t_ast *ast, int n, int left)
 	printf("%s", ft_name_of_token(ast->token), ast->cmd);
 	if (ast->cmd)
 		printf(" (cmd)");
+	if ((ast->token == CMD) || ft_is_redir(ast->token))
+		printf(" :");
 	if (ast->token == CMD)
 	{
-		printf(" :");
-		args = ast->data;
+		args = (t_arg **)ast->data;
 		i = 0;
 		while (args[i])
-		{
-			arg = args[i ++];
-			printf(" \"");
-			while (arg)
-			{
-				if (arg->expand)
-					printf(" expand :");
-				printf(" '%s'", arg->data);
-				arg = arg->next;
-			}
-			printf("\"");
-		}
+			print_arg(args[i ++]);
 	}
 	else if (ft_is_redir(ast->token))
-		printf(" : '%s'\n", (char *)ast->data);
+		print_arg((t_arg *)ast->data);
 	printf("\n");
 }
 
