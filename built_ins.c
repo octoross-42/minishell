@@ -135,6 +135,28 @@ char	*after_equ(char *s)
 	return (ret);
 }
 
+int	print_echo(char **arg)
+{
+	if (!arg[1])
+		return (write(STDOUT_FILENO, "\n", 1), 0);
+	if (!ft_strcmp(arg[1], "-n") && !arg[2])
+		return (0);
+	else if (!strcmp(arg[1], "-n") && arg[2])
+		arg += 2;
+	else
+		arg ++;
+	while (*arg)
+	{
+		write(STDOUT_FILENO, *arg, ft_strlen(*arg));
+		if (*arg)
+			write(STDOUT_FILENO, " ", 1);
+		arg ++;
+	}
+	if (ft_strcmp(arg[1], "-n"))
+		write(STDOUT_FILENO, "\n", 1);
+	return (0);
+}
+
 int	add_var(char **arg/*, t_env *ep*/)
 {
 	char	*name;
