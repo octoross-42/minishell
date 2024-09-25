@@ -6,7 +6,7 @@
 /*   By: octoross <octoross@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/15 20:51:11 by octoross          #+#    #+#             */
-/*   Updated: 2024/09/24 22:44:24 by octoross         ###   ########.fr       */
+/*   Updated: 2024/09/25 19:22:18 by octoross         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,7 +42,6 @@ char	**ft_get_path(char **envp)
 void	ft_exit_minishell(t_minishell *minishell, int status)
 {
 	ft_free_until((void **)(minishell->path), -1);
-	ft_clear_ast(minishell->ast);
 	exit(status);
 }
 
@@ -108,7 +107,6 @@ void	ft_init_minishell(char **envp)
 	minishell.status = STATUS_OK;
 	minishell.parsing_status = STATUS_OK;
 	minishell.path = ft_get_path(envp);
-	minishell.ast = NULL;
 	ft_minishell_input(&minishell);
 }
 

@@ -13,8 +13,9 @@ SRCS = src/display/banner.c \
 		src/parsing/lexer/quotes.c \
 		src/execution/cmd.c \
 		src/execution/exec.c \
-		src/execution/fork.c \
+		src/execution/pipe.c \
 		src/execution/redir.c \
+		src/execution/argv.c \
 		src/history/add_history.c \
 		src/utils/char.c \
 		src/utils/string.c \

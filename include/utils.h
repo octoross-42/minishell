@@ -6,7 +6,7 @@
 /*   By: octoross <octoross@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/09 20:26:55 by octoross          #+#    #+#             */
-/*   Updated: 2024/09/24 19:46:01 by octoross         ###   ########.fr       */
+/*   Updated: 2024/09/25 19:15:46 by octoross         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,6 +28,7 @@
 # define STATUS_CMD 126
 # define STATUS_OPEN 66
 # define STATUS_DUP2 71
+# define STATUS_PIPE 71
 
 # define ERR_PROG "Bad programming happenned :(\n"
 # define ERR_MALLOC "malloc failed\n"
