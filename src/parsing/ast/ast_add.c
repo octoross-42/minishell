@@ -6,7 +6,7 @@
 /*   By: octoross <octoross@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/13 16:26:57 by octoross          #+#    #+#             */
-/*   Updated: 2024/09/25 17:00:50 by octoross         ###   ########.fr       */
+/*   Updated: 2024/09/25 20:48:44 by octoross         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,11 +22,7 @@ int	ft_append_ast(t_ast *new, t_ast **current)
 	else if (!(*current)->right)
 		(*current)->right = new;
 	else
-	{
-		printf("current->left : %s\n", ft_name_of_token((*current)->left->token));
-		printf("current->right : %s\n", ft_name_of_token((*current)->right->token));
 		return (ft_fail(ERR_PARSING, NULL), STATUS_PROG);
-	}
 	*current = new;
 	if ((*current)->token == CMD)
 	{

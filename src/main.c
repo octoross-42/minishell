@@ -6,43 +6,33 @@
 /*   By: octoross <octoross@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/15 20:51:11 by octoross          #+#    #+#             */
-/*   Updated: 2024/09/25 19:22:18 by octoross         ###   ########.fr       */
+/*   Updated: 2024/09/26 01:52:22 by octoross         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-char	**ft_get_path(char **envp)
+char	**ft_get_path(t_env *env)
 {
 	int		i;
 	char	*path;
 	char	**paths;
 
-	if (!envp)
+	if (!env)
 		return (NULL);
 	i = 0;
-	while (envp[i])
+	while (env)
 	{
-		if (ft_strncmp(envp[i], "PATH=", 5) == 0)
+		if (!ft_strcmp(env->name, "PATH"))
 		{
-			path = ft_strdup(envp[i] + 5);
-			if (!path)
-				return (ft_fail(ERR_PATH, NULL), NULL);
-			paths = ft_split(path, ':');
-			free(path);
+			paths = ft_split(env->value, ':');
 			if (!paths)
 				return (ft_fail(ERR_PATH, NULL), NULL);
 			return (paths);
 		}
-		i++;
+		env = env->next;
 	}
 	return (NULL);
-}
-
-void	ft_exit_minishell(t_minishell *minishell, int status)
-{
-	ft_free_until((void **)(minishell->path), -1);
-	exit(status);
 }
 
 void	ft_clear_env(t_env *env)
@@ -55,6 +45,14 @@ void	ft_clear_env(t_env *env)
 		free(env->name);
 	if (env->value)
 		free(env->value);
+	free(env);
+}
+
+void	ft_exit_minishell(t_minishell *minishell, int status)
+{
+	ft_free_until((void **)(minishell->path), -1);
+	ft_clear_env(minishell->env);
+	exit(status);
 }
 
 t_env	*ft_env_of(char **envp)
@@ -66,7 +64,7 @@ t_env	*ft_env_of(char **envp)
 	int		j;
 
 	if (!envp)
-		return (NULL);
+		return (ft_fail(ERR_ENV, NULL), NULL);
 	env = NULL;
 	last = NULL;
 	i = 0;
@@ -77,7 +75,7 @@ t_env	*ft_env_of(char **envp)
 			return (ft_fail(ERR_MALLOC, NULL), ft_clear_env(env), NULL);
 		if (!env)
 			env = new;
-		if (last)
+		else
 			last->next = new;
 		last = new;
 		last->next = NULL;
@@ -85,7 +83,7 @@ t_env	*ft_env_of(char **envp)
 		while (envp[i][j] && envp[i][j] != '=')
 			j++;
 		if (!envp[i][j])
-			return (ft_clear_env(env), NULL);
+			return (ft_fail(ERR_PARSING_ENV, NULL), ft_clear_env(env), NULL);
 		last->name = ft_strndup(envp[i], j ++);
 		if (!last->name)
 			return (ft_fail(ERR_MALLOC, NULL), ft_clear_env(env), NULL);
@@ -100,13 +98,23 @@ t_env	*ft_env_of(char **envp)
 void	ft_init_minishell(char **envp)
 {
 	t_minishell	minishell;
+	t_env		*env;
 
 	minishell.env = ft_env_of(envp);
 	if (!minishell.env)
 		ft_fail(ERR_ENV, NULL);
+	// else
+	// {
+	// 	env = minishell.env;
+	// 	while (env)
+	// 	{
+	// 		printf("%s=\"%s\"\n", env->name, env->value);
+	// 		env = env->next;
+	// 	} 
+	// }
 	minishell.status = STATUS_OK;
 	minishell.parsing_status = STATUS_OK;
-	minishell.path = ft_get_path(envp);
+	minishell.path = ft_get_path(minishell.env);
 	ft_minishell_input(&minishell);
 }
 

@@ -16,18 +16,9 @@
 
 # include "utils.h"
 
-# define PIPE 1
-# define OR 2
-# define AND 3
-# define INPUT 4
-# define OUTPUT 5
-# define HERE_DOC 6
-# define APPEND 7
-# define CMD 8
-# define SUBSHELL 9
-
 // ERR_PARSING is never supposed to be print
 # define ERR_PARSING "Bad parsing happenned :(\n"
+
 # define ERR_SYNTAX "syntax error near unexpected token `%s'\n"
 
 typedef struct s_expand
@@ -42,9 +33,11 @@ typedef struct s_arg
 {
 	bool			expand;
 	bool			wildcard;
-	char			*data;
+	char			*str;
 	struct s_arg	*next;
 }	t_arg;
+
+void	ft_clear_arg(t_arg *arg);
 
 int		ft_arg_expand(char **s, t_arg *arg);
 int		ft_len_quotes(char **s, char *quote);
@@ -74,6 +67,9 @@ typedef struct s_ast
 	struct s_ast	*parent;
 }	t_ast;
 
+void	ft_clear_node_ast(t_ast *ast);
+void	ft_clear_ast(t_ast *ast);
+
 bool	ft_is_separator(int token);
 bool	ft_is_redir(int token);
 bool	ft_is_output(int token);
@@ -82,6 +78,5 @@ int		ft_pipe_token(t_ast *new, t_ast **current, t_ast **top);
 int		ft_append_ast(t_ast *new, t_ast **current);
 int		ft_add_ast(t_ast *new, t_ast **current, t_ast **top);
 t_ast	*ft_ast(t_lexer *lexer, int *status);
-void	ft_clear_ast(t_ast *ast);
 
 #endif

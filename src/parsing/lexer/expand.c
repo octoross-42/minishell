@@ -26,7 +26,7 @@ int	ft_arg_expand(char **s, t_arg *arg)
 	if (!name)
 		return (ft_fail(ERR_MALLOC, NULL), STATUS_MALLOC);
 	ft_strncpy(name, *s, i);
-	arg->data = name;
+	arg->str = name;
 	*s += i;
 	return (STATUS_OK);
 }

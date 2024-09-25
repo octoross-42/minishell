@@ -6,7 +6,7 @@
 /*   By: octoross <octoross@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/09 15:25:03 by octoross          #+#    #+#             */
-/*   Updated: 2024/09/25 14:01:05 by octoross         ###   ########.fr       */
+/*   Updated: 2024/09/25 23:58:00 by octoross         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,16 +31,38 @@ static t_ast	*ft_new_ast(t_lexer *lexer)
 	return (ast);
 }
 
+void	ft_clear_node_ast(t_ast *ast)
+{
+	int		i;
+	t_arg	*arg;
+	t_arg	**args;
+
+	i = 0;
+	if (ast->data)
+	{
+		if (ast->token == CMD)
+		{
+			args = (t_arg **)ast->data;
+			while (args[i])
+			{
+				arg = args[i];
+				ft_clear_arg(arg);
+				i++;
+			}
+			free(args);
+		}
+		else if (ft_is_redir(ast->token))
+			ft_clear_arg((t_arg *)ast->data);
+	}
+	free(ast);
+}
+
 void	ft_clear_ast(t_ast *ast)
 {
 	if (!ast)
 		return ;
 	ft_clear_ast(ast->left);
 	ft_clear_ast(ast->right);
-	if (ast->token == CMD)
-		ft_free_until((void **)ast->data, -1);
-	else if (ft_is_redir(ast->token))
-		free(ast->data);
 	free(ast);
 }
 

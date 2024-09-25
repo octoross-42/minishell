@@ -17,6 +17,7 @@ SRCS = src/display/banner.c \
 		src/execution/redir.c \
 		src/execution/argv.c \
 		src/history/add_history.c \
+		src/buildin/buildin.c \
 		src/utils/char.c \
 		src/utils/string.c \
 		src/utils/utils.c \

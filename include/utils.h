@@ -6,7 +6,7 @@
 /*   By: octoross <octoross@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/09 20:26:55 by octoross          #+#    #+#             */
-/*   Updated: 2024/09/25 19:15:46 by octoross         ###   ########.fr       */
+/*   Updated: 2024/09/26 01:41:35 by octoross         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,26 +19,38 @@
 # include <stdlib.h>
 # include <unistd.h>
 
-# define STATUS_MALLOC 137
-# define STATUS_PROG 1
-# define STATUS_FORK 71
-# define STATUS_SYNTAX 2
-# define STATUS_EXECVE 127
+# define PIPE 1
+# define OR 2
+# define AND 3
+# define INPUT 4
+# define OUTPUT 5
+# define HERE_DOC 6
+# define APPEND 7
+# define CMD 8
+# define SUBSHELL 9
+
 # define STATUS_OK 0
-# define STATUS_CMD 126
-# define STATUS_OPEN 66
+# define STATUS_PROG 1
+# define STATUS_SYNTAX 2
+# define STATUS_FORK 71
 # define STATUS_DUP2 71
 # define STATUS_PIPE 71
+# define STATUS_OPEN 66
+# define STATUS_CMD 126
+# define STATUS_EXECVE 127
+# define STATUS_MALLOC 137
 
-# define ERR_PROG "Bad programming happenned :(\n"
+# define ERR_FAIL "%s failed\n"
 # define ERR_MALLOC "malloc failed\n"
 # define ERR_FORK "fork failed\n"
-# define ERR_PATH "No PATH retrieved : malloc failed\n"
-# define ERR_CMD "Command not found\n"
 # define ERR_PIPE "Pipe failed\n"
 # define ERR_DUP2 "dup2 failed\n"
 # define ERR_EXECVE "execve failed\n"
+# define ERR_PROG "Bad programming happenned :(\n"
+# define ERR_CMD "Command not found\n"
+# define ERR_PARSING_ENV "Error : env is badly parsed\n"
 # define ERR_ENV "Warning : No env retrieved\n"
+# define ERR_PATH "No PATH retrieved : malloc failed\n"
 
 size_t	ft_strlen(const char *s);
 char	*ft_strcpy(char *restrict dst, const char *restrict src);

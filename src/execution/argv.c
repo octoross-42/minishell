@@ -27,18 +27,19 @@ int	ft_len_targ(t_arg *arg)
 	{
 		if (arg->expand)
 		{
-			expand = ft_env(arg->data);
-			free(arg->data);
-			arg->data = expand;
+			expand = ft_env(arg->str);
+			free(arg->str);
+			arg->str = expand;
 		}
-		if (arg->data)
-			len += ft_strlen(arg->data);
+		if (arg->str)
+			len += ft_strlen(arg->str);
 		arg = arg->next;
 	}
 	return (len);
 }
 
 char	*ft_arg_of(t_arg *arg)
+// clean arg en même temps
 {
 	t_arg	*to_free;
 	char	*str;
@@ -50,16 +51,16 @@ char	*ft_arg_of(t_arg *arg)
 	len = ft_len_targ(arg);
 	str = (char *)malloc((len + 1) * sizeof(char));
 	if (!str)
-		return (NULL);
+		return (ft_fail(ERR_MALLOC, NULL), NULL);
 	str[len] = '\0';
 	len = 0;
 	while (arg)
 	{
 		i = 0;
-		while (arg->data && arg->data[i])
-			str[len ++] = arg->data[i ++];
-		if (arg->data && !arg->expand)
-			free(arg->data);
+		while (arg->str && arg->str[i])
+			str[len ++] = arg->str[i ++];
+		if (arg->str && !arg->expand)
+			free(arg->str);
 		to_free = arg;
 		arg = arg->next;
 		free(to_free);
@@ -68,6 +69,7 @@ char	*ft_arg_of(t_arg *arg)
 }
 
 char	**ft_argv_of(t_arg **arg)
+// clean arg en même temps
 {
 	char	**argv;
 	int		i;
@@ -87,8 +89,15 @@ char	**ft_argv_of(t_arg **arg)
 	{
 		argv[i] = ft_arg_of(arg[i]);
 		if (!argv[i])
-			return (ft_free_until((void **)argv, i), NULL);
+		{
+			ft_free_until((void **)argv, i);
+			while (arg[i])
+				ft_clear_arg(arg[i ++]);
+			free(arg);
+			return (NULL);
+		}
 		i++;
 	}
+	free(arg);
 	return (argv);
 }

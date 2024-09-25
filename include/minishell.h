@@ -6,7 +6,7 @@
 /*   By: octoross <octoross@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/09 20:34:55 by octoross          #+#    #+#             */
-/*   Updated: 2024/09/25 19:23:06 by octoross         ###   ########.fr       */
+/*   Updated: 2024/09/26 01:10:16 by octoross         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,6 +46,8 @@ typedef struct s_minishell
 	t_pid		*wait_for_pids;
 	int			pipe;
 	bool		pipe_before;
+	int			std_in;
+	int			std_out;
 	int			status;
 	int			parsing_status;
 	t_env		*env;
@@ -63,5 +65,8 @@ void	ft_exec_cmd(t_ast *ast, t_minishell *minishell);
 void	ft_exec_ast(t_ast *ast, t_minishell *minishell);
 void	ft_redir(t_ast *ast, t_minishell *minishell);
 void 	ft_do_pipe(t_ast *ast, t_minishell *minishell);
+
+bool	ft_is_buildin(char *cmd);
+void	ft_buildin(char **argv, t_minishell *minishell);
 
 #endif

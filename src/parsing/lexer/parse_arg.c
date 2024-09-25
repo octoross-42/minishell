@@ -21,7 +21,7 @@ int	ft_add_new_arg(t_arg **last, t_arg **top)
 	new = (t_arg *)malloc(sizeof(t_arg) );
 	if (!new)
 		return (ft_fail(ERR_MALLOC, NULL), STATUS_MALLOC);
-	new->data = NULL;
+	new->str = NULL;
 	new->next = NULL;
 	new->expand = false;
 	new->wildcard = false;
@@ -106,11 +106,11 @@ int	ft_set_arg(char **s, t_arg *arg, char *quote)
 		if (len < 0)
 			return (status);
 		// printf("len little arg : %d\n", len);
-		arg->data = (char *)malloc((len + 1) * sizeof(char));
-		if (!arg->data)
+		arg->str = (char *)malloc((len + 1) * sizeof(char));
+		if (!arg->str)
 			return (ft_fail(ERR_MALLOC, NULL), STATUS_MALLOC);
-		arg->data[len] = 0;
-		status = ft_fill_arg(s, arg->data, quote);
+		arg->str[len] = 0;
+		status = ft_fill_arg(s, arg->str, quote);
 		if (status != STATUS_OK)
 			return (status);
 	}
@@ -122,8 +122,8 @@ void	ft_clear_arg(t_arg *arg)
 		return ;
 	if (arg->next)
 		ft_clear_arg(arg->next);
-	if (arg->data)
-		free(arg->data);
+	if (arg->str)
+		free(arg->str);
 	free(arg);
 }
 

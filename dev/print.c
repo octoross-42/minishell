@@ -6,7 +6,7 @@
 /*   By: octoross <octoross@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/15 20:00:54 by octoross          #+#    #+#             */
-/*   Updated: 2024/09/26 00:05:59 by octoross         ###   ########.fr       */
+/*   Updated: 2024/09/26 00:17:46 by octoross         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,7 @@ void	print_lexer(t_lexer *lexer)
 		{
 			if (lexer->token == CMD)
 			{
-				args = (t_args **)lexer->data;
+				args = (t_arg **)lexer->data;
 				i = 0;
 				printf(", data : ");
 				while (args[i])

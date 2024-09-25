@@ -6,7 +6,7 @@
 /*   By: octoross <octoross@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/16 15:31:32 by octoross          #+#    #+#             */
-/*   Updated: 2024/09/25 14:34:28 by octoross         ###   ########.fr       */
+/*   Updated: 2024/09/26 01:19:59 by octoross         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,13 +74,15 @@ void	ft_minishell_input(t_minishell *minishell)
 
 	prompt = ft_get_prompt();
 	if (!prompt)
-		ft_exit_minishell(minishell, STATUS_MALLOC);
-	line = readline(prompt);
-	free(prompt);
+		line = readline("🐳 minishell> ");
+	else
+	{
+		line = readline(prompt);
+		free(prompt);
+	}
 	if (!line)
 		ft_minishell_input(minishell);
 	ft_add_history(line);
-	// printf("line: %s\n", line);
 	lexer = ft_lexer(line, &(minishell->parsing_status));
 	free(line);
 	if (minishell->parsing_status != STATUS_OK)
