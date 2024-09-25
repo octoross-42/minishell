@@ -88,7 +88,7 @@ int	unset_var(char **arg, t_env *ep)
 	return (0);
 }
 
-char	*trim(char *s)
+char	*get_env_name(char *s)
 {
 	char	*ret;
 	int		i;
@@ -113,7 +113,7 @@ char	*trim(char *s)
 	return (ret);
 }
 
-char	*after_equ(char *s)
+char	*get_env_value(char *s)
 {
 	char	*ret;
 	int		i;
@@ -126,6 +126,11 @@ char	*after_equ(char *s)
 	while (s[i] && s[i] != '=')
 		i ++;
 	i ++;
+	if (s[i] == '"' || s[i] == '\'')
+	{
+		i ++;
+		j --;
+	}
 	ret = malloc((sizeof(char) * (j - i)) + 1);
 	if (!ret)
 		return (NULL);
@@ -157,23 +162,38 @@ int	print_echo(char **arg)
 	return (0);
 }
 
-int	add_var(char **arg/*, t_env *ep*/)
+void	free_them(char *s, char *st)
+{
+	free(s);
+	free(st);
+}
+
+int	add__env_var(char **arg, t_env *env)
 {
 	char	*name;
 	char	*val;
+	t_env	*node;
 
 	if (!arg[1])
 	{
 		write(STDERR_FILENO, "Export error: specify a name and a value\n", 41);
 		return (1);
 	}
-	name = trim(arg[1]);
-	val = after_equ(arg[1]);
+	name = get_env_name(arg[1]);
+	val = get_env_value(arg[1]);
 	if (!name || !val)
 		return (write(STDERR_FILENO, "Malloc error\n", 14), 137);
-	// créer une node d'env puis node->name = name et node->value = val;
-	// add la node n'improte où -> en premier ca fera l'affaire
-
+	node = ft_add_env();
+	if (!node)
+	{
+		free_them(name, val);
+		return (write(STDERR_FILENO, "Malloc error\n", 14), 137);
+	}
+	node->name = name;
+	node->value = val;
+	node->next = env->next;
+	env->next = node;
+	return (0);
 }
 
 int	go_to_getcwd(void)
