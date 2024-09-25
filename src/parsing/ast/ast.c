@@ -6,7 +6,7 @@
 /*   By: octoross <octoross@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/09 15:25:03 by octoross          #+#    #+#             */
-/*   Updated: 2024/09/23 18:27:28 by octoross         ###   ########.fr       */
+/*   Updated: 2024/09/25 14:01:05 by octoross         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@ static t_ast	*ft_new_ast(t_lexer *lexer)
 	if (!ast)
 		return (NULL);
 	ast->token = lexer->token;
-	if (ft_is_fork(ast->token))
+	if (ft_is_separator(ast->token))
 		ast->data = NULL;
 	else
 		ast->data = lexer->data;

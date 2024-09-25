@@ -6,7 +6,7 @@
 /*   By: octoross <octoross@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/18 13:58:38 by octoross          #+#    #+#             */
-/*   Updated: 2024/09/23 19:11:57 by octoross         ###   ########.fr       */
+/*   Updated: 2024/09/25 14:01:34 by octoross         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,7 +69,7 @@ int	ft_is_compatible(t_lexer *l, t_lexer *previous)
 {
 	if (!l)
 		return (ft_fail(ERR_PARSING, NULL), STATUS_PROG);
-	if (ft_is_fork(l->token) && !previous)
+	if (ft_is_separator(l->token) && !previous)
 		return (ft_fail(ERR_SYNTAX, ft_str_of_token(l->token)), STATUS_SYNTAX);
 	if (!previous)
 		return (STATUS_OK);
@@ -77,7 +77,7 @@ int	ft_is_compatible(t_lexer *l, t_lexer *previous)
 		return (ft_fail(ERR_PARSING, NULL), STATUS_PROG);
 	else if ((l->token == CMD) || (previous->token == CMD))
 		return (STATUS_OK);
-	else if (ft_is_fork(l->token) && ft_is_fork(previous->token))
+	else if (ft_is_separator(l->token) && ft_is_separator(previous->token))
 		return (ft_fail(ERR_SYNTAX, ft_str_of_token(previous->token)), STATUS_SYNTAX);
 	else
 		return (STATUS_OK);
@@ -107,7 +107,7 @@ t_lexer	*ft_lexer(char *line, int *status)
 		if (*status != STATUS_OK)
 			return (ft_clear_lexer(top, 1), NULL);
 	}
-	if (lexer && ft_is_fork(lexer->token))
+	if (lexer && ft_is_separator(lexer->token))
 		return (ft_clear_lexer(top, 1), ft_fail(ERR_SYNTAX, "newline"), NULL);
 	return (top);
 }

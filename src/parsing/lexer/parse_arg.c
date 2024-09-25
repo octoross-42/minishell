@@ -105,7 +105,7 @@ int	ft_set_arg(char **s, t_arg *arg, char *quote)
 		len = ft_len_arg(*s, *quote, &status);
 		if (len < 0)
 			return (status);
-		printf("len little arg : %d\n", len);
+		// printf("len little arg : %d\n", len);
 		arg->data = (char *)malloc((len + 1) * sizeof(char));
 		if (!arg->data)
 			return (ft_fail(ERR_MALLOC, NULL), STATUS_MALLOC);

@@ -6,7 +6,7 @@
 /*   By: octoross <octoross@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/13 16:26:57 by octoross          #+#    #+#             */
-/*   Updated: 2024/09/23 18:26:08 by octoross         ###   ########.fr       */
+/*   Updated: 2024/09/25 16:24:02 by octoross         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,13 +22,17 @@ int	ft_append_ast(t_ast *new, t_ast **current)
 	else if (!(*current)->right)
 		(*current)->right = new;
 	else
+	{
+		printf("current->left : %s\n", ft_name_of_token((*current)->left->token));
+		printf("current->right : %s\n", ft_name_of_token((*current)->right->token));
 		return (ft_fail(ERR_PARSING, NULL), STATUS_PROG);
+	}
 	*current = new;
 	if ((*current)->token == CMD)
 	{
 		(*current)->cmd = true;
 		parent = (*current)->parent;
-		while (parent && !ft_is_fork(parent->token))
+		while (parent && !ft_is_separator(parent->token))
 		{
 			parent->cmd = true;
 			parent = parent->parent;
@@ -40,18 +44,20 @@ int	ft_append_ast(t_ast *new, t_ast **current)
 int	ft_fork_token(t_ast *new, t_ast **current, t_ast **top)
 {
 	t_ast	*ast;
-
+	
 	ast = *current;
 	while (ast && ast->parent
-		&& !ft_is_fork(ast->parent->token))
+		&& !ft_is_separator(ast->parent->token))
 		ast = ast->parent;
 	if (!ast->parent)
 		*top = new;
 	else
 	{
 		new->parent = ast->parent;
-		ast->parent->right = new;
-		// HYPO : cannot be 2 | d'affilée
+		if (ast->parent->left == ast)
+			ast->parent->left = new;
+		else
+			ast->parent->right = new;
 	}
 	new->left = ast;
 	ast->parent = new;
@@ -90,10 +96,10 @@ int	ft_add_ast(t_ast *new, t_ast **current, t_ast **top)
 	if (ft_is_fork(new->token))
 		return (ft_fork_token(new, current, top));
 		// HYPO : fork cant be last or first so cannot be current
-	if (ft_is_output(new->token))
+	else if (ft_is_output(new->token))
 		return (ft_output_token(new, current, top));
-	if ((new->token == INPUT) || (new->token == HERE_DOC)
-		|| (new->token == CMD))
+	else if ((new->token == INPUT) || (new->token == HERE_DOC)
+		|| (new->token == CMD) || ft_is_separator(new->token))
 		return (ft_append_ast(new, current));
 	else
 		return (ft_fail(ERR_PARSING, NULL), STATUS_PROG);
