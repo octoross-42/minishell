@@ -24,6 +24,7 @@
 # define HERE_DOC 6
 # define APPEND 7
 # define CMD 8
+# define SUBSHELL 9
 
 // ERR_PARSING is never supposed to be print
 # define ERR_PARSING "Bad parsing happenned :(\n"
@@ -77,8 +78,7 @@ bool	ft_is_separator(int token);
 bool	ft_is_redir(int token);
 bool	ft_is_output(int token);
 int		ft_output_token(t_ast *new, t_ast **current, t_ast **top);
-bool	ft_is_fork(int token);
-int		ft_fork_token(t_ast *new, t_ast **current, t_ast **top);
+int		ft_pipe_token(t_ast *new, t_ast **current, t_ast **top);
 int		ft_append_ast(t_ast *new, t_ast **current);
 int		ft_add_ast(t_ast *new, t_ast **current, t_ast **top);
 t_ast	*ft_ast(t_lexer *lexer, int *status);

@@ -6,7 +6,7 @@
 /*   By: octoross <octoross@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/13 16:26:57 by octoross          #+#    #+#             */
-/*   Updated: 2024/09/25 16:24:02 by octoross         ###   ########.fr       */
+/*   Updated: 2024/09/25 17:00:50 by octoross         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,7 +41,7 @@ int	ft_append_ast(t_ast *new, t_ast **current)
 	return (STATUS_OK);
 }
 
-int	ft_fork_token(t_ast *new, t_ast **current, t_ast **top)
+int	ft_pipe_token(t_ast *new, t_ast **current, t_ast **top)
 {
 	t_ast	*ast;
 	
@@ -93,8 +93,8 @@ int	ft_output_token(t_ast *new, t_ast **current, t_ast **top)
 
 int	ft_add_ast(t_ast *new, t_ast **current, t_ast **top)
 {
-	if (ft_is_fork(new->token))
-		return (ft_fork_token(new, current, top));
+	if (new->token == PIPE)
+		return (ft_pipe_token(new, current, top));
 		// HYPO : fork cant be last or first so cannot be current
 	else if (ft_is_output(new->token))
 		return (ft_output_token(new, current, top));

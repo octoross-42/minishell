@@ -6,7 +6,7 @@
 /*   By: octoross <octoross@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/09 20:34:55 by octoross          #+#    #+#             */
-/*   Updated: 2024/09/25 13:51:58 by octoross         ###   ########.fr       */
+/*   Updated: 2024/09/25 17:35:32 by octoross         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,7 +39,7 @@ typedef struct s_minishell
 	pid_t		last_pid;
 	pid_t		last_cmd;
 	int			pipe;
-	int			previous_fork;
+	bool		pipe_before;
 	int			status;
 	int			parsing_status;
 	t_env		*env;
