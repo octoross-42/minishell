@@ -73,6 +73,7 @@ typedef struct s_ast
 	struct s_ast	*parent;
 }	t_ast;
 
+bool	ft_is_separator(int token);
 bool	ft_is_redir(int token);
 bool	ft_is_output(int token);
 int		ft_output_token(t_ast *new, t_ast **current, t_ast **top);

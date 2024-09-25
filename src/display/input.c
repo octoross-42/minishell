@@ -6,7 +6,7 @@
 /*   By: octoross <octoross@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/16 15:31:32 by octoross          #+#    #+#             */
-/*   Updated: 2024/09/23 18:15:26 by octoross         ###   ########.fr       */
+/*   Updated: 2024/09/25 14:34:28 by octoross         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,20 +70,27 @@ void	ft_minishell_input(t_minishell *minishell)
 	char	*prompt;
 	char	*line;
 	t_lexer	*lexer;
+	t_ast	*ast;
 
 	prompt = ft_get_prompt();
 	if (!prompt)
 		ft_exit_minishell(minishell, STATUS_MALLOC);
 	line = readline(prompt);
 	free(prompt);
-	lexer = ft_lexer(line, &(minishell->status));
+	if (!line)
+		ft_minishell_input(minishell);
+	ft_add_history(line);
+	// printf("line: %s\n", line);
+	lexer = ft_lexer(line, &(minishell->parsing_status));
 	free(line);
-	if (!lexer || (minishell->status != STATUS_OK))
+	if (minishell->parsing_status != STATUS_OK)
+		minishell->status = minishell->parsing_status;
+	if (!lexer || (minishell->parsing_status != STATUS_OK))
 		ft_minishell_input(minishell);
-	minishell->ast = ft_ast(lexer, &(minishell->status));
+	ast = ft_ast(lexer, &(minishell->status));
 	ft_clear_lexer(lexer, 0);
-	if (!minishell->ast || (minishell->status != STATUS_OK))
+	if (!ast || (minishell->status != STATUS_OK))
 		ft_minishell_input(minishell);
-	print_ast(minishell->ast, 0);
-	ft_exec_line(minishell);
+	print_ast(ast, 0);
+	ft_exec_line(ast, minishell);
 }

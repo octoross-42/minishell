@@ -6,7 +6,7 @@
 /*   By: octoross <octoross@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/09 20:34:55 by octoross          #+#    #+#             */
-/*   Updated: 2024/09/24 19:27:20 by octoross         ###   ########.fr       */
+/*   Updated: 2024/09/25 13:51:58 by octoross         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,13 +47,15 @@ typedef struct s_minishell
 	t_ast		*ast;
 }	t_minishell;
 
+void	ft_add_history(char *line);
+char	**ft_get_argv(t_arg **arg);
+
 void	ft_minishell_input(t_minishell *minishell);
-void	ft_exec_line(t_minishell *minishell);
+void	ft_exec_line(t_ast *ast, t_minishell *minishell);
 void	ft_exit_minishell(t_minishell *minishell, int status);
 
 void	ft_exec_cmd(t_ast *ast, t_minishell *minishell);
-void	ft_exec_line(t_minishell *minishell);
-void	ft_exec_ast(t_ast *ast, t_minishell *minishell, bool in_fork);
+void	ft_exec_ast(t_ast *ast, t_minishell *minishell);
 void	ft_exec_fork(t_ast *ast, t_minishell *minishell);
 void	ft_wait_previous(t_ast *ast, t_minishell *minishell);
 void	ft_do_previous_pipe(t_minishell *minishell);

@@ -5,10 +5,12 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: octoross <octoross@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/09/22 00:59:25 by octoross          #+#    #+#             */
-/*   Updated: 2024/09/22 00:59:25 by octoross         ###   ########.fr       */
+/*   Created: 2024/09/25 12:38:49 by octoross          #+#    #+#             */
+/*   Updated: 2024/09/25 12:38:49 by octoross         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
+
+#include "minishell.h"
 
 #include "minishell.h"
 
@@ -55,6 +57,8 @@ char	*ft_get_cmd_path(char *cmd, char **paths)
 
 	if (access(cmd, F_OK | X_OK) == 0)
 		return (cmd);
+	if (!paths)
+		return (NULL);
 	i = 0;
 	while (paths[i])
 	{
@@ -69,19 +73,39 @@ char	*ft_get_cmd_path(char *cmd, char **paths)
 	return (NULL);
 }
 
-void	ft_exec_cmd(t_ast *ast, t_minishell *minishell)
+void	ft_cmd(char **argv, t_minishell *minishell)
 {
 	char	*path;
 	int		i;
 
-	path = ft_get_cmd_path(((char **)ast->data)[0], minishell->path);
+	path = ft_get_cmd_path(argv[0], minishell->path);
 	if (!path)
 	{
 		ft_fail(ERR_CMD, NULL);
+		// TODO : refaire le message d'erreur
 		ft_exit_minishell(minishell, STATUS_CMD);
 	}
-	execve(path, ast->data, NULL);
+	execve(path, argv, NULL);
 	ft_fail(ERR_EXECVE, NULL);
+	// TODO refaire message erreur
 	minishell->status = STATUS_EXECVE;
 	ft_exit_minishell(minishell, STATUS_EXECVE);
+}
+
+void	ft_exec_cmd(t_ast *ast, t_minishell *minishell)
+{
+	char	**argv;
+	int		i;
+	
+	argv = ft_get_argv((t_arg **)ast->data);
+	if (!argv)
+	{
+		ft_fail(ERR_MALLOC, NULL);
+		minishell->status = STATUS_MALLOC;
+		return ;
+	}
+	i = 0;
+	while (argv[i])
+		printf("argv[%d] = %s\n", i, argv[i ++]);
+	printf("faut exec ca\n");
 }
