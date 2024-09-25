@@ -74,7 +74,7 @@ int	unset_var(char **arg, t_env *ep)
 	i = 0;
 	while (cur)
 	{
-		if (strncmp(arg[1], cur->value, strlen(arg[1])))
+		if (ft_strncmp(arg[1], cur->value, ft_strlen(arg[1])))
 		{
 			prev = cur;
 			cur = cur->next;
@@ -141,7 +141,7 @@ int	print_echo(char **arg)
 		return (write(STDOUT_FILENO, "\n", 1), 0);
 	if (!ft_strcmp(arg[1], "-n") && !arg[2])
 		return (0);
-	else if (!strcmp(arg[1], "-n") && arg[2])
+	else if (!ft_strcmp(arg[1], "-n") && arg[2])
 		arg += 2;
 	else
 		arg ++;
