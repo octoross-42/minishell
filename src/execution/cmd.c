@@ -120,7 +120,10 @@ void	ft_exec_cmd(t_ast *ast, t_minishell *minishell)
 		i ++;
 	}
 	if (ft_is_buildin(argv[0]))
+	{
 		ft_buildin(argv, minishell);
+		ft_free_until((void **)argv, -1);
+	}
 	else
 		ft_cmd(argv, minishell);
 	if (next)
