@@ -172,7 +172,7 @@ int	add__env_var(char **arg, t_env *env)
 {
 	char	*name;
 	char	*val;
-	t_env	*node;
+	int		status;
 
 	if (!arg[1])
 	{
@@ -183,16 +183,12 @@ int	add__env_var(char **arg, t_env *env)
 	val = get_env_value(arg[1]);
 	if (!name || !val)
 		return (write(STDERR_FILENO, "Malloc error\n", 14), 137);
-	node = ft_add_env(&env, name, val);
-	if (!node)
+	status = ft_add_env(&env, name, val);
+	if (status != STATUS_OK)
 	{
 		free_them(name, val);
-		return (write(STDERR_FILENO, "Malloc error\n", 14), 137);
+		return (status);
 	}
-	node->name = name;
-	node->value = val;
-	node->next = env->next;
-	env->next = node;
 	return (0);
 }
 
