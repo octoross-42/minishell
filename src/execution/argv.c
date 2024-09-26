@@ -12,12 +12,7 @@
 
 #include "minishell.h"
 
-char	*ft_env(char *name)
-{
-	return ("TO_EXPAND");
-}
-
-int	ft_len_targ(t_arg *arg)
+int	ft_len_arg(t_arg *arg, t_minishell *minishell)
 {
 	int		len;
 	char	*expand;
@@ -26,11 +21,7 @@ int	ft_len_targ(t_arg *arg)
 	while (arg)
 	{
 		if (arg->expand)
-		{
-			expand = ft_env(arg->str);
-			free(arg->str);
-			arg->str = expand;
-		}
+			ft_expand(arg, minishell);
 		if (arg->str)
 			len += ft_strlen(arg->str);
 		arg = arg->next;
@@ -38,7 +29,7 @@ int	ft_len_targ(t_arg *arg)
 	return (len);
 }
 
-char	*ft_arg_of(t_arg *arg)
+char	*ft_arg_of(t_arg *arg, t_minishell *minishell)
 // clean arg en même temps
 {
 	t_arg	*to_free;
@@ -48,7 +39,7 @@ char	*ft_arg_of(t_arg *arg)
 
 	if (arg->wildcard)
 		return (ft_fail(ERR_PROG, NULL), NULL);
-	len = ft_len_targ(arg);
+	len = ft_len_arg(arg, minishell);
 	str = (char *)malloc((len + 1) * sizeof(char));
 	if (!str)
 		return (ft_fail(ERR_MALLOC, NULL), NULL);
@@ -56,8 +47,8 @@ char	*ft_arg_of(t_arg *arg)
 	len = 0;
 	while (arg)
 	{
+		// printf("arg->str = %s\n", arg->str);
 		i = 0;
-		printf("arg->str = %s\n", arg->str);
 		while (arg->str && arg->str[i])
 			str[len ++] = arg->str[i ++];
 		if (arg->str && !arg->expand)
@@ -69,16 +60,20 @@ char	*ft_arg_of(t_arg *arg)
 	return (str);
 }
 
-char	**ft_argv_of(t_arg **arg)
+char	**ft_argv_of(t_arg **args, t_minishell *minishell)
 // clean arg en même temps
 {
 	char	**argv;
 	int		i;
+	int		len;
 
 	i = 0;
-	while (arg[i])
+	len = 0;
+	while (args[i])
 	{
 		// TODO add wildcard here
+		if (!args[i]->wildcard)
+			len ++;
 		i++;
 	}
 	argv = (char **)malloc(sizeof(char *) * (i + 1));
@@ -86,19 +81,22 @@ char	**ft_argv_of(t_arg **arg)
 		return (ft_fail(ERR_MALLOC, NULL), NULL);
 	argv[i] = NULL;
 	i = 0;
-	while (arg[i])
+	while (args[i])
 	{
-		argv[i] = ft_arg_of(arg[i]);
-		if (!argv[i])
+		if (!args[i]->wildcard)
 		{
-			ft_free_until((void **)argv, i);
-			while (arg[i])
-				ft_clear_arg(arg[i ++]);
-			free(arg);
-			return (NULL);
+			argv[i] = ft_arg_of(args[i], minishell);
+			if (!argv[i])
+			{
+				ft_free_until((void **)argv, i);
+				while (args[i])
+					ft_clear_arg(args[i ++]);
+				free(args);
+				return (NULL);
+			}
 		}
 		i++;
 	}
-	free(arg);
+	free(args);
 	return (argv);
 }

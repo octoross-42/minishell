@@ -23,6 +23,7 @@ SRCS = src/display/banner.c \
 		src/utils/string.c \
 		src/utils/utils.c \
 		src/utils/split.c \
+		src/utils/itoa.c \
 		src/main.c \
 		dev/print.c \
 

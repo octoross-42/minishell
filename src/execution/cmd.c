@@ -71,6 +71,7 @@ char	*ft_get_cmd_path(char *cmd, t_minishell *minishell)
 		i ++;
 	}
 	ft_fail(ERR_CMD, cmd);
+	minishell->status = STATUS_CMD;
 	return (NULL);
 }
 
@@ -78,6 +79,7 @@ void	ft_cmd(char **argv, t_minishell *minishell)
 {
 	char	*path;
 	int		i;
+	int		status;
 
 	minishell->last_cmd = fork();
 	if (minishell->last_cmd == -1)
@@ -89,12 +91,13 @@ void	ft_cmd(char **argv, t_minishell *minishell)
 	if (!minishell->last_cmd)
 	{
 		path = ft_get_cmd_path(argv[0], minishell);
+		// ft_fail("path : %s\n", path);
 		if (!path)
 		{
 			ft_free_until((void **)argv, -1);
 			ft_exit_minishell(minishell, minishell->status);
 		}
-		printf("path = %s\n", path);
+		// printf("path = %s\n", path);
 		// i = 0;
 		// while (argv[i])
 		// 	printf("argv = %s\n", argv[i ++]);
@@ -104,7 +107,8 @@ void	ft_cmd(char **argv, t_minishell *minishell)
 		minishell->status = STATUS_EXECVE;
 		ft_exit_minishell(minishell, minishell->status);
 	}
-	waitpid(minishell->last_cmd, &minishell->status, 0);
+	waitpid(minishell->last_cmd, &status, 0);
+	minishell->status = WEXITSTATUS(status);
 }
 
 void	ft_exec_cmd(t_ast *ast, t_minishell *minishell)
@@ -114,19 +118,19 @@ void	ft_exec_cmd(t_ast *ast, t_minishell *minishell)
 	int		i;
 	
 	next = ast->left;
-	argv = ft_argv_of((t_arg **)ast->data);
+	argv = ft_argv_of((t_arg **)ast->data, minishell);
 	free(ast);
 	if (!argv)
 	{
 		minishell->status = STATUS_MALLOC;
 		return ;
 	}
-	i = 0;
-	while (argv[i])
-	{
-		printf("argv[%d] = %s\n", i, argv[i]);
-		i ++;
-	}
+	// i = 0;
+	// while (argv[i])
+	// {
+	// 	printf("argv[%d] = %s\n", i, argv[i]);
+	// 	i ++;
+	// }
 	if (ft_is_buildin(argv[0]))
 	{
 		ft_buildin(argv, minishell);

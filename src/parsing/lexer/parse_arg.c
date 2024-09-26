@@ -33,7 +33,7 @@ int	ft_add_new_arg(t_arg **last, t_arg **top)
 	return (STATUS_OK);
 }
 
-int	ft_len_arg(char *s, char quote, int *status)
+int	ft_len_t_arg(char *s, char quote, int *status)
 {
 	int	len;
 	int	len_quotes;
@@ -42,7 +42,7 @@ int	ft_len_arg(char *s, char quote, int *status)
 	*status = STATUS_OK;
 	while (*s && !ft_isspace(*s) && !ft_char_is_token(*s))
 	{	
-		if ((*s == '$') && ft_isname(*(s + 1)) && (quote != '\''))
+		if ((*s == '$') && (ft_isname(*(s + 1)) || (*(s + 1) == '?')) && (quote != '\''))
 			return (len);
 		else if ((*s == '$') && ft_char_is_quote(*(s + 1)) && !quote)
 			;
@@ -70,7 +70,7 @@ int	ft_fill_arg(char **s, char *data, char *quote)
 	i = 0;
 	while (**s && !ft_isspace(**s) && !ft_char_is_token(**s))
 	{	
-		if ((**s == '$') && ft_isname(*(*s + 1)) && (*quote != '\''))
+		if ((**s == '$') && (ft_isname(*(*s + 1)) || (*(*s + 1) == '?')) && (*quote != '\''))
 			return (STATUS_OK);
 		else if ((**s == '$') && ft_char_is_quote(*(*s + 1)) && !(*quote))
 			;
@@ -97,12 +97,12 @@ int	ft_set_arg(char **s, t_arg *arg, char *quote)
 	status = STATUS_OK;
 	if ((**s == '$') && ft_char_is_quote(*(*s + 1)) && !(*quote))
 		(*s)++;
-	if ((**s == '$') && ft_isname(*(*s + 1)) && (*quote != '\''))
+	if ((**s == '$') && (ft_isname(*(*s + 1)) || (*(*s + 1) == '?')) && (*quote != '\''))
 		return (ft_arg_expand(s, arg));
 	else
 	{
 		// printf("little arg : %s in quote : %c\n", *s, *quote);
-		len = ft_len_arg(*s, *quote, &status);
+		len = ft_len_t_arg(*s, *quote, &status);
 		if (len < 0)
 			return (status);
 		// printf("len little arg : %d\n", len);

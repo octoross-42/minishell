@@ -26,7 +26,7 @@ int	ft_len_quotes(char **s, char *quote)
 	len = 0;
 	while (**s)
 	{
-		if ((**s == '$') && ft_isname(*(*s + 1)) && (*quote != '\''))
+		if ((**s == '$') && (ft_isname(*(*s + 1)) || (*(*s + 1) == '?')) && (*quote != '\''))
 			return ((*s)--, len);
 		else if (**s == *quote)
 			return (*quote = 0, len);
@@ -46,7 +46,7 @@ int	ft_close_quotes(char **s, char *data, char *quote)
 	len = 0;
 	while (**s)
 	{	
-		if ((**s == '$') && ft_isname(*(*s + 1)) && (*quote != '\''))
+		if ((**s == '$') && (ft_isname(*(*s + 1)) || (*(*s + 1) == '?')) && (*quote != '\''))
 			return ((*s)--, STATUS_OK);
 		else if (**s == *quote)
 			return (*quote = 0, STATUS_OK);

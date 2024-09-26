@@ -6,7 +6,7 @@
 /*   By: octoross <octoross@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/09 20:26:55 by octoross          #+#    #+#             */
-/*   Updated: 2024/09/26 02:40:42 by octoross         ###   ########.fr       */
+/*   Updated: 2024/09/26 17:15:18 by octoross         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,6 +51,7 @@
 # define ERR_PARSING_ENV "Error : env is badly parsed\n"
 # define ERR_ENV "Warning : No env retrieved\n"
 # define ERR_PATH "No PATH retrieved : malloc failed\n"
+# define ERR_EXPAND "%s could not be expanded : malloc failed\n"
 
 size_t	ft_strlen(const char *s);
 char	*ft_strcpy(char *restrict dst, const char *restrict src);
@@ -63,6 +64,8 @@ bool	ft_isdigit(int c);
 bool	ft_isalpha(int c);
 bool	ft_isspace(char c);
 bool	ft_isname(char c);
+
+char	*ft_itoa(int n);
 
 void	ft_fail(char *err, void *err_value);
 void	ft_free_until(void **data, int n);

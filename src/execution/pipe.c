@@ -65,10 +65,12 @@ void	ft_add_pid_to_wait(pid_t pid, t_minishell *minishell)
 void	ft_last_pipe_wait(t_minishell *minishell)
 {
 	t_pid	*next;
+	int		status;
 
 	if (minishell->last_cmd != -1)
 	{
-		waitpid(minishell->last_cmd, &minishell->status, 0);
+		waitpid(minishell->last_cmd, &status, 0);
+		minishell->status = WEXITSTATUS(status);
 		while (minishell->wait_for_pids)
 		{
 			waitpid(minishell->wait_for_pids->pid, NULL, 0);

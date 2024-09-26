@@ -105,3 +105,43 @@ t_env	*ft_env_of_envp(char **envp)
 	}
 	return (env->previous = last, env);
 }
+
+char	*ft_get_env_value(char *name, t_env *env)
+{
+	while (env)
+	{
+		if (!ft_strcmp(name, env->name))
+			return (env->value);
+		env = env->next;
+	}
+	return (NULL);
+}
+
+void	ft_expand(t_arg *arg, t_minishell *minishell)
+{
+	char	*value;
+
+	if (!arg || !arg->expand)
+		return ;
+	if (!ft_strcmp(arg->str, "?"))
+	{
+		value = ft_itoa(minishell->status);
+		if (!value)
+		{
+			ft_fail(ERR_EXPAND, arg->str);
+			free(arg->str);
+			arg->str = NULL;
+		}
+		arg->str = value;
+		arg->expand = false;
+		return ;
+	}
+	value = ft_get_env_value(arg->str, minishell->env);
+	if (!value)
+	{
+		arg->expand = false;
+		return ;
+	}
+	free(arg->str);
+	arg->str = value;
+}

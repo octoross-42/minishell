@@ -22,6 +22,8 @@ int	ft_arg_expand(char **s, t_arg *arg)
 	i = 0;
 	while (ft_isname((*s)[i]))
 		i ++;
+	if (**s == '?')
+		i ++;
 	name = (char *)malloc((i + 1) * sizeof(char));
 	if (!name)
 		return (ft_fail(ERR_MALLOC, NULL), STATUS_MALLOC);

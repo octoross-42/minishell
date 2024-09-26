@@ -72,7 +72,7 @@ void	ft_redir(t_ast *ast, t_minishell *minishell)
 	
 	// TODO : arg wildcards
 	// printf("redir : %s\n", ft_name_of_token(ast->token));
-	arg = ft_arg_of((t_arg *)ast->data);
+	arg = ft_arg_of((t_arg *)ast->data, minishell->env);
 	token = ast->token;
 	next = ast->left;
 	free(ast);
