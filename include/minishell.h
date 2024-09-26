@@ -6,7 +6,7 @@
 /*   By: octoross <octoross@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/09 20:34:55 by octoross          #+#    #+#             */
-/*   Updated: 2024/09/26 02:07:34 by octoross         ###   ########.fr       */
+/*   Updated: 2024/09/26 15:54:14 by octoross         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,6 +31,7 @@ typedef struct s_env
 {
 	char	*name;
 	char	*value;
+	t_env	*previous;
 	struct s_env	*next;
 }	t_env;
 
@@ -69,5 +70,8 @@ void 	ft_do_pipe(t_ast *ast, t_minishell *minishell);
 
 bool	ft_is_buildin(char *cmd);
 void	ft_buildin(char **argv, t_minishell *minishell);
+
+t_env	*ft_env_of_envp(char **envp);
+void	ft_clear_env(t_env *env);
 
 #endif
