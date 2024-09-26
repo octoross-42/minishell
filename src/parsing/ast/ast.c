@@ -6,7 +6,7 @@
 /*   By: octoross <octoross@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/09 15:25:03 by octoross          #+#    #+#             */
-/*   Updated: 2024/09/25 23:58:00 by octoross         ###   ########.fr       */
+/*   Updated: 2024/09/26 02:11:07 by octoross         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,7 +63,7 @@ void	ft_clear_ast(t_ast *ast)
 		return ;
 	ft_clear_ast(ast->left);
 	ft_clear_ast(ast->right);
-	free(ast);
+	ft_clear_node_ast(ast);
 }
 
 int	ft_add_new_ast(t_ast *new, t_ast **current, t_ast **top)

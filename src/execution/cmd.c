@@ -109,7 +109,6 @@ void	ft_exec_cmd(t_ast *ast, t_minishell *minishell)
 	free(ast);
 	if (!argv)
 	{
-		ft_fail(ERR_MALLOC, NULL);
 		minishell->status = STATUS_MALLOC;
 		return ;
 	}

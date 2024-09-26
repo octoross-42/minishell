@@ -12,14 +12,14 @@
 
 #include "minishell.h"
 
-void	ft_input(t_ast *ast, t_minishell *minishell)
+void	ft_input(char *arg, t_minishell *minishell)
 {
 	int	infile;
 
-	infile = open((char *)ast->data, O_RDONLY);
+	infile = open(arg, O_RDONLY);
 	if (infile == -1)
 	{
-		perror((char *)ast->data);
+		perror(arg);
 		minishell->status = STATUS_OPEN;
 		return ;
 	}
@@ -35,17 +35,17 @@ void	ft_input(t_ast *ast, t_minishell *minishell)
 	close(infile);
 }
 
-void	ft_output(t_ast *ast, t_minishell *minishell)
+void	ft_output(int token, char *arg, t_minishell *minishell)
 {
 	int	outfile;
 
-	if (ast->token == APPEND)
-		outfile = open((char *)ast->data, O_WRONLY | O_CREAT | O_APPEND, 0644);
+	if (token == APPEND)
+		outfile = open(arg, O_WRONLY | O_CREAT | O_APPEND, 0644);
 	else
-		outfile = open((char *)ast->data, O_WRONLY | O_CREAT | O_TRUNC, 0644);
+		outfile = open(arg, O_WRONLY | O_CREAT | O_TRUNC, 0644);
 	if (outfile == -1)
 	{
-		perror((char *)ast->data);
+		perror(arg);
 		minishell->status = STATUS_OPEN;
 		return ;
 	}
@@ -60,26 +60,32 @@ void	ft_output(t_ast *ast, t_minishell *minishell)
 	}
 	close(outfile);
 }
-void	ft_here_doc(t_ast *ast, t_minishell *minishell)
+void	ft_here_doc(char *arg, t_minishell *minishell)
 {
 	printf("here_doc\n");
 }
 void	ft_redir(t_ast *ast, t_minishell *minishell)
 {
 	t_ast	*next;
-	char	**args;
-	// TODO : transformer la data d'ast en arg
-
-	if (true)
-		printf("naha\n");
-	else if (ft_is_output(ast->token))
-		ft_output(ast, minishell);
-	else if (ast->token == INPUT)
-		ft_input(ast, minishell);
-	else if (ast->token == HERE_DOC)
-		ft_here_doc(ast, minishell);
+	char	*arg;
+	int		token;
+	
+	// TODO : arg wildcards
+	arg = ft_arg_of((t_arg *)ast->data);
+	token = ast->token;
 	next = ast->left;
-	ft_clear_node_ast(ast);
+	free(ast);
+	if (!arg)
+	{
+		minishell->status = STATUS_MALLOC;
+		return ;
+	}
+	if (ft_is_output(token))
+		ft_output(token, arg, minishell);
+	else if (token == INPUT)
+		ft_input(arg, minishell);
+	else if (token == HERE_DOC)
+		ft_here_doc(arg, minishell);
 	if (next && (minishell->status == STATUS_OK))
 		ft_exec_ast(next, minishell);
 	else
