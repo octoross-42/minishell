@@ -87,3 +87,103 @@
    obj:/usr/bin/ls
    fun:(below main)
 }
+
+
+{
+   infinite_cat_interrupt
+   Memcheck:Leak
+   match-leak-kinds: reachable
+   fun:malloc
+   fun:strdup
+   fun:__textdomain
+   fun:textdomain
+   obj:/usr/bin/cat
+   fun:(below main)
+}
+{
+   infinite_cat_interrupt
+   Memcheck:Leak
+   match-leak-kinds: reachable
+   fun:malloc
+   fun:strdup
+   fun:_nl_load_locale_from_archive
+   fun:_nl_find_locale
+   fun:setlocale
+   obj:/usr/bin/cat
+   fun:(below main)
+}
+{
+   infinite_cat_interrupt
+   Memcheck:Leak
+   match-leak-kinds: reachable
+   fun:malloc
+   fun:new_composite_name
+   fun:setlocale
+   obj:/usr/bin/cat
+   fun:(below main)
+}
+{
+   infinite_cat_interrupt
+   Memcheck:Leak
+   match-leak-kinds: reachable
+   fun:malloc
+   fun:set_binding_values.part.0
+   fun:set_binding_values
+   fun:bindtextdomain
+   obj:/usr/bin/cat
+   fun:(below main)
+}
+{
+   infinite_cat_interrupt
+   Memcheck:Leak
+   match-leak-kinds: reachable
+   fun:malloc
+   fun:_nl_load_locale_from_archive
+   fun:_nl_find_locale
+   fun:setlocale
+   obj:/usr/bin/cat
+   fun:(below main)
+}
+{
+   infinite_cat_interrupt
+   Memcheck:Leak
+   match-leak-kinds: reachable
+   fun:malloc
+   fun:strdup
+   fun:setlocale
+   obj:/usr/bin/cat
+   fun:(below main)
+}
+{
+   infinite_cat_interrupt
+   Memcheck:Leak
+   match-leak-kinds: reachable
+   fun:malloc
+   fun:_nl_intern_locale_data
+   fun:_nl_load_locale_from_archive
+   fun:_nl_find_locale
+   fun:setlocale
+   obj:/usr/bin/cat
+   fun:(below main)
+}
+{
+   infinite_cat_interrupt
+   Memcheck:Leak
+   match-leak-kinds: reachable
+   fun:malloc
+   fun:_nl_intern_locale_data
+   fun:_nl_load_locale_from_archive
+   fun:_nl_find_locale
+   fun:setlocale
+   obj:/usr/bin/cat
+   fun:(below main)
+}
+{
+   infinite_cat_interrupt
+   Memcheck:Leak
+   match-leak-kinds: reachable
+   fun:memalign
+   obj:/usr/bin/cat
+   obj:/usr/bin/cat
+   fun:(below main)
+}
