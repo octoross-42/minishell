@@ -71,6 +71,7 @@ void	ft_redir(t_ast *ast, t_minishell *minishell)
 	int		token;
 	
 	// TODO : arg wildcards
+	// printf("redir : %s\n", ft_name_of_token(ast->token));
 	arg = ft_arg_of((t_arg *)ast->data);
 	token = ast->token;
 	next = ast->left;
@@ -86,7 +87,8 @@ void	ft_redir(t_ast *ast, t_minishell *minishell)
 		ft_input(arg, minishell);
 	else if (token == HERE_DOC)
 		ft_here_doc(arg, minishell);
-	if (next && (minishell->status == STATUS_OK))
+	free(arg);
+	if ((minishell->status == STATUS_OK))
 		ft_exec_ast(next, minishell);
 	else
 		ft_clear_ast(next);

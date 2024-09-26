@@ -55,6 +55,7 @@ char	*ft_get_cmd_path(char *cmd, t_minishell *minishell)
 		path = ft_strdup(cmd);
 		if (!path)
 			return (ft_fail(ERR_MALLOC, NULL), minishell->status = STATUS_MALLOC, NULL);
+		return (path);
 	}
 	if (!minishell->path)
 			return (ft_fail(ERR_CMD, NULL), minishell->status = STATUS_CMD, NULL);
@@ -69,6 +70,7 @@ char	*ft_get_cmd_path(char *cmd, t_minishell *minishell)
 		free(path);
 		i ++;
 	}
+	ft_fail(ERR_CMD, cmd);
 	return (NULL);
 }
 
@@ -88,7 +90,14 @@ void	ft_cmd(char **argv, t_minishell *minishell)
 	{
 		path = ft_get_cmd_path(argv[0], minishell);
 		if (!path)
+		{
+			ft_free_until((void **)argv, -1);
 			ft_exit_minishell(minishell, minishell->status);
+		}
+		printf("path = %s\n", path);
+		// i = 0;
+		// while (argv[i])
+		// 	printf("argv = %s\n", argv[i ++]);
 		execve(path, argv, NULL);
 		ft_fail(ERR_EXECVE, NULL);
 		// TODO refaire message erreur
@@ -121,10 +130,9 @@ void	ft_exec_cmd(t_ast *ast, t_minishell *minishell)
 	if (ft_is_buildin(argv[0]))
 	{
 		ft_buildin(argv, minishell);
-		ft_free_until((void **)argv, -1);
 	}
 	else
 		ft_cmd(argv, minishell);
-	if (next)
-		ft_exec_ast(next, minishell);
+	ft_free_until((void **)argv, -1);
+	ft_exec_ast(next, minishell);
 }

@@ -16,9 +16,15 @@ void	ft_reset_stds(t_minishell *minishell)
 {
 	// TODO faire fail les dup2
 	if (minishell->std_in != -1)
+	{
 		dup2(minishell->std_in, STDIN_FILENO);
+		close(minishell->std_in);
+	}
 	if (minishell->std_out != -1)
+	{
 		dup2(minishell->std_out, STDOUT_FILENO);
+		close(minishell->std_out);
+	}
 	minishell->std_in = -1;
 	minishell->std_out = -1;
 }
@@ -32,8 +38,8 @@ void	ft_separator(t_ast *ast, t_minishell *minishell)
 	token = ast->token;
 	ft_clear_node_ast(ast);
 	ft_reset_stds(minishell);
-	if (((token == OR) && (minishell->status == STATUS_OK))
-		|| ((token == AND) && (minishell->status != STATUS_OK)))
+	if (((token == OR) && (minishell->status != STATUS_OK))
+		|| ((token == AND) && (minishell->status == STATUS_OK)))
 		ft_exec_ast(next, minishell);
 	else
 		ft_clear_ast(next);

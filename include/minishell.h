@@ -6,7 +6,7 @@
 /*   By: octoross <octoross@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/09 20:34:55 by octoross          #+#    #+#             */
-/*   Updated: 2024/09/26 01:10:16 by octoross         ###   ########.fr       */
+/*   Updated: 2024/09/26 02:07:34 by octoross         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,6 +55,7 @@ typedef struct s_minishell
 }	t_minishell;
 
 void	ft_add_history(char *line);
+char	*ft_arg_of(t_arg *arg);
 char	**ft_argv_of(t_arg **arg);
 
 void	ft_minishell_input(t_minishell *minishell);

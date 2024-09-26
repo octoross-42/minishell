@@ -6,7 +6,7 @@
 /*   By: octoross <octoross@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/09 20:26:55 by octoross          #+#    #+#             */
-/*   Updated: 2024/09/26 01:41:35 by octoross         ###   ########.fr       */
+/*   Updated: 2024/09/26 02:40:42 by octoross         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,7 +47,7 @@
 # define ERR_DUP2 "dup2 failed\n"
 # define ERR_EXECVE "execve failed\n"
 # define ERR_PROG "Bad programming happenned :(\n"
-# define ERR_CMD "Command not found\n"
+# define ERR_CMD "%s: command not found\n"
 # define ERR_PARSING_ENV "Error : env is badly parsed\n"
 # define ERR_ENV "Warning : No env retrieved\n"
 # define ERR_PATH "No PATH retrieved : malloc failed\n"

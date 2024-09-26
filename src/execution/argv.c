@@ -57,6 +57,7 @@ char	*ft_arg_of(t_arg *arg)
 	while (arg)
 	{
 		i = 0;
+		printf("arg->str = %s\n", arg->str);
 		while (arg->str && arg->str[i])
 			str[len ++] = arg->str[i ++];
 		if (arg->str && !arg->expand)

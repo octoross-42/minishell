@@ -14,8 +14,16 @@
 
 void	ft_do_pipe_child(int pipefd[2], t_ast *ast, t_minishell *minishell)
 {
-	t_ast	*next;
+	t_ast	*left;
+	t_ast	*right;
+	t_pid	*next;
 
+	while (minishell->wait_for_pids)
+	{
+		next = minishell->wait_for_pids->next;
+		free(minishell->wait_for_pids);
+		minishell->wait_for_pids = next;
+	}
 	if (minishell->pipe_before)
 	{
 		dup2(minishell->pipe, STDIN_FILENO);
@@ -28,11 +36,13 @@ void	ft_do_pipe_child(int pipefd[2], t_ast *ast, t_minishell *minishell)
 		close(pipefd[0]);
 	}
 	minishell->pipe_before = false;
-	next = ast->left;
+	left = ast->left;
+	right = ast->right;
 	if (ast->token == PIPE)
 	{
 		ft_clear_node_ast(ast);
-		ft_exec_ast(next, minishell);
+		ft_clear_ast(right);
+		ft_exec_ast(left, minishell);
 	}
 	else
 		ft_exec_ast(ast, minishell);
@@ -86,7 +96,10 @@ void	ft_do_pipe_parent(int pipefd[2], pid_t pid, t_ast *ast, t_minishell *minish
 	if (((ast->token == PIPE) && ast->left->cmd) || (minishell->pipe_before && ast->cmd))
 		ft_add_pid_to_wait(pid, minishell);
 	if (minishell->pipe_before && (ast->token != PIPE))
+	{
+		// printf("pipe before and last for wait\n");
 		ft_last_pipe_wait(minishell);
+	}
 }
 
 void ft_do_pipe(t_ast *ast, t_minishell *minishell)
@@ -94,6 +107,8 @@ void ft_do_pipe(t_ast *ast, t_minishell *minishell)
 	pid_t	pid;
 	int		pipefd[2];
 	t_pid	*next;
+	t_ast	*right;
+	t_ast	*left;
 
 	if ((ast->token == PIPE) && (pipe(pipefd) == -1))
 	{
@@ -113,5 +128,11 @@ void ft_do_pipe(t_ast *ast, t_minishell *minishell)
 	ft_do_pipe_parent(pipefd, pid, ast, minishell);
 	if (ast->token == PIPE)
 		minishell->pipe_before = true;
-	ft_exec_ast(ast->right, minishell);
+	right = ast->right;
+	left = ast->left;
+	ft_clear_node_ast(ast);
+	ft_clear_ast(left);
+	if (right)
+		printf("right : %s\n", ft_name_of_token(right->token));
+	ft_exec_ast(right, minishell);
 }

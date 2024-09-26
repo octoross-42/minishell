@@ -33,9 +33,14 @@ bool	ft_is_buildin(char *cmd)
 
 void	ft_buildin(char **argv, t_minishell *minishell)
 {
+	int	i;
+
 	printf("we buildin\n");
 	if (!ft_strcmp(argv[0], "exit"))
 	{
+		// i = 0;
+		// while (argv[i])
+		// 	printf("argv = '%s'\n", argv[i ++]);
 		ft_free_until((void **)argv, -1);
 		ft_exit_minishell(minishell, minishell->status);
 	}
