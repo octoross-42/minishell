@@ -70,10 +70,8 @@ int	ft_parse_cmd(char **s, t_lexer *lexer)
 	nbr_args = 0;
 	while (**s && !ft_char_is_token(**s))
 	{
-		// printf("parse cmd : %s\n", *s);
 		status = ft_parse_arg(s, &(args[nbr_args]));
 		if (status != STATUS_OK)
-		// TODO rajouter boucle pour clear tous les args
 			return (status);
 		while (ft_isspace(**s))
 			(*s)++;

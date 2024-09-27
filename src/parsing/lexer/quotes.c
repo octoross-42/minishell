@@ -47,9 +47,9 @@ int	ft_close_quotes(char **s, char *data, char *quote)
 	while (**s)
 	{	
 		if ((**s == '$') && (ft_isname(*(*s + 1)) || (*(*s + 1) == '?')) && (*quote != '\''))
-			return ((*s)--, STATUS_OK);
+			return ((*s)--, len);
 		else if (**s == *quote)
-			return (*quote = 0, STATUS_OK);
+			return (*quote = 0, len);
 		else
 			data[len ++] = **s;
 		(*s)++;

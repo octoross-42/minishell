@@ -18,13 +18,19 @@ int	ft_add_new_arg(t_arg **last, t_arg **top)
 
 	if (!last || !top)
 		return (ft_fail(ERR_PROG, NULL), STATUS_PROG);
-	new = (t_arg *)malloc(sizeof(t_arg) );
+	new = (t_arg *)malloc(sizeof(t_arg));
 	if (!new)
+	{
+		ft_clear_arg(*top);
 		return (ft_fail(ERR_MALLOC, NULL), STATUS_MALLOC);
+	}
 	new->str = NULL;
 	new->next = NULL;
-	new->expand = false;
 	new->wildcard = false;
+	new->expand = false;
+	new->previous = *last;
+	if (*last && (*last)->wildcard)
+		new->wildcard = true;
 	if (!(*top))
 		*top = new;
 	if (*last)
@@ -62,12 +68,14 @@ int	ft_len_t_arg(char *s, char quote, int *status)
 	return (len);
 }
 
-int	ft_fill_arg(char **s, char *data, char *quote)
+int	ft_fill_arg(char **s, t_arg *arg, char *quote)
 {
-	int	i;
-	int	status;
+	int		i;
+	int		status;
+	char	*str;
+	t_arg	*previous;
 
-	i = 0;
+	str = arg->str;
 	while (**s && !ft_isspace(**s) && !ft_char_is_token(**s))
 	{	
 		if ((**s == '$') && (ft_isname(*(*s + 1)) || (*(*s + 1) == '?')) && (*quote != '\''))
@@ -76,14 +84,28 @@ int	ft_fill_arg(char **s, char *data, char *quote)
 			;
 		else if (ft_char_is_quote(**s) && !(*quote))
 		{
-			status = ft_close_quotes(s, data, quote);
-			if (status != STATUS_OK)
-				return (status);
+			i = ft_close_quotes(s, str, quote);
+			if (i < 0)
+				return (STATUS_SYNTAX);
+			str += i;
 		}
 		else if (**s == *quote)
 			*quote = 0;
 		else
-			data[i ++] = **s;
+			*(str ++) = **s;
+		if (**s == '*' && (!*quote))
+		{
+			if (!arg->wildcard)
+			{
+				previous = arg;
+				while (previous)
+				{
+					previous->wildcard = true;
+					previous = previous->previous;
+				}
+
+			}
+		}
 		(*s)++;
 	}
 	return (STATUS_OK);
@@ -101,16 +123,14 @@ int	ft_set_arg(char **s, t_arg *arg, char *quote)
 		return (ft_arg_expand(s, arg));
 	else
 	{
-		// printf("little arg : %s in quote : %c\n", *s, *quote);
 		len = ft_len_t_arg(*s, *quote, &status);
 		if (len < 0)
 			return (status);
-		// printf("len little arg : %d\n", len);
 		arg->str = (char *)malloc((len + 1) * sizeof(char));
 		if (!arg->str)
 			return (ft_fail(ERR_MALLOC, NULL), STATUS_MALLOC);
 		arg->str[len] = 0;
-		status = ft_fill_arg(s, arg->str, quote);
+		status = ft_fill_arg(s, arg, quote);
 		if (status != STATUS_OK)
 			return (status);
 	}
@@ -127,6 +147,23 @@ void	ft_clear_arg(t_arg *arg)
 	free(arg);
 }
 
+void	ft_clear_args(t_arg **args)
+{
+	int	i;
+
+	i = 0;
+	if (!args)
+		return ;
+	if (!(args[i]))
+	{
+		free(args);
+		return ;
+	}
+	while (args[i])
+		ft_clear_arg(args[i ++]);
+	free(args);
+}
+
 int	ft_parse_arg(char **s, t_arg **data)
 {
 	int			status;
@@ -138,16 +175,15 @@ int	ft_parse_arg(char **s, t_arg **data)
 	quote = 0;
 	while (**s && !ft_isspace(**s) && !ft_char_is_token(**s))
 	{
-		// printf("parse arg : %s\n", *s);
 		status = ft_add_new_arg(&last, data);
 		if (status != STATUS_OK)
-			return (ft_clear_arg(*data), status);
+			return (status);
 		status = ft_set_arg(s, last, &quote);
 		if (status != STATUS_OK)
-			return (ft_clear_arg(*data), status);
+			return (status);
 	}
 	if (quote)
-		return (ft_clear_arg(*data), ft_fail(ERR_SYNTAX, "newline"), STATUS_SYNTAX);
+		return (ft_fail(ERR_SYNTAX, "newline"), STATUS_SYNTAX);
 	return (STATUS_OK);
 }
 

@@ -6,7 +6,7 @@
 /*   By: octoross <octoross@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/18 13:58:38 by octoross          #+#    #+#             */
-/*   Updated: 2024/09/25 14:01:34 by octoross         ###   ########.fr       */
+/*   Updated: 2024/09/26 23:04:10 by octoross         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,14 +16,14 @@ void	ft_clear_lexer(t_lexer *lexer, int erase_data)
 {
 	if (!lexer)
 		return ;
-	if ((lexer)->next)
+	if (lexer->next)
 		ft_clear_lexer(lexer->next, erase_data);
 	if (erase_data)
 	{
 		if (lexer->token == CMD)
-			ft_free_until((void **)lexer->data, -1);
+			ft_clear_args((t_arg **)(lexer->data));
 		else if (ft_is_redir(lexer->token))
-			free(lexer->data);
+			ft_clear_arg((t_arg *)lexer->data);
 	}
 	free(lexer);
 }
