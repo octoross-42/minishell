@@ -25,34 +25,6 @@ void	ft_clear_env(t_env *env)
 	free(env);
 }
 
-static void	ft_fill_env_from_envp(t_env *env, char *envp)
-{
-	int	i;
-
-	i = 0;
-	while (envp[i] && envp[i] != '=')
-		i++;
-	if (envp[i] != '=')
-	{
-		ft_fail(ERR_PARSING_ENV, NULL);
-		ft_clear_env(env);
-		return ;
-	}
-	env->name = ft_strndup(envp, i ++);
-	if (!env->name)
-	{
-		ft_fail(ERR_MALLOC, NULL);
-		ft_clear_env(env);
-		return ;
-	}
-	env->value = ft_strdup(envp + i);
-	if (!env->value)
-	{
-		ft_fail(ERR_MALLOC, NULL);
-		ft_clear_env(env);
-		return ;
-	}
-}
 
 int	ft_add_env(t_env **env, char *name, char *value)
 {
@@ -74,6 +46,37 @@ int	ft_add_env(t_env **env, char *name, char *value)
 		new->previous = (*env)->previous;
 		(*env)->previous->next = new;
 		(*env)->previous = new;
+	}
+}
+
+static void	ft_fill_env_from_envp(t_env *env, char *envp)
+{
+	int	i;
+
+	i = 0;
+	while (envp[i] && envp[i] != '=')
+		i++;
+	if (envp[i] != '=')
+	{
+		ft_fail(ERR_PARSING_ENV, NULL);
+		ft_clear_env(env);
+		return ;
+	}
+	// printf("fill env : name : %s\n", envp);
+	env->name = ft_strndup(envp, i ++);
+	if (!env->name)
+	{
+		ft_fail(ERR_MALLOC, NULL);
+		ft_clear_env(env);
+		return ;
+	}
+	// printf("fill env : value : %s\n", envp + i);
+	env->value = ft_strdup(&envp[i]);
+	if (!env->value)
+	{
+		ft_fail(ERR_MALLOC, NULL);
+		ft_clear_env(env);
+		return ;
 	}
 }
 
@@ -127,21 +130,13 @@ void	ft_expand(t_arg *arg, t_minishell *minishell)
 	{
 		value = ft_itoa(minishell->status);
 		if (!value)
-		{
 			ft_fail(ERR_EXPAND, arg->str);
-			free(arg->str);
-			arg->str = NULL;
-		}
+		free(arg->str);
 		arg->str = value;
 		arg->expand = false;
 		return ;
 	}
 	value = ft_get_env_value(arg->str, minishell->env);
-	if (!value)
-	{
-		arg->expand = false;
-		return ;
-	}
 	free(arg->str);
 	arg->str = value;
 }
