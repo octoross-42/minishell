@@ -6,24 +6,12 @@
 /*   By: octoross <octoross@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/09 20:30:08 by octoross          #+#    #+#             */
-/*   Updated: 2024/09/23 02:02:33 by octoross         ###   ########.fr       */
+/*   Updated: 2024/09/28 00:51:14 by octoross         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "utils.h"
 #include "lexer.h"
-
-size_t	ft_strlen(const char *s)
-{
-	size_t	len;
-
-	if (!s)
-		return (0);
-	len = 0;
-	while (s[len])
-		len ++;
-	return (len);
-}
 
 void	ft_free_until(void **data, int n)
 {
@@ -65,4 +53,61 @@ void	ft_fail(char *err, void *err_value)
 	}
 	if (*err)
 		write(STDERR_FILENO, err, ft_strlen(err));
+}
+
+char	*ft_build_path(char const *path, char const *file)
+{
+	int		len;
+	int		i;
+	char	*concatenated;
+
+	len = ft_strlen(path);
+	if (path[len - 1] == '/')
+		len --;
+	len += ft_strlen(file) + 1;
+	concatenated = (char *)malloc(sizeof(char) * (len + 1));
+	if (!concatenated)
+		return (NULL);
+	concatenated[len] = '\0';
+	i = -1;
+	while (path[++i])
+		concatenated[i] = path[i];
+	if (concatenated[i - 1] != '/')
+		concatenated[i ++] = '/';
+	len = i;
+	while (file[i - len])
+	{
+		concatenated[i] = file[i - len];
+		i ++;
+	}
+	return (concatenated);
+}
+
+char	*ft_build_dir_path(char const *path, char const *file)
+{
+	int		len;
+	int		i;
+	char	*concatenated;
+
+	len = ft_strlen(path);
+	if (path && path[len - 1] != '/')
+		len ++;
+	len += ft_strlen(file);
+	concatenated = (char *)malloc(sizeof(char) * (len + 1));
+	if (!concatenated)
+		return (NULL);
+	concatenated[len - 1] = '/';
+	concatenated[len] = '\0';
+	i = -1;
+	while (path[++i])
+		concatenated[i] = path[i];
+	if (path && *path && concatenated[i - 1] != '/')
+		concatenated[i ++] = '/';
+	len = i;
+	while (file[i - len])
+	{
+		concatenated[i] = file[i - len];
+		i ++;
+	}
+	return (concatenated);
 }
