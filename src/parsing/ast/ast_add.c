@@ -6,11 +6,11 @@
 /*   By: octoross <octoross@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/13 16:26:57 by octoross          #+#    #+#             */
-/*   Updated: 2024/09/25 20:48:44 by octoross         ###   ########.fr       */
+/*   Updated: 2024/09/28 22:18:32 by octoross         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "lexer.h"
+#include "ast.h"
 
 int	ft_append_ast(t_ast *new, t_ast **current)
 {
@@ -40,7 +40,7 @@ int	ft_append_ast(t_ast *new, t_ast **current)
 int	ft_pipe_token(t_ast *new, t_ast **current, t_ast **top)
 {
 	t_ast	*ast;
-	
+
 	ast = *current;
 	while (ast && ast->parent
 		&& !ft_is_separator(ast->parent->token))
@@ -63,7 +63,6 @@ int	ft_pipe_token(t_ast *new, t_ast **current, t_ast **top)
 
 int	ft_output_token(t_ast *new, t_ast **current, t_ast **top)
 {
-	// HYPO : 2 cmd cannot succeed
 	if (((*current)->token == CMD))
 	{
 		new->cmd = true;
@@ -91,7 +90,6 @@ int	ft_add_ast(t_ast *new, t_ast **current, t_ast **top)
 {
 	if (new->token == PIPE)
 		return (ft_pipe_token(new, current, top));
-		// HYPO : fork cant be last or first so cannot be current
 	else if (ft_is_output(new->token))
 		return (ft_output_token(new, current, top));
 	else if ((new->token == INPUT) || (new->token == HERE_DOC)

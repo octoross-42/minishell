@@ -6,11 +6,11 @@
 /*   By: octoross <octoross@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/09 15:25:03 by octoross          #+#    #+#             */
-/*   Updated: 2024/09/26 02:11:07 by octoross         ###   ########.fr       */
+/*   Updated: 2024/09/28 22:18:48 by octoross         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "lexer.h"
+#include "ast.h"
 
 static t_ast	*ft_new_ast(t_lexer *lexer)
 {
@@ -88,8 +88,6 @@ int	ft_add_new_ast(t_ast *new, t_ast **current, t_ast **top)
 	return (STATUS_OK);
 }
 
-// #include "dev.h"
-
 t_ast	*ft_ast(t_lexer *lexer, int *status)
 {
 	t_ast	*new;
@@ -105,14 +103,13 @@ t_ast	*ft_ast(t_lexer *lexer, int *status)
 		if (!new)
 		{
 			*status = STATUS_MALLOC;
-			ft_fail(ERR_MALLOC, NULL);
+			ft_fail(ERR_MALLOC, "no parsing");
 			return (ft_clear_ast(top), NULL);
 		}
 		*status = ft_add_new_ast(new, &current, &top);
 		if (*status != STATUS_OK)
 			return (NULL);
 		lexer = lexer->next;
-		// print_ast(top, 0);
 	}
 	return (top);
 }
