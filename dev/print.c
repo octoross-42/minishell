@@ -6,7 +6,7 @@
 /*   By: octoross <octoross@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/15 20:00:54 by octoross          #+#    #+#             */
-/*   Updated: 2024/09/26 00:17:46 by octoross         ###   ########.fr       */
+/*   Updated: 2024/09/27 04:43:43 by octoross         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,8 @@ void	print_arg(t_arg *arg)
 	printf(" \"");
 	while (arg)
 	{
+		if (arg->wildcard)
+			printf(" wildcard :");
 		if (arg->expand)
 			printf(" expand :");
 		printf(" '%s'", arg->str);

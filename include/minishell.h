@@ -6,7 +6,7 @@
 /*   By: octoross <octoross@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/09 20:34:55 by octoross          #+#    #+#             */
-/*   Updated: 2024/09/28 21:12:04 by octoross         ###   ########.fr       */
+/*   Updated: 2024/09/28 21:50:53 by octoross         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,7 @@
 
 # define MINISHELL_H
 
+# include "utils.h"
 # include "ast.h"
 # include "display.h"
 
@@ -38,7 +39,6 @@ typedef struct s_env
 char	**ft_envp_of_env(t_env *env);
 t_env	*ft_env_of_envp(char **envp);
 void	ft_clear_env(t_env *env);
-void	ft_expand(t_arg *arg, t_minishell *minishell);
 
 typedef struct s_pid
 {
@@ -48,18 +48,19 @@ typedef struct s_pid
 
 typedef struct s_minishell
 {
-	pid_t		last_cmd;
-	t_pid		*wait_for_pids;
-	int			pipe;
-	bool		pipe_before;
+	int			parsing_status;
+	int			status;
 	int			std_in;
 	int			std_out;
-	int			status;
-	int			parsing_status;
-	t_env		*env;
 	char		**path;
+	t_env		*env;
+	bool		pipe_before;
+	int			pipe;
+	pid_t		last_cmd;
+	t_pid		*wait_for_pids;
 }	t_minishell;
 
+void	ft_expand(t_arg *arg, t_minishell *minishell);
 void	ft_add_history(char *line);
 
 bool	ft_is_buildin(char *cmd);
