@@ -6,7 +6,7 @@
 /*   By: octoross <octoross@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/09 20:26:55 by octoross          #+#    #+#             */
-/*   Updated: 2024/09/26 17:15:18 by octoross         ###   ########.fr       */
+/*   Updated: 2024/09/28 21:04:02 by octoross         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,6 +31,7 @@
 
 # define STATUS_OK 0
 # define STATUS_PROG 1
+# define STATUS_REDIR 1
 # define STATUS_SYNTAX 2
 # define STATUS_FORK 71
 # define STATUS_DUP2 71
@@ -40,18 +41,18 @@
 # define STATUS_EXECVE 127
 # define STATUS_MALLOC 137
 
+# define ERR_MALLOC "malloc failed : %s\n"
+# define ERR_REDIR "ambiguous redirection\n"
 # define ERR_FAIL "%s failed\n"
-# define ERR_MALLOC "malloc failed\n"
 # define ERR_FORK "fork failed\n"
 # define ERR_PIPE "Pipe failed\n"
 # define ERR_DUP2 "dup2 failed\n"
-# define ERR_EXECVE "execve failed\n"
-# define ERR_PROG "Bad programming happenned :(\n"
 # define ERR_CMD "%s: command not found\n"
-# define ERR_PARSING_ENV "Error : env is badly parsed\n"
-# define ERR_ENV "Warning : No env retrieved\n"
-# define ERR_PATH "No PATH retrieved : malloc failed\n"
 # define ERR_EXPAND "%s could not be expanded : malloc failed\n"
+# define ERR_PATH "No PATH retrieved : malloc failed\n"
+# define ERR_ENV "Warning : No env retrieved\n"
+// # define ERR_PARSING_ENV "Error : env is badly parsed\n"
+# define ERR_PROG "Bad programming happenned :(\n"
 
 size_t	ft_strlen(const char *s);
 char	*ft_strcpy(char *restrict dst, const char *restrict src);
@@ -79,5 +80,8 @@ char	*ft_str_of_token(int token);
 char	*ft_name_of_token(int token);
 int		ft_token_of_str(char *token);
 int		ft_get_next_token(char *s);
+
+char	*ft_build_path(char const *path, char const *file);
+char	*ft_build_dir_path(char const *path, char const *file);
 
 #endif

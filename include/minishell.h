@@ -6,7 +6,7 @@
 /*   By: octoross <octoross@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/09 20:34:55 by octoross          #+#    #+#             */
-/*   Updated: 2024/09/26 17:18:36 by octoross         ###   ########.fr       */
+/*   Updated: 2024/09/28 21:12:04 by octoross         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 # define MINISHELL_H
 
-# include "lexer.h"
+# include "ast.h"
 # include "display.h"
 
 # include <errno.h>
@@ -34,6 +34,11 @@ typedef struct s_env
 	struct s_env	*previous;
 	struct s_env	*next;
 }	t_env;
+
+char	**ft_envp_of_env(t_env *env);
+t_env	*ft_env_of_envp(char **envp);
+void	ft_clear_env(t_env *env);
+void	ft_expand(t_arg *arg, t_minishell *minishell);
 
 typedef struct s_pid
 {
@@ -56,23 +61,21 @@ typedef struct s_minishell
 }	t_minishell;
 
 void	ft_add_history(char *line);
-char	*ft_arg_of(t_arg *arg, t_minishell *minishell);
-char	**ft_argv_of(t_arg **args, t_minishell *minishell);
-
-void	ft_minishell_input(t_minishell *minishell);
-void	ft_exec_line(t_ast *ast, t_minishell *minishell);
-void	ft_exit_minishell(t_minishell *minishell, int status);
-
-void	ft_exec_cmd(t_ast *ast, t_minishell *minishell);
-void	ft_exec_ast(t_ast *ast, t_minishell *minishell);
-void	ft_redir(t_ast *ast, t_minishell *minishell);
-void 	ft_do_pipe(t_ast *ast, t_minishell *minishell);
 
 bool	ft_is_buildin(char *cmd);
 void	ft_buildin(char **argv, t_minishell *minishell);
 
-t_env	*ft_env_of_envp(char **envp);
-void	ft_clear_env(t_env *env);
-void	ft_expand(t_arg *arg, t_minishell *minishell);
+void	ft_clear_minishell(t_minishell *minishell);
+void	ft_exit_minishell(t_minishell *minishell, int status);
+
+char	*ft_arg_of(t_arg *arg, t_minishell *minishell);
+char	**ft_argv_of(t_arg **args, t_minishell *minishell);
+
+void	ft_do_pipe(t_ast *ast, t_minishell *minishell);
+void	ft_redir(t_ast *ast, t_minishell *minishell);
+void	ft_exec_cmd(t_ast *ast, t_minishell *minishell);
+void	ft_exec_ast(t_ast *ast, t_minishell *minishell);
+void	ft_exec_line(t_ast *ast, t_minishell *minishell);
+void	ft_minishell_input(t_minishell *minishell);
 
 #endif

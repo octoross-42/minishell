@@ -16,9 +16,7 @@
 
 # include "utils.h"
 
-// ERR_PARSING is never supposed to be print
 # define ERR_PARSING "Bad parsing happenned :(\n"
-
 # define ERR_SYNTAX "syntax error near unexpected token `%s'\n"
 
 typedef struct s_expand
@@ -35,9 +33,11 @@ typedef struct s_arg
 	bool			wildcard;
 	char			*str;
 	struct s_arg	*next;
+	struct s_arg	*previous;
 }	t_arg;
 
 void	ft_clear_arg(t_arg *arg);
+void	ft_clear_args(t_arg **args);
 
 int		ft_arg_expand(char **s, t_arg *arg);
 int		ft_len_quotes(char **s, char *quote);
@@ -57,26 +57,7 @@ int		ft_parse_cmd(char **s, t_lexer *lexer);
 void	ft_clear_lexer(t_lexer *lexer, int erase_data);
 t_lexer	*ft_lexer(char *line, int *status);
 
-typedef struct s_ast
-{
-	int				token;
-	bool			cmd;
-	void			*data;
-	struct s_ast	*left;
-	struct s_ast	*right;
-	struct s_ast	*parent;
-}	t_ast;
-
-void	ft_clear_node_ast(t_ast *ast);
-void	ft_clear_ast(t_ast *ast);
-
 bool	ft_is_separator(int token);
 bool	ft_is_redir(int token);
-bool	ft_is_output(int token);
-int		ft_output_token(t_ast *new, t_ast **current, t_ast **top);
-int		ft_pipe_token(t_ast *new, t_ast **current, t_ast **top);
-int		ft_append_ast(t_ast *new, t_ast **current);
-int		ft_add_ast(t_ast *new, t_ast **current, t_ast **top);
-t_ast	*ft_ast(t_lexer *lexer, int *status);
 
 #endif
