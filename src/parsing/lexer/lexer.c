@@ -6,7 +6,7 @@
 /*   By: octoross <octoross@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/18 13:58:38 by octoross          #+#    #+#             */
-/*   Updated: 2024/09/26 23:04:10 by octoross         ###   ########.fr       */
+/*   Updated: 2024/09/28 22:20:32 by octoross         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,7 @@ static int	ft_set_lexer(char **s, t_lexer *lexer)
 	else if (lexer->token == PIPE)
 		return (*s = *s + 1, STATUS_OK);
 	else if (lexer->token == CMD)
-		return ft_parse_cmd(s, lexer);
+		return (ft_parse_cmd(s, lexer));
 	else if ((lexer->token == INPUT) || (lexer->token == OUTPUT))
 		(*s)++;
 	else if ((lexer->token == HERE_DOC) || (lexer->token == APPEND))
@@ -52,7 +52,11 @@ bool	ft_add_lexer(t_lexer **top, t_lexer **last)
 
 	new = (t_lexer *)malloc(sizeof(t_lexer));
 	if (!new)
-		return (ft_clear_lexer(*top, 1), ft_fail(ERR_MALLOC, NULL), false);
+	{
+		ft_clear_lexer(*top, 1);
+		ft_fail(ERR_MALLOC, "no parsing");
+		return (false);
+	}
 	new->data = NULL;
 	new->next = NULL;
 	new->previous = *last;
@@ -78,11 +82,11 @@ int	ft_is_compatible(t_lexer *l, t_lexer *previous)
 	else if ((l->token == CMD) || (previous->token == CMD))
 		return (STATUS_OK);
 	else if (ft_is_separator(l->token) && ft_is_separator(previous->token))
-		return (ft_fail(ERR_SYNTAX, ft_str_of_token(previous->token)), STATUS_SYNTAX);
+		return (ft_fail(ERR_SYNTAX, ft_str_of_token(previous->token)),
+			STATUS_SYNTAX);
 	else
 		return (STATUS_OK);
 }
-#include "dev.h"
 
 t_lexer	*ft_lexer(char *line, int *status)
 {

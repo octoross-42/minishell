@@ -51,7 +51,7 @@ static int	ft_init_parsing_cmd(char *s, t_arg ***args)
 		return (ft_fail(ERR_SYNTAX, "newline"), STATUS_SYNTAX);
 	*args = (t_arg **)malloc((nbr_args + 1) * sizeof(t_arg *));
 	if (!(*args))
-		return (ft_fail(ERR_MALLOC, NULL), STATUS_MALLOC);
+		return (ft_fail(ERR_MALLOC, "no parsing"), STATUS_MALLOC);
 	(*args)[nbr_args] = NULL;
 	return (STATUS_OK);
 }
