@@ -6,7 +6,7 @@
 /*   By: octoross <octoross@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/09 20:34:55 by octoross          #+#    #+#             */
-/*   Updated: 2024/09/28 21:50:53 by octoross         ###   ########.fr       */
+/*   Updated: 2024/09/29 15:59:39 by octoross         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,8 @@
 # include "utils.h"
 # include "ast.h"
 # include "display.h"
+# include "wildcard.h"
+
 
 # include <errno.h>
 # include <stdbool.h>
@@ -78,5 +80,6 @@ void	ft_exec_cmd(t_ast *ast, t_minishell *minishell);
 void	ft_exec_ast(t_ast *ast, t_minishell *minishell);
 void	ft_exec_line(t_ast *ast, t_minishell *minishell);
 void	ft_minishell_input(t_minishell *minishell);
+void	ft_init_minishell(char **envp);
 
 #endif

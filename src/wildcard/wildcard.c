@@ -109,20 +109,46 @@ t_wildcard	*ft_wildcard(char *regex, char *path)
 	return (wildcard);
 }
 
-int	main(int argc, char **argv)
+char	**ft_argv_wildcard(t_wildcard *wildcard)
 {
-	t_wildcard	*wildcard;
+	char	**argv;
+	int		len;
 	t_wildcard	*next;
 
-	if (argc < 2)
-		return (1);
-	wildcard = ft_wildcard(argv[1], NULL);
-	next = wildcard;
-	while (next)
+	len = ft_len_wildcard(wildcard);
+	argv = (char **)malloc(sizeof(char *) * (len + 1));
+	if (!argv)
+		return (ft_fail(ERR_MALLOC, "no wildcard"), NULL);
+	argv[len] = NULL;
+	len = 0;
+	while (wildcard)
 	{
-		printf("%s\n", next->file);
-		next = next->next;
+		argv[len ++] = wildcard->file;
+		next = wildcard->next;
+		free(wildcard);
+		wildcard = next;
 	}
-	ft_clear_wildcard(wildcard);
-	return (0);
+	return (argv);
 }
+
+// int	main(int argc, char **argv)
+// {
+// 	t_wildcard	*wildcard;
+// 	int			i;
+// 	char		**argv_wildcard;
+
+// 	if (argc < 2)
+// 		return (1);
+// 	wildcard = ft_wildcard(argv[1], NULL);
+// 	argv_wildcard = ft_argv_wildcard(wildcard);
+// 	if (!argv_wildcard)
+// 		return (1);
+// 	i = 0;
+// 	while (argv_wildcard[i])
+// 	{
+// 		printf("%s\n", argv_wildcard[i]);
+// 		free(argv_wildcard[i ++]);
+// 	}
+// 	free(argv_wildcard);
+// 	return (0);
+// }

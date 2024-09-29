@@ -38,7 +38,9 @@ typedef struct s_arg
 
 void	ft_clear_arg(t_arg *arg);
 void	ft_clear_args(t_arg **args);
+int		ft_add_new_arg(t_arg **last, t_arg **top);
 
+bool	ft_is_expand(char c, char next, char quote);
 int		ft_arg_expand(char **s, t_arg *arg);
 int		ft_len_quotes(char **s, char *quote);
 int		ft_close_quotes(char **s, char *data, char *quote);

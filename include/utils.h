@@ -6,7 +6,7 @@
 /*   By: octoross <octoross@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/09 20:26:55 by octoross          #+#    #+#             */
-/*   Updated: 2024/09/28 21:49:40 by octoross         ###   ########.fr       */
+/*   Updated: 2024/09/29 17:48:07 by octoross         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,6 +55,7 @@
 # define ERR_PROG "Bad programming happenned :(\n"
 
 size_t	ft_strlen(const char *s);
+size_t	ft_ptrslen(void **s);
 char	*ft_strcpy(char *restrict dst, const char *restrict src);
 char	*ft_strncpy(char *restrict dst, const char *restrict src, size_t n);
 char	*ft_strdup(const char *s);
