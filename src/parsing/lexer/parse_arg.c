@@ -95,7 +95,7 @@ int	ft_set_arg(char **s, t_arg *arg, char *quote)
 	status = STATUS_OK;
 	if ((**s == '$') && ft_char_is_quote(*(*s + 1)) && !(*quote))
 		(*s)++;
-	if (ft_is_expand(*s, *(*s + 1), *quote))
+	if (ft_is_expand(**s, *(*s + 1), *quote))
 		return (ft_arg_expand(s, arg));
 	else
 	{
