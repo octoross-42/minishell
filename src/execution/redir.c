@@ -62,24 +62,54 @@ void	ft_output(int token, char *arg, t_minishell *minishell)
 }
 void	ft_here_doc(char *arg, t_minishell *minishell)
 {
+	(void)arg;
+	(void)minishell;
 	printf("here_doc\n");
 }
 void	ft_redir(t_ast *ast, t_minishell *minishell)
 {
 	t_ast	*next;
 	char	*arg;
+	char	**args;
 	int		token;
+	bool	wildcard;
 	
-	// TODO : arg wildcards
-	// printf("redir : %s\n", ft_name_of_token(ast->token));
-	arg = ft_arg_of((t_arg *)ast->data, minishell->env);
+	wildcard = ((t_arg *)ast->data)->wildcard;
+	arg = ft_arg_of((t_arg *)ast->data, minishell);
 	token = ast->token;
 	next = ast->left;
 	free(ast);
 	if (!arg)
 	{
+		ft_clear_ast(next);
 		minishell->status = STATUS_MALLOC;
 		return ;
+	}
+	if (wildcard)
+	{
+		args = ft_argv_wildcard(ft_wildcard(arg, NULL));
+		free(arg);
+		if (!args)
+		{
+			ft_clear_ast(next);
+			minishell->status = STATUS_MALLOC;
+			return ;
+		}
+		if (!(*args))
+			free(args);
+		else if (args[1])
+		{
+			ft_free_until((void **)args, -1);
+			ft_fail(ERR_REDIR, NULL);
+			ft_clear_ast(next);
+			minishell->status = STATUS_REDIR;
+			return ;
+		}
+		else
+		{
+			arg = args[0];
+			free(args);
+		}
 	}
 	if (ft_is_output(token))
 		ft_output(token, arg, minishell);
