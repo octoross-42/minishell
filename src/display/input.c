@@ -6,13 +6,13 @@
 /*   By: octoross <octoross@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/16 15:31:32 by octoross          #+#    #+#             */
-/*   Updated: 2024/09/28 21:01:36 by octoross         ###   ########.fr       */
+/*   Updated: 2024/09/30 22:39:23 by octoross         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-void	ft_strcpy_prompt(char *prompt, char wd[PATH_SIZE], bool err)
+void	ft_strcpy_prompt(char *prompt, char wd[BSIZE], bool err)
 {
 	int	i;
 
@@ -41,14 +41,14 @@ void	ft_strcpy_prompt(char *prompt, char wd[PATH_SIZE], bool err)
 
 char	*ft_get_prompt(void)
 {
-	char	wd[PATH_SIZE];
+	char	wd[BSIZE];
 	char	*prompt;
 	int		len;
 	bool	err;
 
 	len = ft_strlen("🐳 minishell:") + ft_strlen(CYAN) + ft_strlen(END) + 2;
 	err = false;
-	if (!getcwd(wd, PATH_SIZE))
+	if (!getcwd(wd, BSIZE))
 	{
 		len += ft_strlen(ERR_GETCWD);
 		err = true;

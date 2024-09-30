@@ -6,7 +6,7 @@
 /*   By: octoross <octoross@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/15 20:52:10 by octoross          #+#    #+#             */
-/*   Updated: 2024/09/23 20:37:06 by octoross         ###   ########.fr       */
+/*   Updated: 2024/09/30 22:40:10 by octoross         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@
 # define CYAN "\e[0;36m"
 # define WHITE "\e[0;37m"
 
-# define PATH_SIZE 4096
+# define BSIZE 4096
 
 # define ERR_GETCWD "(Error: buffer size was not sufficient \
 to allocate current working directory)"

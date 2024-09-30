@@ -23,6 +23,10 @@ SRCS = src/display/banner.c \
 		src/minishell/minishell.c \
 		src/history/add_history.c \
 		src/buildin/buildin.c \
+		src/buildin/echo.c \
+		src/buildin/env.c \
+		src/buildin/pwd.c \
+		src/buildin/cd.c \
 		src/utils/char.c \
 		src/utils/string.c \
 		src/utils/string_copy.c \

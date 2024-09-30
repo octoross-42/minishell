@@ -29,9 +29,9 @@ bool	ft_check_ends(t_str *file, t_str *regex)
 	regex->s += start;
 	regex->end -= start;
 	file->end = ft_strlen(file->s);
-	while ((regex->s)[regex->end - 1] && ((regex->s)[regex->end - 1] != ''))
+	while ((regex->s)[regex->end - 1] && ((regex->s)[regex->end - 1] != '*'))
 	{
-		if ((file->s)[file->s - 1] != (regex->s)[regex->end - 1])
+		if ((file->s)[file->end - 1] != (regex->s)[regex->end - 1])
 			return (false);
 		(regex->end)--;
 		(file->s)--;

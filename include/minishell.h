@@ -6,7 +6,7 @@
 /*   By: octoross <octoross@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/09 20:34:55 by octoross          #+#    #+#             */
-/*   Updated: 2024/09/29 15:59:39 by octoross         ###   ########.fr       */
+/*   Updated: 2024/09/30 22:47:23 by octoross         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,5 +81,11 @@ void	ft_exec_ast(t_ast *ast, t_minishell *minishell);
 void	ft_exec_line(t_ast *ast, t_minishell *minishell);
 void	ft_minishell_input(t_minishell *minishell);
 void	ft_init_minishell(char **envp);
+
+
+void	print_echo(char **arg);
+void	print_env(t_env *ep);
+int		print_wd(t_env *ep);
+int		change_dir(char **arg);
 
 #endif

@@ -6,7 +6,7 @@
 /*   By: octoross <octoross@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/13 16:26:57 by octoross          #+#    #+#             */
-/*   Updated: 2024/09/28 22:18:32 by octoross         ###   ########.fr       */
+/*   Updated: 2024/09/30 21:40:05 by octoross         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,7 +63,7 @@ int	ft_pipe_token(t_ast *new, t_ast **current, t_ast **top)
 
 int	ft_output_token(t_ast *new, t_ast **current, t_ast **top)
 {
-	if (((*current)->token == CMD))
+	if ((*current)->token == CMD)
 	{
 		new->cmd = true;
 		if (*top == *current)

@@ -22,34 +22,6 @@
 // 		return (0);
 // }
 
-int	change_dir(char **arg)
-{
-	if (!arg[1])
-		return (write(STDERR_FILENO, "Error: cd: specify a path\n", 26), 1);
-	if (chdir(arg[1]) == -1)
-	{
-		return (write(STDERR_FILENO, "Error: cd: \
-		failed to access path\n", 33), 1);
-	}
-	else
-	{
-		printf("Changed directory to %s\n", arg[1]); // a remove
-		return (0);
-	}
-}
-
-int	print_env(t_env *ep)
-{
-	t_env	*cur;
-
-	cur = ep;
-	while (cur)
-	{
-		write(STDOUT_FILENO, cur->value, ft_strlen(cur->value));
-		cur = cur->next;
-	}
-	return (0);
-}
 
 void	modify_ptrs(int i, t_env *ep, t_env *cur, t_env *prev)
 {
@@ -100,7 +72,7 @@ char	*get_env_name(char *s)
 		i ++;
 	if(!i)
 		return(NULL);//message d'erreur!!!!!!!(pas de name à export)
-	ret = malloc((sizeof(char) * i) + 2);
+	ret = malloc((sizeof(char) * i) + 1);
 	if (!ret)
 		return (NULL);
 	while (j < i)
@@ -108,8 +80,7 @@ char	*get_env_name(char *s)
 		ret[j] = s[j];
 		j ++;
 	}
-	ret[j] = '=';
-	ret[j + 1] = '\0';
+	ret[j] = '\0';
 	return (ret);
 }
 
@@ -140,28 +111,6 @@ char	*get_env_value(char *s)
 	return (ret);
 }
 
-int	print_echo(char **arg)
-{
-	if (!arg[1])
-		return (write(STDOUT_FILENO, "\n", 1), 0);
-	if (!ft_strcmp(arg[1], "-n") && !arg[2])
-		return (0);
-	else if (!ft_strcmp(arg[1], "-n") && arg[2])
-		arg += 2;
-	else
-		arg ++;
-	while (*arg)
-	{
-		write(STDOUT_FILENO, *arg, ft_strlen(*arg));
-		if (*arg)
-			write(STDOUT_FILENO, " ", 1);
-		arg ++;
-	}
-	if (ft_strcmp(arg[1], "-n"))
-		write(STDOUT_FILENO, "\n", 1);
-	return (0);
-}
-
 void	free_them(char *s, char *st)
 {
 	free(s);
@@ -190,55 +139,6 @@ int	add__env_var(char **arg, t_env *env)
 		return (status);
 	}
 	return (0);
-}
-
-int	go_to_getcwd(void)
-{
-	char	*buff;
-	int		i;
-
-	i = 1;
-	buff = malloc(sizeof(char) * BSIZE * i);
-	if (!buff)
-		return (printf("Malloc error\n"), 137);
-	while (getcwd(buff, BSIZE * i) == NULL)
-	{
-		if (errno == ERANGE)
-		{
-			i ++;
-			buff = malloc(sizeof(char) * BSIZE * i);
-			if (!buff)
-				return (printf("Malloc error\n"), 137);
-		}
-		else
-		{
-			printf("Can't access directory\n");
-			return (1);
-		}
-	}
-	write(STDOUT_FILENO, buff, ft_strlen(buff));
-	return (0);
-}
-
-int	print_wd(t_env *ep)
-{
-	int		i;
-	t_env	*cur
-
-	i = 0;
-	cur = ep;
-	while (cur)
-	{
-		if (ft_strncmp(cur->name, "PWD=", 4))
-			cur = cur->next;
-		else
-		{
-			write(STDOUT_FILENO, cur->value, ft_strlen(cur->value));
-			return i;
-		}
-	}
-	i = go_to_getcwd();
-	return (i);
 }
 
 // int	main(int ac, char **av, char **ep)

@@ -25,9 +25,8 @@ typedef struct s_str
 	int		end;
 }	t_str;
 
-bool			ft_check_ends(char **s, int *end_s, \
-		char **regex, int *end_regex);
-bool			ft_fit_wildcard(char *s, char *regex, int end_regex);
+bool	ft_check_ends(t_str *file, t_str *regex);
+bool	ft_fit_wildcard(char *filestr, t_str regex);
 
 typedef struct s_wildcard
 {

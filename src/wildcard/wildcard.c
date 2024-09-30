@@ -59,7 +59,6 @@ t_wildcard	*ft_wildcard(char *regex, char *path)
 	t_wildcard		*new;
     DIR				*dir;
     struct dirent	*entry;
-	int				end_regex;
 	int				is_dir;
 	char			*next_path;
 	t_str			r;
@@ -73,17 +72,18 @@ t_wildcard	*ft_wildcard(char *regex, char *path)
 	{
 		if (!strcmp(entry->d_name, ".") || !strcmp(entry->d_name, ".."))
 		{
+			// TODO pas les ignorer pour remonter le path
 			entry = readdir(dir);
 			continue ;
 		}
 		is_dir = ft_entry_is_dir(entry);
 		if (is_dir < 0)
 			return (ft_clear_wildcard(wildcard), NULL);
-		if (!regex[end_regex] || ((regex[end_regex] == '/') && is_dir))
+		if (!r.s[r.end] || ((r.s[r.end] == '/') && is_dir))
 		{
-			if (ft_fit_wildcard(entry->d_name, regex, end_regex))
+			if (ft_fit_wildcard(entry->d_name, r.s, r.end))
 			{
-				if ((regex[end_regex] == '/') && regex[end_regex + 1])
+				if ((r.s[r.end] == '/') && r.s[r.end + 1])
 				{
 					if (path)
 						next_path = ft_build_dir_path(path, entry->d_name);
@@ -91,11 +91,11 @@ t_wildcard	*ft_wildcard(char *regex, char *path)
 						next_path = ft_build_dir_path("", entry->d_name);
 					if (!next_path)
 						return (ft_fail(ERR_MALLOC, "no wildcard"), ft_clear_wildcard(wildcard), NULL);
-					ft_add_wildcard(&wildcard, ft_wildcard(regex + end_regex + 1, next_path));
+					ft_add_wildcard(&wildcard, ft_wildcard(r.s + r.end + 1, next_path));
 				}
 				else
 				{
-					new = ft_new_wildcard(entry->d_name, path, regex[end_regex] == '/');
+					new = ft_new_wildcard(entry->d_name, path, r.s[r.end] == '/');
 					if (!new)
 						return (ft_clear_wildcard(wildcard), NULL);
 					ft_add_wildcard(&wildcard, new);

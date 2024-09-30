@@ -5,4 +5,4 @@
 --memcheck:track-fds=yes
 --memcheck:leak-check=full
 --show-reachable=yes
---suppressions=/home/octoross/.valgrind.supp
+--suppressions=/mnt/nfs/homes/octoross/.valgrind.supp

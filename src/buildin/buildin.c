@@ -14,18 +14,18 @@
 
 bool	ft_is_buildin(char *cmd)
 {
-	// if (!ft_strcmp(cmd, "echo"))
-	// 	return (true);
-	// if (!ft_strcmp(cmd, "cd"))
-	// 	return (true);
-	// if (!ft_strcmp(cmd, "pwd"))
-	// 	return (true);
+	if (!ft_strcmp(cmd, "echo"))
+		return (true);
+	if (!ft_strcmp(cmd, "cd"))
+		return (true);
+	if (!ft_strcmp(cmd, "pwd"))
+		return (true);
 	// if (!ft_strcmp(cmd, "export"))
 	// 	return (true);
 	// if (!ft_strcmp(cmd, "unset"))
 	// 	return (true);
-	// if (!ft_strcmp(cmd, "env"))
-	// 	return (true);
+	if (!ft_strcmp(cmd, "env"))
+		return (true);
 	if (!ft_strcmp(cmd, "exit"))
 		return (true);
 	return (false);
@@ -39,5 +39,12 @@ void	ft_buildin(char **argv, t_minishell *minishell)
 		ft_free_until((void **)argv, -1);
 		ft_exit_minishell(minishell, minishell->status);
 	}
-	minishell->status = STATUS_OK;
+	if (!ft_strcmp(argv[0], "echo"))
+		print_echo(argv);
+	if (!ft_strcmp(argv[0], "env"))
+		print_env(minishell->env);
+	if (!ft_strcmp(argv[0], "pwd"))
+		minishell->status = print_wd(minishell->env);
+	if (!ft_strcmp(argv[0], "cd"))
+		minishell->status = change_dir(argv);
 }
