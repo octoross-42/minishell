@@ -33,62 +33,8 @@
    obj:/usr/bin/ls
    obj:/usr/bin/ls
    obj:/usr/bin/ls
-   obj:/usr/bin/ls
    fun:(below main)
 }
-{
-   ls
-   Memcheck:Leak
-   match-leak-kinds: reachable
-   fun:malloc
-   obj:/usr/bin/ls
-   obj:/usr/bin/ls
-   obj:/usr/bin/ls
-   obj:/usr/bin/ls
-   fun:(below main)
-}
-{
-   ls
-   Memcheck:Leak
-   match-leak-kinds: reachable
-   fun:malloc
-   obj:/usr/bin/ls
-   obj:/usr/bin/ls
-   fun:(below main)
-}
-{
-   ls
-   Memcheck:Leak
-   match-leak-kinds: reachable
-   fun:malloc
-   obj:/usr/bin/ls
-   obj:/usr/bin/ls
-   obj:/usr/bin/ls
-   obj:/usr/bin/ls
-   fun:(below main)
-}
-{
-   ls
-   Memcheck:Leak
-   match-leak-kinds: reachable
-   fun:malloc
-   obj:/usr/bin/ls
-   obj:/usr/bin/ls
-   obj:/usr/bin/ls
-   fun:(below main)
-}
-{
-   ls
-   Memcheck:Leak
-   match-leak-kinds: reachable
-   fun:malloc
-   obj:/usr/bin/ls
-   obj:/usr/bin/ls
-   obj:/usr/bin/ls
-   fun:(below main)
-}
-
-
 {
    infinite_cat_interrupt
    Memcheck:Leak

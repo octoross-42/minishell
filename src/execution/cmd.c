@@ -14,37 +14,6 @@
 
 #include "minishell.h"
 
-char	*ft_path_of(char const *path, char const *cmd)
-{
-	int		len;
-	int		i;
-	char	*concatenated;
-
-	len = ft_strlen(path);
-	if (path[len - 1] == '/')
-		len --;
-	len += ft_strlen(cmd) + 1;
-	concatenated = (char *)malloc(sizeof(char) * (len + 1));
-	if (!concatenated)
-		return (NULL);
-	concatenated[len] = '\0';
-	i = 0;
-	while (path[i])
-	{
-		concatenated[i] = path[i];
-		i ++;
-	}
-	if (concatenated[i - 1] != '/')
-		concatenated[i ++] = '/';
-	len = i;
-	while (cmd[i - len])
-	{
-		concatenated[i] = cmd[i - len];
-		i ++;
-	}
-	return (concatenated);
-}
-
 char	*ft_get_cmd_path(char *cmd, t_minishell *minishell)
 {
 	char	*path;
@@ -54,17 +23,17 @@ char	*ft_get_cmd_path(char *cmd, t_minishell *minishell)
 	{
 		path = ft_strdup(cmd);
 		if (!path)
-			return (ft_fail(ERR_MALLOC, NULL), minishell->status = STATUS_MALLOC, NULL);
+			return (ft_fail(ERR_MALLOC, "no path for cmd"), minishell->status = STATUS_MALLOC, NULL);
 		return (path);
 	}
 	if (!minishell->path)
-			return (ft_fail(ERR_CMD, NULL), minishell->status = STATUS_CMD, NULL);
+			return (ft_fail(ERR_CMD, cmd), minishell->status = STATUS_CMD, NULL);
 	i = 0;
 	while (minishell->path[i])
 	{
-		path = ft_path_of(minishell->path[i], cmd);
+		path = ft_build_path(minishell->path[i], cmd);
 		if (!path)
-			return (ft_fail(ERR_MALLOC, NULL), minishell->status = STATUS_MALLOC, NULL);
+			return (ft_fail(ERR_MALLOC, "no path for cmd"), minishell->status = STATUS_MALLOC, NULL);
 		if (access(path, F_OK | X_OK) == 0)
 			return (path);
 		free(path);
@@ -75,10 +44,10 @@ char	*ft_get_cmd_path(char *cmd, t_minishell *minishell)
 	return (NULL);
 }
 
-void	ft_cmd(char **argv, t_minishell *minishell)
+void	ft_cmd(char **argv, t_ast *next, t_minishell *minishell)
 {
 	char	*path;
-	int		i;
+	char	**envp;
 	int		status;
 
 	minishell->last_cmd = fork();
@@ -91,31 +60,31 @@ void	ft_cmd(char **argv, t_minishell *minishell)
 	if (!minishell->last_cmd)
 	{
 		path = ft_get_cmd_path(argv[0], minishell);
-		// ft_fail("path : %s\n", path);
 		if (!path)
 		{
+			ft_clear_ast(next);
 			ft_free_until((void **)argv, -1);
 			ft_exit_minishell(minishell, minishell->status);
 		}
-		// printf("path = %s\n", path);
-		// i = 0;
-		// while (argv[i])
-		// 	printf("argv = %s\n", argv[i ++]);
-		execve(path, argv, NULL);
-		ft_fail(ERR_EXECVE, NULL);
-		// TODO refaire message erreur
+		envp = ft_envp_of_env(minishell->env);
+		ft_clear_minishell(minishell);
+		execve(path, argv, envp);
+		perror("minishell : execve");
+		ft_free_until((void **)envp, -1);
+		ft_free_until((void **)argv, -1);
+		free(path);
 		minishell->status = STATUS_EXECVE;
-		ft_exit_minishell(minishell, minishell->status);
+		exit(minishell->status);
 	}
 	waitpid(minishell->last_cmd, &status, 0);
 	minishell->status = WEXITSTATUS(status);
+	// TODO WEXISTATUS si exit normal
 }
 
 void	ft_exec_cmd(t_ast *ast, t_minishell *minishell)
 {
 	t_ast	*next;
 	char	**argv;
-	int		i;
 	
 	next = ast->left;
 	argv = ft_argv_of((t_arg **)ast->data, minishell);
@@ -125,18 +94,10 @@ void	ft_exec_cmd(t_ast *ast, t_minishell *minishell)
 		minishell->status = STATUS_MALLOC;
 		return ;
 	}
-	// i = 0;
-	// while (argv[i])
-	// {
-	// 	printf("argv[%d] = %s\n", i, argv[i]);
-	// 	i ++;
-	// }
 	if (ft_is_buildin(argv[0]))
-	{
 		ft_buildin(argv, minishell);
-	}
 	else
-		ft_cmd(argv, minishell);
+		ft_cmd(argv, next, minishell);
 	ft_free_until((void **)argv, -1);
 	ft_exec_ast(next, minishell);
 }

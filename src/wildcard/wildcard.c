@@ -27,15 +27,15 @@ int	ft_entry_is_dir(struct dirent *entry)
 		return (entry->d_type == DT_DIR);
 }
 
-DIR	*ft_init_wildcard(char *regex, int *end_regex, char **path)
+DIR	*ft_init_wildcard(t_str *r, char *regex, char **path)
 {
     DIR				*dir;
 
 	if (!regex)
 		return (NULL);
-	if (!(*path) && regex && (regex[0] == '/'))
+	if (!(*path) && (regex[0] == '/'))
 	{
-		(*path) = strdup("/");
+		*path = ft_strdup("/");
 		if (!(*path))
 			return (ft_fail(ERR_MALLOC, "no wildcard"), NULL);
 		regex ++;
@@ -43,12 +43,13 @@ DIR	*ft_init_wildcard(char *regex, int *end_regex, char **path)
 	if (!(*path))
 		dir = opendir(".");
 	else
-		dir = opendir((*path));
+		dir = opendir(*path);
 	if (!dir)
 		return (perror("opendir"), NULL);
-	*end_regex = 0;
-	while (regex[*end_regex] && (regex[*end_regex] != '/'))
-		(*end_regex)++;
+	r->end = 0;
+	while (regex[r->end] && (regex[r->end] != '/'))
+		(r->end)++;
+	r->s = regex;
 	return (dir);
 }
 
@@ -61,8 +62,9 @@ t_wildcard	*ft_wildcard(char *regex, char *path)
 	int				end_regex;
 	int				is_dir;
 	char			*next_path;
+	t_str			r;
 
-	dir = ft_init_wildcard(regex, &end_regex, &path);
+	dir = ft_init_wildcard(&r, regex, &path);
 	if (!dir)
 		return (NULL);
 	wildcard = NULL;

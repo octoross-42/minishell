@@ -183,7 +183,7 @@ int	add__env_var(char **arg, t_env *env)
 	val = get_env_value(arg[1]);
 	if (!name || !val)
 		return (write(STDERR_FILENO, "Malloc error\n", 14), 137);
-	status = ft_add_env(&env, name, val);
+	status = ft_add_env(name, val, &env);
 	if (status != STATUS_OK)
 	{
 		free_them(name, val);

@@ -60,6 +60,7 @@ void	ft_output(int token, char *arg, t_minishell *minishell)
 	}
 	close(outfile);
 }
+
 void	ft_here_doc(char *arg, t_minishell *minishell)
 {
 	(void)arg;
@@ -88,9 +89,9 @@ void	ft_redir(t_ast *ast, t_minishell *minishell)
 	if (wildcard)
 	{
 		args = ft_argv_wildcard(ft_wildcard(arg, NULL));
-		free(arg);
 		if (!args)
 		{
+			free(arg);
 			ft_clear_ast(next);
 			minishell->status = STATUS_MALLOC;
 			return ;
@@ -99,6 +100,7 @@ void	ft_redir(t_ast *ast, t_minishell *minishell)
 			free(args);
 		else if (args[1])
 		{
+			free(arg);
 			ft_free_until((void **)args, -1);
 			ft_fail(ERR_REDIR, NULL);
 			ft_clear_ast(next);
@@ -107,6 +109,7 @@ void	ft_redir(t_ast *ast, t_minishell *minishell)
 		}
 		else
 		{
+			free(arg);
 			arg = args[0];
 			free(args);
 		}

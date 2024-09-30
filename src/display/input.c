@@ -6,7 +6,7 @@
 /*   By: octoross <octoross@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/16 15:31:32 by octoross          #+#    #+#             */
-/*   Updated: 2024/09/26 17:39:00 by octoross         ###   ########.fr       */
+/*   Updated: 2024/09/28 21:01:36 by octoross         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,7 +57,7 @@ char	*ft_get_prompt(void)
 		len += ft_strlen(wd) + ft_strlen(BLUE);
 	prompt = (char *)malloc(sizeof(char) * (len + 1));
 	if (!prompt)
-		return (ft_fail(ERR_MALLOC, NULL), NULL);
+		return (ft_fail(ERR_MALLOC, "no prompt"), NULL);
 	prompt[len] = '\0';
 	ft_strcpy_prompt(prompt, wd, err);
 	return (prompt);
@@ -96,6 +96,6 @@ void	ft_minishell_input(t_minishell *minishell)
 		minishell->status = minishell->parsing_status;
 		ft_minishell_input(minishell);
 	}
-	print_ast(ast, 0);
+	// print_ast(ast, 0);
 	ft_exec_line(ast, minishell);
 }

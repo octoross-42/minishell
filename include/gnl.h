@@ -1,22 +1,40 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   main.c                                             :+:      :+:    :+:   */
+/*   gnl.h                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: octoross <octoross@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/09/15 20:51:11 by octoross          #+#    #+#             */
-/*   Updated: 2024/09/28 21:55:46 by octoross         ###   ########.fr       */
+/*   Created: 2023/10/17 15:03:48 by octoross          #+#    #+#             */
+/*   Updated: 2024/09/29 20:06:11 by octoross         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
+#ifndef GNL_H
 
-int	main(int argc, char **argv, char **envp)
+# define GNL_H
+
+# include <stdlib.h>
+# include <unistd.h>
+
+# ifndef BUFFER_SIZE
+#  define BUFFER_SIZE 4096
+# endif
+
+typedef struct s_gnl
 {
-	(void)argc;
-	(void)argv;
-	ft_print_banner();
-	ft_init_minishell(envp);
-	return (0);
-}
+	int				size;
+	char			*content;
+	int				eof;
+	int				eol;
+	int				len;
+	int				start;
+	struct s_gnl	*next;
+}		t_gnl;
+
+void	ft_clear_leftovers(t_gnl **leftovers);
+void	ft_clean_and_next_lst(t_gnl **line);
+
+char	*get_next_line(int fd);
+
+#endif

@@ -6,7 +6,7 @@
 /*   By: octoross <octoross@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/09 20:30:08 by octoross          #+#    #+#             */
-/*   Updated: 2024/09/28 00:51:14 by octoross         ###   ########.fr       */
+/*   Updated: 2024/09/29 02:32:55 by octoross         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,18 +61,23 @@ char	*ft_build_path(char const *path, char const *file)
 	int		i;
 	char	*concatenated;
 
+	if (!path && !file)
+		return (NULL);
 	len = ft_strlen(path);
-	if (path[len - 1] == '/')
-		len --;
-	len += ft_strlen(file) + 1;
+	if (path && path[len - 1] != '/')
+		len ++;
+	len += ft_strlen(file);
 	concatenated = (char *)malloc(sizeof(char) * (len + 1));
 	if (!concatenated)
 		return (NULL);
 	concatenated[len] = '\0';
-	i = -1;
-	while (path[++i])
+	i = 0;
+	while (path && path[i])
+	{
 		concatenated[i] = path[i];
-	if (concatenated[i - 1] != '/')
+		i ++;
+	}
+	if (path && *path && concatenated[i - 1] != '/')
 		concatenated[i ++] = '/';
 	len = i;
 	while (file[i - len])
@@ -90,17 +95,20 @@ char	*ft_build_dir_path(char const *path, char const *file)
 	char	*concatenated;
 
 	len = ft_strlen(path);
-	if (path && path[len - 1] != '/')
+	if (path && (len > 0) && path[len - 1] != '/')
 		len ++;
-	len += ft_strlen(file);
+	len += ft_strlen(file) + 1;
 	concatenated = (char *)malloc(sizeof(char) * (len + 1));
 	if (!concatenated)
 		return (NULL);
 	concatenated[len - 1] = '/';
 	concatenated[len] = '\0';
-	i = -1;
-	while (path[++i])
+	i = 0;
+	while (path && path[i])
+	{
 		concatenated[i] = path[i];
+		i ++;
+	}
 	if (path && *path && concatenated[i - 1] != '/')
 		concatenated[i ++] = '/';
 	len = i;

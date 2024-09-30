@@ -69,11 +69,8 @@ void	ft_exec_ast(t_ast *ast, t_minishell *minishell)
 
 void	ft_exec_line(t_ast *ast, t_minishell *minishell)
 {
-	int	status;
-
 	if (!ast)
 		ft_minishell_input(minishell);
-	// printf("executing line\n");
 	minishell->pipe_before = false;
 	minishell->last_cmd = -1;
 	minishell->wait_for_pids = NULL;
@@ -83,5 +80,4 @@ void	ft_exec_line(t_ast *ast, t_minishell *minishell)
 	minishell->std_out = -1;
 	ft_exec_ast(ast, minishell);
 	ft_minishell_input(minishell);
-	// ft_exit_minishell(minishell, STATUS_OK);
 }

@@ -6,7 +6,7 @@
 /*   By: octoross <octoross@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/15 20:00:54 by octoross          #+#    #+#             */
-/*   Updated: 2024/09/27 04:43:43 by octoross         ###   ########.fr       */
+/*   Updated: 2024/09/28 22:13:52 by octoross         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,7 +65,7 @@ void	print_node_ast(t_ast *ast, int n, int left)
 		printf("\\");
 	else if (n)
 		printf("/");
-	printf("%s", ft_name_of_token(ast->token), ast->cmd);
+	printf("%s", ft_name_of_token(ast->token));
 	if (ast->cmd)
 		printf(" (cmd)");
 	if ((ast->token == CMD) || ft_is_redir(ast->token))

@@ -6,13 +6,25 @@
 /*   By: octoross <octoross@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/17 11:30:41 by octoross          #+#    #+#             */
-/*   Updated: 2024/09/28 22:28:57 by octoross         ###   ########.fr       */
+/*   Updated: 2024/09/29 17:47:20 by octoross         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "utils.h"
 
 size_t	ft_strlen(const char *s)
+{
+	size_t	len;
+
+	if (!s)
+		return (0);
+	len = 0;
+	while (s[len])
+		len ++;
+	return (len);
+}
+
+size_t	ft_ptrslen(void **s)
 {
 	size_t	len;
 

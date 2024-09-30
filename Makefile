@@ -6,9 +6,11 @@ SRCS = src/display/banner.c \
 		src/parsing/ast/ast.c \
 		src/parsing/token/token_is.c \
 		src/parsing/token/conversion.c \
-		src/parsing/lexer/expand.c \
+		src/parsing/lexer/parse_expand.c \
 		src/parsing/lexer/lexer.c \
 		src/parsing/lexer/parse_arg.c \
+		src/parsing/lexer/parse_arg_utils.c \
+		src/parsing/lexer/parse_redir.c \
 		src/parsing/lexer/parse_cmd.c \
 		src/parsing/lexer/quotes.c \
 		src/execution/cmd.c \
@@ -16,21 +18,30 @@ SRCS = src/display/banner.c \
 		src/execution/pipe.c \
 		src/execution/redir.c \
 		src/execution/argv.c \
-		src/execution/env.c \
+		src/minishell/env.c \
+		src/minishell/env_conversion.c \
+		src/minishell/minishell.c \
 		src/history/add_history.c \
 		src/buildin/buildin.c \
 		src/utils/char.c \
 		src/utils/string.c \
+		src/utils/string_copy.c \
 		src/utils/utils.c \
 		src/utils/split.c \
 		src/utils/itoa.c \
+		src/utils/gnl/gnl.c \
+		src/utils/gnl/gnl_utils.c \
+		src/wildcard/wildcard.c \
+		src/wildcard/wildcard_utils.c \
+		src/wildcard/wildcards_utils.c \
+		src/wildcard/fit_wildcard.c \
 		src/main.c \
 		dev/print.c \
 
 OBJS = ${SRCS:.c=.o}
 
 CC = cc
-# CFLAGS = -Wall -Wextra -Werror
+CFLAGS = -Wall -Wextra -Werror
 INCLUDE = include/
 
 # enlever g3
