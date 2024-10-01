@@ -1,66 +1,114 @@
-NAME = minishell
+NAME	=	minishell
 
-SRCS = src/display/banner.c \
-		src/display/input.c \
-		src/parsing/ast/ast_add.c \
-		src/parsing/ast/ast.c \
-		src/parsing/token/token_is.c \
-		src/parsing/token/conversion.c \
-		src/parsing/lexer/parse_expand.c \
-		src/parsing/lexer/lexer.c \
-		src/parsing/lexer/parse_arg.c \
-		src/parsing/lexer/parse_arg_utils.c \
-		src/parsing/lexer/parse_redir.c \
-		src/parsing/lexer/parse_cmd.c \
-		src/parsing/lexer/quotes.c \
-		src/execution/cmd.c \
-		src/execution/exec.c \
-		src/execution/pipe.c \
-		src/execution/redir.c \
-		src/execution/argv.c \
-		src/minishell/env.c \
-		src/minishell/env_conversion.c \
-		src/minishell/minishell.c \
-		src/history/add_history.c \
-		src/buildin/buildin.c \
-		src/buildin/echo.c \
-		src/buildin/env.c \
-		src/buildin/pwd.c \
-		src/buildin/cd.c \
-		src/utils/char.c \
-		src/utils/string.c \
-		src/utils/string_copy.c \
-		src/utils/utils.c \
-		src/utils/split.c \
-		src/utils/itoa.c \
-		src/utils/gnl/gnl.c \
-		src/utils/gnl/gnl_utils.c \
-		src/wildcard/wildcard.c \
-		src/wildcard/wildcard_utils.c \
-		src/wildcard/wildcards_utils.c \
-		src/wildcard/fit_wildcard.c \
-		src/main.c \
-		dev/print.c \
+RESET	:=	\e[0m
+BOLD	:=	\e[1m
+ITAL	:=	\e[3m
+BLINK	:=	\e[5m
+GREEN	:=	\e[32m
+YELLOW	:=	\e[33m
+BLUE	:=	\e[34m
+CYAN	:=	\e[36m
+PINK	:=	\e[38;2;255;182;193m
 
-OBJS = ${SRCS:.c=.o}
+CC	=	cc
 
-CC = cc
-CFLAGS = -Wall -Wextra -Werror
-INCLUDE = include/
+CFLAGS		= -Wall -Wextra -Werror -MMD -g3
+INCLUDE		= include/
+LFLAGS		= -lreadline
 
-# enlever g3
-%.o: %.c
-	$(CC) $(CFLAGS) -I$(INCLUDE) -g3 -c $< -o ${<:.c=.o} 
+DISPLAY_SRCS = src/display/banner.c \
+	src/display/input.c
+EXECUTION_SRCS = src/execution/cmd.c \
+	src/execution/exec.c \
+	src/execution/pipe.c \
+	src/execution/redir.c \
+	src/execution/argv.c
+PARSING_SRCS = src/parsing/ast/ast_add.c \
+	src/parsing/ast/ast.c \
+	src/parsing/token/token_is.c \
+	src/parsing/token/conversion.c \
+	src/parsing/lexer/parse_expand.c \
+	src/parsing/lexer/lexer.c \
+	src/parsing/lexer/parse_arg.c \
+	src/parsing/lexer/parse_arg_utils.c \
+	src/parsing/lexer/parse_redir.c \
+	src/parsing/lexer/parse_cmd.c \
+	src/parsing/lexer/quotes.c
+MINISHELL_SRCS = src/minishell/env.c \
+	src/minishell/env_conversion.c \
+	src/minishell/minishell.c
+HISTORY_SRCS = src/history/add_history.c
+BUILDIN_SRCS = src/buildin/buildin.c \
+	src/buildin/echo.c \
+	src/buildin/env.c \
+	src/buildin/pwd.c \
+	src/buildin/cd.c
+UTILS_SRCS = src/utils/char.c \
+	src/utils/string.c \
+	src/utils/string_copy.c \
+	src/utils/utils.c \
+	src/utils/split.c \
+	src/utils/itoa.c \
+	src/utils/gnl/gnl.c \
+	src/utils/gnl/gnl_utils.c
+WILDCARD_SRCS = src/wildcard/wildcard.c \
+	src/wildcard/wildcard_utils.c \
+	src/wildcard/wildcards_utils.c \
+	src/wildcard/fit_wildcard.c
+MAIN_SRCS = src/main.c
+DEV_SRCS = dev/print.c
 
-$(NAME): ${OBJS}
-	$(CC) $(OBJS) -o $(NAME) -lreadline 
+SRCS = $(DISPLAY_SRCS) \
+	$(EXECUTION_SRCS) \
+	$(PARSING_SRCS) \
+	$(MINISHELL_SRCS) \
+	$(HISTORY_SRCS) \
+	$(BUILDIN_SRCS) \
+	$(UTILS_SRCS) \
+	$(WILDCARD_SRCS) \
+	$(MAIN_SRCS) \
+	$(DEV_SRCS)
 
-all : ${NAME}
+OBJS_DIR = objs
+OBJS = $(SRCS:%.c=$(OBJS_DIR)/%.o)
+DEPS = $(OBJS:.o=.d)
+
+all: $(NAME)
+
+$(OBJS_DIR):
+	@mkdir -p $(OBJS_DIR)
+
+$(OBJS_DIR)/%.o: %.c | $(OBJS_DIR)
+	@mkdir -p $(dir $@)
+	@printf "\r                                                                                                                                       \r\
+	$(BOLD)$(BLUE)[objs]:\t$(RESET)$<"
+	@$(CC) $(CFLAGS) -I$(INCLUDE) -g3 -c $< -o $@
+
+compile: $(OBJS)
+
+$(NAME):
+	@printf "$(BOLD)$(YELLOW)Compilation...$(RESET)\n"
+	@make --silent compile
+	@printf "\r                                                                                                                                       \r\
+	$(BOLD)$(BLUE)Compilation: $(RESET)done!\n"
+	@printf "$(BOLD)$(YELLOW)\nLinking...$(RESET)\n"
+	@$(CC) $(CFLAGS) $(OBJS) $(LFLAGS) -o $(NAME)
+	@printf "$(BOLD)$(BLUE)Linking: $(RESET)done!$(RESET)\n"
+	@printf "\n$(BOLD)$(GREEN)[$(NAME) ready]$(RESET)\n"
 
 clean:
-	rm -f ${OBJS}
+	@rm -rf $(OBJS_DIR)
+	@printf "$(BOLD)$(CYAN)[objs]\t $(RESET)Clean completed\n"
+ 
+fclean: 
+	@rm -rf $(OBJS_DIR)
+	@rm -rf $(NAME)
+	@printf "$(BOLD)$(CYAN)[objs/minishell] $(RESET)Full clean completed!\n"
 
-fclean: clean
-	rm -f ${NAME}
+re:	
+	@make --silent fclean
+	@printf "\n"
+	@make --silent $(NAME)
+#	 @printf "\n$(BOLD)$(YELLOW)make re: $(RESET)All files have been rebuilt! ✨\n"
 
-re: fclean all
+.PHONY:	all clean fclean re
