@@ -6,7 +6,7 @@
 /*   By: octoross <octoross@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/09 20:26:55 by octoross          #+#    #+#             */
-/*   Updated: 2024/09/29 17:48:07 by octoross         ###   ########.fr       */
+/*   Updated: 2024/10/02 23:51:32 by octoross         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,6 +43,7 @@
 
 # define ERR_MALLOC "malloc failed : %s\n"
 # define ERR_REDIR "ambiguous redirection\n"
+# define ERR_HERE_DOC "warning: here-document delimited by end-of-file (wanted `%s')\n"
 # define ERR_FAIL "%s failed\n"
 # define ERR_FORK "fork failed\n"
 # define ERR_PIPE "Pipe failed\n"
@@ -53,6 +54,8 @@
 # define ERR_ENV "Warning : No env retrieved\n"
 # define ERR_PARSING_ENV "Error : env is badly parsed\n"
 # define ERR_PROG "Bad programming happenned :(\n"
+
+# define HERE_DOC_FILE "/tmp/here_doc.tmp"
 
 size_t	ft_strlen(const char *s);
 size_t	ft_ptrslen(void **s);
@@ -73,7 +76,6 @@ void	ft_fail(char *err, void *err_value);
 void	ft_free_until(void **data, int n);
 
 char	**ft_split(char const *s, char c);
-char	*ft_err(char *err, char *s);
 
 bool	ft_char_is_quote(char c);
 bool	ft_char_is_token(char c);
@@ -82,7 +84,6 @@ char	*ft_name_of_token(int token);
 int		ft_token_of_str(char *token);
 int		ft_get_next_token(char *s);
 
-char	*ft_build_path(char const *path, char const *file);
-char	*ft_build_dir_path(char const *path, char const *file);
+char	*ft_build_path(char const *path, char const *file, int slash);
 
 #endif

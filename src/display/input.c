@@ -6,7 +6,7 @@
 /*   By: octoross <octoross@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/16 15:31:32 by octoross          #+#    #+#             */
-/*   Updated: 2024/10/02 20:31:52 by octoross         ###   ########.fr       */
+/*   Updated: 2024/10/02 23:30:56 by octoross         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,6 +84,8 @@ t_ast	*ft_prep_exec(char *line, t_minishell *minishell)
 	return (ast);
 }
 
+#include "dev.h"
+
 void	ft_minishell_input(t_minishell *minishell)
 {
 	char	*prompt;
@@ -102,5 +104,6 @@ void	ft_minishell_input(t_minishell *minishell)
 		ft_minishell_input(minishell);
 	ft_add_history(line);
 	ast = ft_prep_exec(line, minishell);
+	print_ast(ast, 0);
 	ft_exec_line(ast, minishell);
 }

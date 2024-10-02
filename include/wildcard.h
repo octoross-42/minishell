@@ -25,8 +25,20 @@ typedef struct s_str
 	int		end;
 }	t_str;
 
-bool	ft_check_ends(t_str *file, t_str *regex);
-bool	ft_fit_wildcard(char *filestr, t_str regex);
+typedef struct s_wildcard_data
+{
+	char	*regex;
+	int		end;
+	int		end_slash;
+	int		slash;
+	int		entry_is_dir;
+	char	*name;
+	int		end_name;
+	char	*path;
+} t_wildcard_data;
+
+bool	ft_check_ends(t_wildcard_data *data);
+bool	ft_fit_wildcard(t_wildcard_data data);
 
 typedef struct s_wildcard
 {
@@ -35,7 +47,7 @@ typedef struct s_wildcard
 	struct s_wildcard	*last;
 }	t_wildcard;
 
-t_wildcard	*ft_new_wildcard(char *name, char *path, bool dir);
+t_wildcard	*ft_new_wildcard(t_wildcard_data data);
 void		ft_add_wildcard(t_wildcard **wildcard, t_wildcard *new);
 void		ft_clear_wildcard(t_wildcard *wildcard);
 int			ft_len_wildcard(t_wildcard *wildcard);

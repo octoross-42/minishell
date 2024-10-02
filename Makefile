@@ -10,11 +10,10 @@ BLUE	:=	\e[34m
 CYAN	:=	\e[36m
 PINK	:=	\e[38;2;255;182;193m
 
-CC	=	cc
-
-CFLAGS		= -Wall -Wextra -Werror -MMD -g3
-INCLUDE		= include/
-LFLAGS		= -lreadline
+CC		=	cc
+CFLAGS	= -Wall -Wextra -Werror -MMD -g3
+INCLUDE	= include/
+LFLAGS	= -lreadline
 
 DISPLAY_SRCS = src/display/banner.c \
 	src/display/input.c
@@ -105,6 +104,5 @@ re:
 	@make --silent fclean
 	@printf "\n"
 	@make --silent $(NAME)
-#	 @printf "\n$(BOLD)$(YELLOW)make re: $(RESET)All files have been rebuilt! ✨\n"
 
 .PHONY:	all clean fclean re

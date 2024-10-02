@@ -6,7 +6,7 @@
 /*   By: octoross <octoross@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/09 20:34:55 by octoross          #+#    #+#             */
-/*   Updated: 2024/10/02 01:50:08 by octoross         ###   ########.fr       */
+/*   Updated: 2024/10/02 22:21:26 by octoross         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,6 @@
 # include "ast.h"
 # include "display.h"
 # include "wildcard.h"
-
 
 # include <errno.h>
 # include <stdbool.h>
@@ -87,7 +86,5 @@ void	print_echo(char **arg);
 void	print_env(t_env *ep);
 int		print_wd(t_env *ep);
 int		change_dir(char **arg, t_env *env);
-
-# define CAROT "lalal"
 
 #endif
