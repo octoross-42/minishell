@@ -31,7 +31,7 @@ char	*ft_get_cmd_path(char *cmd, t_minishell *minishell)
 	i = 0;
 	while (minishell->path[i])
 	{
-		path = ft_build_path(minishell->path[i], cmd);
+		path = ft_build_path(minishell->path[i], cmd, 0);
 		if (!path)
 			return (ft_fail(ERR_MALLOC, "no path for cmd"), minishell->status = STATUS_MALLOC, NULL);
 		if (access(path, F_OK | X_OK) == 0)

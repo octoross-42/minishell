@@ -6,7 +6,7 @@
 /*   By: octoross <octoross@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/09 20:30:08 by octoross          #+#    #+#             */
-/*   Updated: 2024/09/29 02:32:55 by octoross         ###   ########.fr       */
+/*   Updated: 2024/10/02 20:07:57 by octoross         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,66 +55,37 @@ void	ft_fail(char *err, void *err_value)
 		write(STDERR_FILENO, err, ft_strlen(err));
 }
 
-char	*ft_build_path(char const *path, char const *file)
+char	*ft_build_path(char const *path, char const *file, int slash)
 {
 	int		len;
+	int		len_path;
+	int		len_file;
 	int		i;
 	char	*concatenated;
 
 	if (!path && !file)
 		return (NULL);
-	len = ft_strlen(path);
-	if (path && path[len - 1] != '/')
+	len_path = ft_strlen(path);
+	len_file = ft_strlen(file);
+	len = len_file + len_path;
+	if (path && path[len_path - 1] != '/')
 		len ++;
-	len += ft_strlen(file);
+	len += slash;
 	concatenated = (char *)malloc(sizeof(char) * (len + 1));
 	if (!concatenated)
 		return (NULL);
 	concatenated[len] = '\0';
+	len = 0;
+	ft_strncpy(concatenated, path, len_path);
+	len += len_path;
+	if (path && *path && concatenated[len - 1] != '/')
+		concatenated[len ++] = '/';
+	ft_strncpy(&concatenated[len], file, len_file);
+	len += len_file;
 	i = 0;
-	while (path && path[i])
+	while (i < slash)
 	{
-		concatenated[i] = path[i];
-		i ++;
-	}
-	if (path && *path && concatenated[i - 1] != '/')
-		concatenated[i ++] = '/';
-	len = i;
-	while (file[i - len])
-	{
-		concatenated[i] = file[i - len];
-		i ++;
-	}
-	return (concatenated);
-}
-
-char	*ft_build_dir_path(char const *path, char const *file)
-{
-	int		len;
-	int		i;
-	char	*concatenated;
-
-	len = ft_strlen(path);
-	if (path && (len > 0) && path[len - 1] != '/')
-		len ++;
-	len += ft_strlen(file) + 1;
-	concatenated = (char *)malloc(sizeof(char) * (len + 1));
-	if (!concatenated)
-		return (NULL);
-	concatenated[len - 1] = '/';
-	concatenated[len] = '\0';
-	i = 0;
-	while (path && path[i])
-	{
-		concatenated[i] = path[i];
-		i ++;
-	}
-	if (path && *path && concatenated[i - 1] != '/')
-		concatenated[i ++] = '/';
-	len = i;
-	while (file[i - len])
-	{
-		concatenated[i] = file[i - len];
+		concatenated[len ++] = '/';
 		i ++;
 	}
 	return (concatenated);
