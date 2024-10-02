@@ -6,7 +6,7 @@
 /*   By: octoross <octoross@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/21 19:49:29 by octoross          #+#    #+#             */
-/*   Updated: 2024/09/23 02:27:23 by octoross         ###   ########.fr       */
+/*   Updated: 2024/10/02 20:50:30 by octoross         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,6 +33,7 @@ char	*ft_name_of_token(int token)
 	else
 		return (NULL);
 }
+
 char	*ft_str_of_token(int token)
 {
 	if (token == PIPE)
