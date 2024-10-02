@@ -6,7 +6,7 @@
 /*   By: octoross <octoross@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/09 20:30:08 by octoross          #+#    #+#             */
-/*   Updated: 2024/10/02 20:07:57 by octoross         ###   ########.fr       */
+/*   Updated: 2024/10/02 20:27:55 by octoross         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,38 +55,48 @@ void	ft_fail(char *err, void *err_value)
 		write(STDERR_FILENO, err, ft_strlen(err));
 }
 
+char	*ft_init_build_path(int len_path, int len_file, int slash)
+{
+	int	len;
+
+	if (!path && !file)
+		return (NULL);
+	len = len_file + len_path;
+	if (path && path[len_path - 1] != '/')
+		len ++;
+	len += slash;
+	new_path = (char *)malloc(sizeof(char) * (len + 1));
+	if (!new_path)
+		return (NULL);
+	new_path[len] = '\0';
+	return (new_path);
+}
+
 char	*ft_build_path(char const *path, char const *file, int slash)
 {
 	int		len;
 	int		len_path;
 	int		len_file;
 	int		i;
-	char	*concatenated;
+	char	*new_path;
 
-	if (!path && !file)
-		return (NULL);
 	len_path = ft_strlen(path);
 	len_file = ft_strlen(file);
-	len = len_file + len_path;
-	if (path && path[len_path - 1] != '/')
-		len ++;
-	len += slash;
-	concatenated = (char *)malloc(sizeof(char) * (len + 1));
-	if (!concatenated)
+	new_path = ft_init_build_path(len_path, len_file, slash);
+	if (!new_path)
 		return (NULL);
-	concatenated[len] = '\0';
 	len = 0;
-	ft_strncpy(concatenated, path, len_path);
+	ft_strncpy(new_path, path, len_path);
 	len += len_path;
-	if (path && *path && concatenated[len - 1] != '/')
-		concatenated[len ++] = '/';
-	ft_strncpy(&concatenated[len], file, len_file);
+	if (path && *path && new_path[len - 1] != '/')
+		new_path[len ++] = '/';
+	ft_strncpy(&new_path[len], file, len_file);
 	len += len_file;
 	i = 0;
 	while (i < slash)
 	{
-		concatenated[len ++] = '/';
+		new_path[len ++] = '/';
 		i ++;
 	}
-	return (concatenated);
+	return (new_path);
 }
