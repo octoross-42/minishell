@@ -81,14 +81,10 @@ $(OBJS_DIR):
 $(OBJS_DIR)/%.o: %.c | $(OBJS_DIR)
 	@mkdir -p $(dir $@)
 	@printf "\r                                                                                                                                       \r\
-	$(BOLD)$(BLUE)[objs]:\t$(RESET)$<"
+	$(BOLD)$(BLUE)[objs]: $(RESET)$<"
 	@$(CC) $(CFLAGS) -I$(INCLUDE) -g3 -c $< -o $@
 
-compile: $(OBJS)
-
-$(NAME):
-	@printf "$(BOLD)$(YELLOW)Compilation...$(RESET)\n"
-	@make --silent compile
+$(NAME): $(OBJS)
 	@printf "\r                                                                                                                                       \r\
 	$(BOLD)$(BLUE)Compilation: $(RESET)done!\n"
 	@printf "$(BOLD)$(YELLOW)\nLinking...$(RESET)\n"
