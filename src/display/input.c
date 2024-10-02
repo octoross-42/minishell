@@ -6,7 +6,7 @@
 /*   By: octoross <octoross@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/16 15:31:32 by octoross          #+#    #+#             */
-/*   Updated: 2024/09/30 22:39:23 by octoross         ###   ########.fr       */
+/*   Updated: 2024/10/02 20:31:52 by octoross         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,26 +63,11 @@ char	*ft_get_prompt(void)
 	return (prompt);
 }
 
-#include "dev.h"
-
-void	ft_minishell_input(t_minishell *minishell)
+t_ast	*ft_prep_exec(char *line, t_minishell *minishell)
 {
-	char	*prompt;
-	char	*line;
 	t_lexer	*lexer;
 	t_ast	*ast;
 
-	prompt = ft_get_prompt();
-	if (!prompt)
-		line = readline("🐳 minishell> ");
-	else
-	{
-		line = readline(prompt);
-		free(prompt);
-	}
-	if (!line)
-		ft_minishell_input(minishell);
-	ft_add_history(line);
 	lexer = ft_lexer(line, &(minishell->parsing_status));
 	free(line);
 	if (minishell->parsing_status != STATUS_OK)
@@ -96,6 +81,26 @@ void	ft_minishell_input(t_minishell *minishell)
 		minishell->status = minishell->parsing_status;
 		ft_minishell_input(minishell);
 	}
-	// print_ast(ast, 0);
+	return (ast);
+}
+
+void	ft_minishell_input(t_minishell *minishell)
+{
+	char	*prompt;
+	char	*line;
+	t_ast	*ast;
+
+	prompt = ft_get_prompt();
+	if (!prompt)
+		line = readline("🐳 minishell> ");
+	else
+	{
+		line = readline(prompt);
+		free(prompt);
+	}
+	if (!line)
+		ft_minishell_input(minishell);
+	ft_add_history(line);
+	ast = ft_prep_exec(line, minishell);
 	ft_exec_line(ast, minishell);
 }
