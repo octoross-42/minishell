@@ -6,7 +6,7 @@
 /*   By: octoross <octoross@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/09 20:30:08 by octoross          #+#    #+#             */
-/*   Updated: 2024/10/02 20:27:55 by octoross         ###   ########.fr       */
+/*   Updated: 2024/10/02 20:48:17 by octoross         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,12 +55,11 @@ void	ft_fail(char *err, void *err_value)
 		write(STDERR_FILENO, err, ft_strlen(err));
 }
 
-char	*ft_init_build_path(int len_path, int len_file, int slash)
+char	*ft_init_build_path(char const *path, int len_path, int len_file, int slash)
 {
-	int	len;
+	int		len;
+	char	*new_path;
 
-	if (!path && !file)
-		return (NULL);
 	len = len_file + len_path;
 	if (path && path[len_path - 1] != '/')
 		len ++;
@@ -82,7 +81,7 @@ char	*ft_build_path(char const *path, char const *file, int slash)
 
 	len_path = ft_strlen(path);
 	len_file = ft_strlen(file);
-	new_path = ft_init_build_path(len_path, len_file, slash);
+	new_path = ft_init_build_path(path, len_path, len_file, slash);
 	if (!new_path)
 		return (NULL);
 	len = 0;

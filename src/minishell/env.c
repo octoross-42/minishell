@@ -27,7 +27,7 @@ void	ft_clear_env(t_env *env)
 
 int	ft_add_env(t_env **env, char *name, char *value)
 {
-	t_env *new;
+	t_env	*new;
 
 	if (!env)
 		return (ft_fail(ERR_PROG, NULL), STATUS_PROG);

@@ -51,6 +51,7 @@ char	**ft_get_path(t_env *env)
 	}
 	return (NULL);
 }
+
 void	ft_init_minishell(char **envp)
 {
 	t_minishell	minishell;
