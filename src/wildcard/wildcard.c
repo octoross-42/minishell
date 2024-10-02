@@ -81,7 +81,7 @@ t_wildcard	*ft_wildcard(char *regex, char *path)
 			return (ft_clear_wildcard(wildcard), NULL);
 		if (!r.s[r.end] || ((r.s[r.end] == '/') && is_dir))
 		{
-			if (ft_fit_wildcard(entry->d_name, r.s, r.end))
+			if (ft_fit_wildcard(entry->d_name, r))
 			{
 				if ((r.s[r.end] == '/') && r.s[r.end + 1])
 				{

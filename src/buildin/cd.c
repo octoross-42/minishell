@@ -6,7 +6,7 @@
 /*   By: octoross <octoross@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/30 22:43:07 by octoross          #+#    #+#             */
-/*   Updated: 2024/09/30 23:28:35 by octoross         ###   ########.fr       */
+/*   Updated: 2024/10/01 17:09:39 by octoross         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,9 +17,8 @@ char	*ft_build_cd_path(char *pwd, char *cd)
 	int		len;
 	int		i;
 	int		end;
-	char	*path;
 
-	if (!pwd || !path)
+	if (!pwd || !cd)
 		return (NULL);
 	len = 0;
 	i = 0;
@@ -44,10 +43,12 @@ char	*ft_build_cd_path(char *pwd, char *cd)
 			}
 		}
 	}
+	return (NULL);
 }
 
 int	change_dir(char **arg, t_env *env)
 {
+	(void)env;
 	if (!arg[1])
 		return (ft_fail("Error: cd: specify a path\n", NULL), 1);
 	if (arg[2])
