@@ -27,7 +27,52 @@ int	ft_entry_is_dir(struct dirent *entry)
 		return (entry->d_type == DT_DIR);
 }
 
-DIR	*ft_init_wildcard(t_str *r, char *regex, char **path)
+bool	ft_explore_path(t_wildcard_data data, t_wildcard **wildcard)
+{
+	char			*next_path;
+
+	next_path = ft_build_path(data.path, data.name, data.slash);
+	if (!next_path)
+	{
+		ft_fail(ERR_MALLOC, "no wildcard");
+		ft_clear_wildcard(*wildcard);
+		return (false);
+	}
+	ft_add_wildcard(wildcard, \
+		ft_wildcard(data.regex + data.end_slash, next_path));
+	return (true);
+}
+
+bool	ft_check_entry(t_wildcard_data data, t_wildcard **wildcard)
+{
+	t_wildcard		*new;
+
+	if ((!ft_strcmp(data.name, ".") || !ft_strcmp(data.name, ".."))
+		&& (ft_strncmp(data.regex, ".", data.end)
+			&& ft_strncmp(data.regex, "..", data.end)))
+		return (true);
+	if ((data.regex[data.end] == '/') && !(data.entry_is_dir))
+		return (true);
+	if (!ft_fit_wildcard(data))
+		return (true);
+	data.end_slash = data.end;
+	while (data.regex[data.end_slash] == '/')
+		data.end_slash ++;
+	data.slash = data.end_slash - data.end;
+	if (!(data.regex[data.end_slash]))
+	{
+		new = ft_new_wildcard(data);
+		if (!new)
+			return (ft_clear_wildcard(*wildcard), false);
+		ft_add_wildcard(wildcard, new);
+		return (true);
+	}
+	else
+		ft_explore_path(data, wildcard);
+	return (true);
+}
+
+DIR	*ft_init_wildcard(t_wildcard_data *data, char *regex, char **path)
 {
 	DIR	*dir;
 
@@ -46,96 +91,41 @@ DIR	*ft_init_wildcard(t_str *r, char *regex, char **path)
 		dir = opendir(*path);
 	if (!dir)
 		return (perror("opendir"), NULL);
-	r->end = 0;
-	while (regex[r->end] && (regex[r->end] != '/'))
-		(r->end)++;
-	r->s = regex;
+	data->path = *path;
+	data->end = 0;
+	while (regex[data->end] && (regex[data->end] != '/'))
+		data->end ++;
+	data->regex = regex;
 	return (dir);
 }
 
 t_wildcard	*ft_wildcard(char *regex, char *path)
 {
 	t_wildcard		*wildcard;
-	t_wildcard		*new;
+	t_wildcard_data	data;
 	DIR				*dir;
 	struct dirent	*entry;
-	int				is_dir;
-	char			*next_path;
-	t_str			r;
 
-	dir = ft_init_wildcard(&r, regex, &path);
+	dir = ft_init_wildcard(&data, regex, &path);
 	if (!dir)
 		return (NULL);
 	wildcard = NULL;
 	entry = readdir(dir);
-	
-	printf("wildcard : %s, end %d\n", r.s, r.end);
 	while (entry)
 	{
-		if ((!ft_strcmp(entry->d_name, ".") || !ft_strcmp(entry->d_name, ".."))
-			&& (ft_strncmp(r.s, ".", r.end) && ft_strncmp(r.s, "..", r.end)))
-		{
-			// TODO pas les ignorer pour remonter le path
-			entry = readdir(dir);
-			continue ;
-		}
-		is_dir = ft_entry_is_dir(entry);
-		if (is_dir < 0)
+		data.entry_is_dir = ft_entry_is_dir(entry);
+		if (data.entry_is_dir < 0)
 			return (ft_clear_wildcard(wildcard), NULL);
-		if (!r.s[r.end] || ((r.s[r.end] == '/') && is_dir))
-		{
-			printf("entry : '%s'\n", entry->d_name);
-			if (ft_fit_wildcard(entry->d_name, r))
-			{
-				printf("fit wildcard : '%s'\n", entry->d_name);
-				if ((r.s[r.end] == '/') && r.s[r.end + 1])
-				{
-					if (path)
-						next_path = ft_build_dir_path(path, entry->d_name);
-					else
-						next_path = ft_build_dir_path("", entry->d_name);
-					if (!next_path)
-						return (ft_fail(ERR_MALLOC, "no wildcard"), ft_clear_wildcard(wildcard), NULL);
-					ft_add_wildcard(&wildcard, ft_wildcard(r.s + r.end + 1, next_path));
-				}
-				else
-				{
-					new = ft_new_wildcard(entry->d_name, path, r.s[r.end] == '/');
-					if (!new)
-						return (ft_clear_wildcard(wildcard), NULL);
-					ft_add_wildcard(&wildcard, new);
-				}
-			}
-		}
+		data.name = entry->d_name;
+		if (!ft_check_entry(data, &wildcard))
+			return (NULL);
 		entry = readdir(dir);
 	}
 	if (closedir(dir) == -1)
 		return (perror("closedir"), NULL);
-	if (path)
-		free(path);
+	if (data.path)
+		free(data.path);
 	return (wildcard);
-}
-
-char	**ft_argv_wildcard(t_wildcard *wildcard)
-{
-	char	**argv;
-	int		len;
-	t_wildcard	*next;
-
-	len = ft_len_wildcard(wildcard);
-	argv = (char **)malloc(sizeof(char *) * (len + 1));
-	if (!argv)
-		return (ft_fail(ERR_MALLOC, "no wildcard"), NULL);
-	argv[len] = NULL;
-	len = 0;
-	while (wildcard)
-	{
-		argv[len ++] = wildcard->file;
-		next = wildcard->next;
-		free(wildcard);
-		wildcard = next;
-	}
-	return (argv);
 }
 
 // int	main(int argc, char **argv)

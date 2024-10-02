@@ -12,17 +12,14 @@
 
 #include "wildcard.h"
 
-t_wildcard	*ft_new_wildcard(char *name, char *path, bool dir)
+t_wildcard	*ft_new_wildcard(t_wildcard_data data)
 {
 	t_wildcard	*new;
 
 	new = (t_wildcard *)malloc(sizeof(t_wildcard));
 	if (!new)
 		return (ft_fail(ERR_MALLOC, "no wildcard"), NULL);
-	if (dir)
-		new->file = ft_build_dir_path(path, name);
-	else
-		new->file = ft_build_path(path, name);
+	new->file = ft_build_path(data.path, data.name, data.slash);
 	if (!new->file)
 		return (ft_fail(ERR_MALLOC, "no wildcard"), free(new), NULL);
 	new->next = NULL;

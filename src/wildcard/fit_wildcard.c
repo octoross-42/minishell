@@ -12,79 +12,69 @@
 
 #include "wildcard.h"
 
-bool	ft_check_ends(t_str *file, t_str *regex)
+bool	ft_check_ends(t_wildcard_data *data)
 {
-	int	start;
-
-	if (!file->s || !regex->s)
+	while (*(data->regex) && (*(data->regex) != '*') && (data->end > 0))
+	{
+		if (*(data->name ++) != *(data->regex ++))
+			return (false);
+		data->end --;
+	}
+	data->end_name = ft_strlen(data->name);
+	while ((data->end_name > 0) && (data->end > 0)
+		&& ((data->regex)[data->end - 1] != '*'))
+	{
+		if ((data->name)[data->end_name - 1] != (data->regex)[data->end - 1])
+			return (false);
+		(data->end)--;
+		(data->end_name)--;
+	}
+	if (!data->end_name && (data->end > 0))
 		return (false);
-	start = 0;
-	while ((start < regex->end) && (regex->s)[start]
-		&& ((regex->s)[start] != '*'))
-	{
-		if ((file->s)[start] != (regex->s)[start])
-			return (false);
-		start ++;
-	}
-	printf("\tstart : %d\n", start);
-	file->s += start;
-	regex->s += start;
-	regex->end -= start;
-	file->end = ft_strlen(file->s);
-	if (!(*regex->s))
-		return (true);
-	while ((regex->s)[regex->end - 1] && ((regex->s)[regex->end - 1] != '*'))
-	{
-		if ((file->s)[file->end - 1] != (regex->s)[regex->end - 1])
-			return (false);
-		(regex->end)--;
-		(file->s)--;
-	}
-	printf("\tend : %d\n", regex->end);
 	return (true);
 }
 
-bool	ft_fit_word(t_str regex, int *r, t_str file, int *f)
+bool	ft_fit_word(t_wildcard_data *data)
 {
 	int	len_need;
 
 	len_need = 0;
-	while (regex.s[*r + len_need]
-		&& (regex.s[*r + len_need] != '*') && (len_need + *f <= file.end))
+	while ((data->regex)[len_need]
+		&& ((data->regex)[len_need] != '*') && (data->end_name >= len_need))
 		len_need ++;
-	while ((len_need + *f <= file.end)
-		&& ft_strncmp(file.s + *f, regex.s + *r, len_need))
-		(*f)++;
-	if (len_need + *f > file.end)
+	while ((data->end_name >= len_need)
+		&& ft_strncmp(data->name, data->regex, len_need))
+	{
+		(data->name)++;
+		(data->end_name)--;
+	}
+	if (data->end_name < len_need)
 		return (false);
-	*r += len_need;
 	return (true);
 }
 
-bool	ft_fit_wildcard(char *filestr, t_str regex)
+bool	ft_fit_wildcard(t_wildcard_data data)
 {
-	t_str	file;
-	int		r;
-	int		f;
-
-	file.s = filestr;
-	if (!file.s || !regex.s)
+	if (!(data.name) || !data.regex)
 		return (false);
-	if ((*file.s == '.') && (*regex.s != '.'))
+	if ((*(data.name) == '.') && (*data.regex != '.'))
 		return (false);
-	if (!ft_check_ends(&file, &regex))
+	if (!ft_check_ends(&data))
 		return (false);
-	printf("file : '%s'\n", file.s);
-	if (!(*regex.s))
+	if (!(*(data.regex)))
 		return (true);
-	r = 0;
-	f = 0;
-	while (regex.s[r] && (r < regex.end))
+	while (*(data.regex) && (data.end > 0))
 	{
-		if (regex.s[r] == '*')
-			r ++;
-		else if (!ft_fit_word(regex, &r, file, &f))
-			return (false);
+		if (*(data.regex) == '*')
+		{
+			data.regex ++;
+			data.end --;
+		}
+		else
+		{
+			if (!ft_fit_word(&data))
+				return (false);
+		}
 	}
 	return (true);
 }

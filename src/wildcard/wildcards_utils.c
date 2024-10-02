@@ -39,3 +39,25 @@ void	ft_clear_wildcards(t_wildcards *wildcards)
 		ft_free_until((void **)wildcards->files, -1);
 	free(wildcards);
 }
+
+char	**ft_argv_wildcard(t_wildcard *wildcard)
+{
+	char		**argv;
+	int			len;
+	t_wildcard	*next;
+
+	len = ft_len_wildcard(wildcard);
+	argv = (char **)malloc(sizeof(char *) * (len + 1));
+	if (!argv)
+		return (ft_fail(ERR_MALLOC, "no wildcard"), NULL);
+	argv[len] = NULL;
+	len = 0;
+	while (wildcard)
+	{
+		argv[len ++] = wildcard->file;
+		next = wildcard->next;
+		free(wildcard);
+		wildcard = next;
+	}
+	return (argv);
+}
