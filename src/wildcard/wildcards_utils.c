@@ -12,7 +12,8 @@
 
 #include "wildcard.h"
 
-bool	ft_add_wildcards(char **argv, t_wildcards **wildcards, t_wildcards **last)
+bool	ft_add_wildcards(char **argv,
+	t_wildcards **wildcards, t_wildcards **last)
 {
 	t_wildcards	*new;
 

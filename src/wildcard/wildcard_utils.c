@@ -61,7 +61,7 @@ void	ft_clear_wildcard(t_wildcard *wildcard)
 int	ft_len_wildcard(t_wildcard *wildcard)
 {
 	int			len;
-	
+
 	len = 0;
 	while (wildcard)
 	{

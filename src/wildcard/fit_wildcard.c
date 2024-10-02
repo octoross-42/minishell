@@ -16,9 +16,9 @@ bool	ft_check_ends(t_str *file, t_str *regex)
 {
 	int	start;
 
-	start = 0;
 	if (!file->s || !regex->s)
 		return (false);
+	start = 0;
 	while ((start < regex->end) && (regex->s)[start]
 		&& ((regex->s)[start] != '*'))
 	{
@@ -26,10 +26,13 @@ bool	ft_check_ends(t_str *file, t_str *regex)
 			return (false);
 		start ++;
 	}
+	printf("\tstart : %d\n", start);
 	file->s += start;
 	regex->s += start;
 	regex->end -= start;
 	file->end = ft_strlen(file->s);
+	if (!(*regex->s))
+		return (true);
 	while ((regex->s)[regex->end - 1] && ((regex->s)[regex->end - 1] != '*'))
 	{
 		if ((file->s)[file->end - 1] != (regex->s)[regex->end - 1])
@@ -37,6 +40,7 @@ bool	ft_check_ends(t_str *file, t_str *regex)
 		(regex->end)--;
 		(file->s)--;
 	}
+	printf("\tend : %d\n", regex->end);
 	return (true);
 }
 
@@ -70,6 +74,7 @@ bool	ft_fit_wildcard(char *filestr, t_str regex)
 		return (false);
 	if (!ft_check_ends(&file, &regex))
 		return (false);
+	printf("file : '%s'\n", file.s);
 	if (!(*regex.s))
 		return (true);
 	r = 0;

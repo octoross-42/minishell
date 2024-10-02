@@ -14,7 +14,7 @@
 
 int	ft_entry_is_dir(struct dirent *entry)
 {
-    struct stat file_stat;
+	struct stat	file_stat;
 
 	if (entry->d_type == DT_UNKNOWN)
 	{
@@ -29,7 +29,7 @@ int	ft_entry_is_dir(struct dirent *entry)
 
 DIR	*ft_init_wildcard(t_str *r, char *regex, char **path)
 {
-    DIR				*dir;
+	DIR	*dir;
 
 	if (!regex)
 		return (NULL);
@@ -57,8 +57,8 @@ t_wildcard	*ft_wildcard(char *regex, char *path)
 {
 	t_wildcard		*wildcard;
 	t_wildcard		*new;
-    DIR				*dir;
-    struct dirent	*entry;
+	DIR				*dir;
+	struct dirent	*entry;
 	int				is_dir;
 	char			*next_path;
 	t_str			r;
@@ -68,9 +68,12 @@ t_wildcard	*ft_wildcard(char *regex, char *path)
 		return (NULL);
 	wildcard = NULL;
 	entry = readdir(dir);
+	
+	printf("wildcard : %s, end %d\n", r.s, r.end);
 	while (entry)
 	{
-		if (!strcmp(entry->d_name, ".") || !strcmp(entry->d_name, ".."))
+		if ((!ft_strcmp(entry->d_name, ".") || !ft_strcmp(entry->d_name, ".."))
+			&& (ft_strncmp(r.s, ".", r.end) && ft_strncmp(r.s, "..", r.end)))
 		{
 			// TODO pas les ignorer pour remonter le path
 			entry = readdir(dir);
@@ -81,8 +84,10 @@ t_wildcard	*ft_wildcard(char *regex, char *path)
 			return (ft_clear_wildcard(wildcard), NULL);
 		if (!r.s[r.end] || ((r.s[r.end] == '/') && is_dir))
 		{
+			printf("entry : '%s'\n", entry->d_name);
 			if (ft_fit_wildcard(entry->d_name, r))
 			{
+				printf("fit wildcard : '%s'\n", entry->d_name);
 				if ((r.s[r.end] == '/') && r.s[r.end + 1])
 				{
 					if (path)
