@@ -19,7 +19,8 @@ bool	ft_check_ends(t_str *file, t_str *regex)
 	start = 0;
 	if (!file->s || !regex->s)
 		return (false);
-	while ((start < regex->end) && (regex->s)[start] && ((regex->s)[start] != '*'))
+	while ((start < regex->end) && (regex->s)[start]
+		&& ((regex->s)[start] != '*'))
 	{
 		if ((file->s)[start] != (regex->s)[start])
 			return (false);
@@ -39,12 +40,28 @@ bool	ft_check_ends(t_str *file, t_str *regex)
 	return (true);
 }
 
+bool	ft_fit_word(t_str regex, int *r, t_str file, int *f)
+{
+	int	len_need;
+
+	len_need = 0;
+	while (regex.s[*r + len_need]
+		&& (regex.s[*r + len_need] != '*') && (len_need + *f <= file.end))
+		len_need ++;
+	while ((len_need + *f <= file.end)
+		&& ft_strncmp(file.s + *f, regex.s + *r, len_need))
+		(*f)++;
+	if (len_need + *f > file.end)
+		return (false);
+	*r += len_need;
+	return (true);
+}
+
 bool	ft_fit_wildcard(char *filestr, t_str regex)
 {
 	t_str	file;
 	int		r;
 	int		f;
-	int		len_need;
 
 	file.s = filestr;
 	if (!file.s || !regex.s)
@@ -61,17 +78,8 @@ bool	ft_fit_wildcard(char *filestr, t_str regex)
 	{
 		if (regex.s[r] == '*')
 			r ++;
-		else
-		{
-			len_need = 0;
-			while (regex.s[r + len_need] && (regex.s[r + len_need] != '*') && (len_need + f <= file.end))
-				len_need ++;
-			while ((len_need + f <= file.end) && ft_strncmp(file.s + f, regex.s + r, len_need))
-				f ++;
-			if (len_need + f > file.end)
-				return (false);
-			r += len_need;
-		}
+		else if (!ft_fit_word(regex, &r, file, &f))
+			return (false);
 	}
 	return (true);
 }
