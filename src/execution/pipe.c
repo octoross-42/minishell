@@ -124,8 +124,7 @@ void ft_do_pipe(t_ast *ast, t_minishell *minishell)
 	if (!pid)
 		ft_do_pipe_child(pipefd, ast, minishell);
 	ft_do_pipe_parent(pipefd, pid, ast, minishell);
-	if (ast->token == PIPE)
-		minishell->pipe_before = true;
+	minishell->pipe_before = (ast->token == PIPE);
 	right = ast->right;
 	left = ast->left;
 	ft_clear_node_ast(ast);
