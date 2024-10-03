@@ -17,13 +17,11 @@ void	ft_reset_stds(t_minishell *minishell)
 	// TODO faire fail les dup2
 	if (minishell->std_in != -1)
 	{
-		dup2(minishell->std_in, STDIN_FILENO);
-		close(minishell->std_in);
+		ft_dup2_std(minishell->std_in, IN, minishell);
 	}
 	if (minishell->std_out != -1)
 	{
-		dup2(minishell->std_out, STDOUT_FILENO);
-		close(minishell->std_out);
+		ft_dup2_std(minishell->std_out, OUT, minishell);
 	}
 	minishell->std_in = -1;
 	minishell->std_out = -1;

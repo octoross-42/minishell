@@ -28,13 +28,11 @@ void	ft_do_pipe_child(int pipefd[2], t_ast *ast, t_minishell *minishell)
 	}
 	if (minishell->pipe_before)
 	{
-		dup2(minishell->pipe, STDIN_FILENO);
-		close(minishell->pipe);
+		ft_dup2_std(minishell->pipe, IN, minishell);
 	}
 	if (ast->token == PIPE)
 	{
-		dup2(pipefd[1], STDOUT_FILENO);
-		close(pipefd[1]);
+		ft_dup2_std(pipefd[1], OUT, minishell);
 		close(pipefd[0]);
 	}
 	minishell->pipe_before = false;
