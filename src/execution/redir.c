@@ -64,6 +64,7 @@ void ft_output(int token, char *arg, t_minishell *minishell)
 void ft_here_doc(char *limiter, t_minishell *minishell)
 {
 	int fd;
+	int fddup;
 	char *line;
 
 	fd = open(HERE_DOC_FILE, O_WRONLY | O_TRUNC | O_CREAT, 0644);
@@ -73,6 +74,7 @@ void ft_here_doc(char *limiter, t_minishell *minishell)
 		minishell->status = STATUS_OPEN;
 		return;
 	}
+	fddup = dup(fd);
 	// signal(SIGINT, sig_handler_here_doc);
 	if (minishell->std_in == -1)
 		minishell->std_in = dup(STDIN_FILENO);
@@ -85,8 +87,8 @@ void ft_here_doc(char *limiter, t_minishell *minishell)
 		// 	unlink(FILE_HEREDOC);
 		// 	return ;
 		// }
-		write(fd, line, ft_strlen(line));
-		write(fd, "\n", 1);
+		write(fddup, line, ft_strlen(line));
+		write(fddup, "\n", 1);
 		free(line);
 		line = readline("> ");
 	}
@@ -94,16 +96,18 @@ void ft_here_doc(char *limiter, t_minishell *minishell)
 		free(line);
 	else
 		ft_fail(ERR_HERE_DOC, limiter);
-	close(fd);
-	fd = open(HERE_DOC_FILE, O_RDONLY);
-    if (fd == -1) {
+	close(fddup);
+	fddup = open(HERE_DOC_FILE, O_RDONLY);
+    if (fddup == -1) {
         perror("open");
 		minishell->status = STATUS_OPEN;
     }
+	close(fd);
+	unlink(HERE_DOC_FILE);
 	if (minishell->std_in == -1)
 		minishell->std_in = dup(STDIN_FILENO);
-	dup2(fd, STDIN_FILENO);
-    close(fd);
+	dup2(fddup, STDIN_FILENO);
+    close(fddup);
 }
 
 void ft_redir(t_ast *ast, t_minishell *minishell)
