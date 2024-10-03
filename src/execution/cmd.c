@@ -73,6 +73,7 @@ void	ft_cmd(char **argv, t_ast *next, t_minishell *minishell)
 		ft_free_until((void **)envp, -1);
 		ft_free_until((void **)argv, -1);
 		free(path);
+		ft_reset_stds(minishell);
 		minishell->status = STATUS_EXECVE;
 		exit(minishell->status);
 	}

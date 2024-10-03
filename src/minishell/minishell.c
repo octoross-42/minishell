@@ -29,6 +29,7 @@ void	ft_clear_minishell(t_minishell *minishell)
 void	ft_exit_minishell(t_minishell *minishell, int status)
 {
 	ft_clear_minishell(minishell);
+	ft_reset_stds(minishell);
 	exit(status);
 }
 

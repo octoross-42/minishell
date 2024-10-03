@@ -38,27 +38,20 @@ int	ft_dup2_std(int fd, bool in, t_minishell *minishell)
 	return (STATUS_OK);
 }
 
-void ft_input(char *arg, t_minishell *minishell)
+int ft_input(char *arg, t_minishell *minishell)
 {
 	int infile;
-	int	status;
 
 	infile = open(arg, O_RDONLY);
 	if (infile == -1)
 	{
 		perror(arg);
-		minishell->status = STATUS_OPEN;
-		return;
+		return (STATUS_OPEN);
 	}
-	status = ft_dup2_std(infile, IN, minishell);
-	if (status != STATUS_OK)
-	{
-		minishell->status = status;
-		return;
-	}
+	return (ft_dup2_std(infile, IN, minishell));
 }
 
-void ft_output(int token, char *arg, t_minishell *minishell)
+int ft_output(int token, char *arg, t_minishell *minishell)
 {
 	int outfile;
 
@@ -69,40 +62,44 @@ void ft_output(int token, char *arg, t_minishell *minishell)
 	if (outfile == -1)
 	{
 		perror(arg);
-		minishell->status = STATUS_OPEN;
-		return;
+		return (STATUS_OPEN);
 	}
-	status = ft_dup2_std(outfile, OUT, minishell);
-	if (status != STATUS_OK)
-	{
-		minishell->status = status;
-		return;
-	}
+	return (ft_dup2_std(outfile, OUT, minishell));
 }
 
-void ft_here_doc(char *limiter, t_minishell *minishell)
+int	ft_reset_stds_for_readline(int *prev_out, t_minishell *minishell)
+{
+	if (minishell->std_in >= 0)
+	{
+		if (dup2(minishell->std_in, STDIN_FILENO) < 0)
+			return (ft_fail(ERR_DUP2, NULL), STATUS_DUP2);
+	}
+	if (minishell->std_out < 0)
+		return (*prev_out = -1, STATUS_OK);
+	*prev_out = dup(STDOUT_FILENO);
+	if (*prev_out < 0)
+		return (ft_fail(ERR_DUP, NULL), STATUS_DUP);
+	if (dup2(minishell->std_out, STDOUT_FILENO) < 0)
+		return (ft_fail(ERR_DUP2, NULL), STATUS_DUP2);
+	return (STATUS_OK);
+}
+
+int ft_here_doc(char *limiter, t_minishell *minishell)
 {
 	char *line;
+	int	here_doc_tmp;
+	int	prev_out;
+	int	status;
 
-	fd = open(HERE_DOC_FILE, O_WRONLY | O_TRUNC | O_CREAT, 0644);
-	if (fd < 0)
-	{
-        perror("open");
-		minishell->status = STATUS_OPEN;
-		return;
-	}
-	// signal(SIGINT, sig_handler_here_doc);
+	here_doc_tmp = open(HERE_DOC_FILE, O_WRONLY | O_TRUNC | O_CREAT, 0644);
+	if (here_doc_tmp < 0)
+		return (perror(HERE_DOC_FILE), STATUS_OPEN);
+	ft_reset_stds_for_readline(&prev_out, minishell);
 	line = readline("> ");
 	while (line && ft_strcmp(line, limiter))
 	{
-		// if (g_sigint == 1)
-		// {
-		// 	close_if(fd);
-		// 	unlink(FILE_HEREDOC);
-		// 	return ;
-		// }
-		write(here_doc, line, ft_strlen(line));
-		write(here_doc, "\n", 1);
+		write(here_doc_tmp, line, ft_strlen(line));
+		write(here_doc_tmp, "\n", 1);
 		free(line);
 		line = readline("> ");
 	}
@@ -110,10 +107,23 @@ void ft_here_doc(char *limiter, t_minishell *minishell)
 		free(line);
 	else
 		ft_fail(ERR_HERE_DOC, limiter);
+	close(here_doc_tmp);
+	if (prev_out >= 0)
+	{
+		status = ft_dup2_std(prev_out, OUT, minishell);
+		if (status != STATUS_OK)
+			return (status);
+	}
+	here_doc_tmp = open(HERE_DOC_FILE, O_RDONLY);
+	if (here_doc_tmp < 0)
+		return (perror(HERE_DOC_FILE), STATUS_OPEN);
+	// unlink(HERE_DOC_FILE);
+	return (ft_dup2_std(here_doc_tmp, IN, minishell));
 }
 
 void ft_redir(t_ast *ast, t_minishell *minishell)
 {
+	int	status;
 	t_ast *next;
 	char *arg;
 	char **args;
@@ -159,15 +169,19 @@ void ft_redir(t_ast *ast, t_minishell *minishell)
 			free(args);
 		}
 	}
-	if (ft_is_output(token))
-		ft_output(token, arg, minishell);
+	status = STATUS_OK;
+	if (token == HERE_DOC)
+		status = ft_here_doc(arg, minishell);
+	else if (ft_is_output(token))
+		status =ft_output(token, arg, minishell);
 	else if (token == INPUT)
-		ft_input(arg, minishell);
-	else if (token == HERE_DOC)
-		ft_here_doc(arg, minishell);
+		status = ft_input(arg, minishell);
 	free(arg);
-	if (minishell->status == STATUS_OK)
+	if (status == STATUS_OK)
 		ft_exec_ast(next, minishell);
 	else
+	{
+		minishell->status = status;
 		ft_clear_ast(next);
+	}
 }
