@@ -23,7 +23,9 @@ void	ft_clear_minishell(t_minishell *minishell)
 		minishell->wait_for_pids = next;
 	}
 	ft_free_until((void **)(minishell->path), -1);
+	minishell->path = NULL;
 	ft_clear_env(minishell->env);
+	minishell->env = NULL;
 }
 
 void	ft_exit_minishell(t_minishell *minishell, int status)

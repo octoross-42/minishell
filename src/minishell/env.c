@@ -25,12 +25,29 @@ void	ft_clear_env(t_env *env)
 	free(env);
 }
 
+bool	ft_aldeady_in_env(t_env *env, char *name, char *value)
+{
+	while (env)
+	{
+		if (!ft_strcmp(name, env->name))
+		{
+			free(env->value);
+			env->value = value;
+			return (true);
+		}
+		env = env->next;
+	}
+	return (false);
+}
+
 int	ft_add_env(t_env **env, char *name, char *value)
 {
 	t_env	*new;
 
 	if (!env)
 		return (ft_fail(ERR_PROG, NULL), STATUS_PROG);
+	if (ft_aldeady_in_env(*env, name, value))
+		return (free(name), STATUS_OK);
 	new = (t_env *)malloc(sizeof(t_env));
 	if (!new)
 		return (ft_fail(ERR_MALLOC, "no new env"), STATUS_MALLOC);

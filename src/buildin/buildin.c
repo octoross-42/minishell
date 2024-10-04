@@ -44,7 +44,7 @@ void	ft_buildin(char **argv, t_minishell *minishell)
 	if (!ft_strcmp(argv[0], "env"))
 		print_env(minishell->env);
 	if (!ft_strcmp(argv[0], "pwd"))
-		minishell->status = print_wd(minishell->env);
+		minishell->status = print_wd(&(minishell->env));
 	if (!ft_strcmp(argv[0], "cd"))
-		minishell->status = change_dir(argv, minishell->env);
+		minishell->status = change_dir(argv, &(minishell->env));
 }

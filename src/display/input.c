@@ -6,7 +6,7 @@
 /*   By: octoross <octoross@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/16 15:31:32 by octoross          #+#    #+#             */
-/*   Updated: 2024/10/03 19:32:04 by octoross         ###   ########.fr       */
+/*   Updated: 2024/10/04 15:57:57 by octoross         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,16 +39,17 @@ void	ft_strcpy_prompt(char *prompt, char wd[BSIZE], bool err)
 	ft_strcpy(&prompt[i], "> ");
 }
 
-char	*ft_get_prompt(void)
+char	*ft_get_prompt(t_env **env)
 {
-	char	wd[BSIZE];
+	char	*wd;
 	char	*prompt;
 	int		len;
 	bool	err;
 
 	len = ft_strlen("🐳 minishell:") + ft_strlen(CYAN) + ft_strlen(END) + 2;
 	err = false;
-	if (!getcwd(wd, BSIZE))
+	wd = ft_getcwd(env);
+	if (!wd)
 	{
 		len += ft_strlen(ERR_GETCWD);
 		err = true;
@@ -90,7 +91,7 @@ void	ft_minishell_input(t_minishell *minishell)
 	char	*line;
 	t_ast	*ast;
 
-	prompt = ft_get_prompt();
+	prompt = ft_get_prompt(&(minishell->env));
 	if (!prompt)
 		line = readline("🐳 minishell> ");
 	else

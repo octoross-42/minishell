@@ -16,11 +16,13 @@ char	*ft_file_arg(t_arg *data, t_minishell *minishell)
 {
 	char			*arg;
 	t_wildcard_arg	*wildcard_arg;
+	bool			is_wildcard;
 
+	is_wildcard = data->wildcard;
 	arg = ft_arg_of(data, minishell);
 	if (!arg)
 		return (minishell->status = STATUS_MALLOC, NULL);
-	if (data->wildcard)
+	if (is_wildcard)
 	{
 		wildcard_arg = ft_wilcard_arg(arg);
 		if (!wildcard_arg)

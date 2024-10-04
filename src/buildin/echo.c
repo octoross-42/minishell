@@ -6,11 +6,30 @@
 /*   By: octoross <octoross@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/30 21:50:14 by octoross          #+#    #+#             */
-/*   Updated: 2024/09/30 22:11:25 by octoross         ###   ########.fr       */
+/*   Updated: 2024/10/04 15:54:42 by octoross         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
+
+bool	ft_optn_echo(char ***arg)
+{
+	int		j;
+	bool	opt_n;
+
+	opt_n = false;
+	while (**arg)
+	{
+		j = 0;
+		while ((**arg)[j ++] == 'n')
+			opt_n = true;
+		if ((**arg)[j] != '\0')
+			(*arg)++;
+		else
+			return (opt_n);
+	}
+	return (opt_n);
+}
 
 void	print_echo(char **arg)
 {
@@ -21,13 +40,7 @@ void	print_echo(char **arg)
 		write(STDOUT_FILENO, "\n", 1);
 		return ;
 	}
-	opt_n = !ft_strcmp(arg[1], "-n");
-	if (opt_n && !arg[2])
-		return ;
-	else if (opt_n && arg[2])
-		arg += 2;
-	else
-		arg ++;
+	opt_n = ft_optn_echo(&arg);
 	while (*arg)
 	{
 		write(STDOUT_FILENO, *arg, ft_strlen(*arg));

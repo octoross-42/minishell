@@ -6,56 +6,50 @@
 /*   By: octoross <octoross@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/30 22:15:32 by octoross          #+#    #+#             */
-/*   Updated: 2024/09/30 22:40:37 by octoross         ###   ########.fr       */
+/*   Updated: 2024/10/04 16:31:49 by octoross         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-int	go_to_getcwd(void)
+char	*ft_getcwd(t_env **env)
 {
-	char	*buff;
-	int		i;
+	char	*buffer;
+	int		bsize;
 
-	i = 1;
-	buff = malloc(sizeof(char) * BSIZE * i);
-	if (!buff)
-		return (ft_fail(ERR_MALLOC, "no pwd"), STATUS_MALLOC);
-	while (getcwd(buff, BSIZE * i) == NULL)
+	bsize = BSIZE;
+	if (bsize <= 0)
+		bsize = 1;
+	buffer = malloc(sizeof(char) * (bsize + 1));
+	if (!buffer)
+		return (ft_fail(ERR_MALLOC, "no pwd"), NULL);
+	while (!getcwd(buffer, bsize))
 	{
-		free(buff);
+		free(buffer);
 		if (errno == ERANGE)
 		{
-			i ++;
-			buff = malloc(sizeof(char) * BSIZE * i);
-			if (!buff)
-				return (ft_fail(ERR_MALLOC, "no pwd"), STATUS_MALLOC);
+			bsize += 4096;
+			buffer = malloc(sizeof(char) * (bsize + 1));
+			if (!buffer)
+				return (ft_fail(ERR_MALLOC, "no pwd"), NULL);
 		}
 		else
-			return (perror("pwd"), 1);
+			return (perror("pwd"), NULL);
 	}
-	write(STDOUT_FILENO, buff, ft_strlen(buff));
-	write(STDERR_FILENO, "\n", 1);
-	free(buff);
-	return (0);
+	ft_add_env(env, ft_strdup("PWD"), buffer);
+	return (buffer);
 }
 
-int	print_wd(t_env *ep)
+int	print_wd(t_env **ep)
 {
-	t_env	*cur;
+	char	*pwd;
 
-	cur = ep;
-	while (cur)
-	{
-		if (ft_strcmp(cur->name, "PWD"))
-			cur = cur->next;
-		else
-		{
-			write(STDOUT_FILENO, cur->value, ft_strlen(cur->value));
-			write(STDERR_FILENO, "\n", 1);
-			return (0);
-		}
-	}
-	return (go_to_getcwd());
+	pwd = ft_get_env_value("PWD", *ep);
+	if (!pwd)
+		pwd = ft_getcwd(ep);
+	if (!pwd)
+		return (STATUS_MALLOC);
+	write(STDOUT_FILENO, pwd, ft_strlen(pwd));
+	write(STDOUT_FILENO, "\n", 1);
+	return (STATUS_OK);
 }
-
