@@ -41,13 +41,17 @@ PARSING_SRCS = src/parsing/ast/ast_add.c \
 	src/parsing/lexer/quotes.c
 MINISHELL_SRCS = src/minishell/env.c \
 	src/minishell/env_conversion.c \
+	src/minishell/minishell_utils.c \
 	src/minishell/minishell.c
 HISTORY_SRCS = src/history/add_history.c
 BUILDIN_SRCS = src/buildin/buildin.c \
 	src/buildin/echo.c \
 	src/buildin/env.c \
+	src/buildin/export.c \
+	src/buildin/unset.c \
 	src/buildin/pwd.c \
-	src/buildin/cd.c
+	src/buildin/cd.c \
+	src/buildin/exit.c
 UTILS_SRCS = src/utils/char.c \
 	src/utils/string.c \
 	src/utils/string_copy.c \

@@ -6,11 +6,13 @@
 /*   By: octoross <octoross@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/23 15:33:02 by octoross          #+#    #+#             */
-/*   Updated: 2024/09/29 20:07:13 by octoross         ###   ########.fr       */
+/*   Updated: 2024/10/04 18:00:30 by octoross         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "gnl.h"
+
+#include <stdio.h>
 
 t_gnl	*ft_read_line(int fd)
 {
@@ -93,7 +95,7 @@ char	*ft_lst_to_str(t_gnl **l)
 	return (return_line);
 }
 
-char	*get_next_line(int fd)
+char	*gnl(int fd)
 {
 	static t_gnl	*leftovers = NULL;
 	char			*return_line;

@@ -20,10 +20,10 @@ bool	ft_is_buildin(char *cmd)
 		return (true);
 	if (!ft_strcmp(cmd, "pwd"))
 		return (true);
-	// if (!ft_strcmp(cmd, "export"))
-	// 	return (true);
-	// if (!ft_strcmp(cmd, "unset"))
-	// 	return (true);
+	if (!ft_strcmp(cmd, "export"))
+		return (true);
+	if (!ft_strcmp(cmd, "unset"))
+		return (true);
 	if (!ft_strcmp(cmd, "env"))
 		return (true);
 	if (!ft_strcmp(cmd, "exit"))
@@ -33,18 +33,22 @@ bool	ft_is_buildin(char *cmd)
 
 void	ft_buildin(char **argv, t_minishell *minishell)
 {
-	printf("we buildin\n");
+	int	status;
+
+	status = STATUS_OK;
 	if (!ft_strcmp(argv[0], "exit"))
-	{
-		ft_free_until((void **)argv, -1);
-		ft_exit_minishell(minishell, minishell->status);
-	}
+		ft_exit(argv, minishell);
 	if (!ft_strcmp(argv[0], "echo"))
 		print_echo(argv);
 	if (!ft_strcmp(argv[0], "env"))
-		print_env(minishell->env);
+		print_env(minishell->env, false);
 	if (!ft_strcmp(argv[0], "pwd"))
 		minishell->status = print_wd(&(minishell->env));
 	if (!ft_strcmp(argv[0], "cd"))
 		minishell->status = change_dir(argv, &(minishell->env));
+	if (!ft_strcmp(argv[0], "export"))
+		status = ft_export(argv, minishell);
+	if (!ft_strcmp(argv[0], "unset"))
+		unset_var(argv, minishell);
+	minishell->status = status;
 }

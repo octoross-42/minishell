@@ -6,7 +6,7 @@
 /*   By: octoross <octoross@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/17 15:03:48 by octoross          #+#    #+#             */
-/*   Updated: 2024/09/29 20:06:11 by octoross         ###   ########.fr       */
+/*   Updated: 2024/10/04 17:40:34 by octoross         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,6 +35,6 @@ typedef struct s_gnl
 void	ft_clear_leftovers(t_gnl **leftovers);
 void	ft_clean_and_next_lst(t_gnl **line);
 
-char	*get_next_line(int fd);
+char	*gnl(int fd);
 
 #endif

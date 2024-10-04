@@ -34,7 +34,7 @@ char	*ft_file_arg(t_arg *data, t_minishell *minishell)
 			minishell->status = STATUS_REDIR;
 			return (NULL);
 		}
-		arg = (char *)wildcard_arg->data;	
+		arg = (char *)wildcard_arg->data;
 		return (free(wildcard_arg), arg);
 	}
 	else

@@ -6,13 +6,13 @@
 /*   By: octoross <octoross@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/16 15:31:32 by octoross          #+#    #+#             */
-/*   Updated: 2024/10/04 15:57:57 by octoross         ###   ########.fr       */
+/*   Updated: 2024/10/04 20:56:48 by octoross         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-void	ft_strcpy_prompt(char *prompt, char wd[BSIZE], bool err)
+void	ft_strcpy_prompt(char *prompt, char *wd, bool err)
 {
 	int	i;
 
@@ -101,7 +101,7 @@ void	ft_minishell_input(t_minishell *minishell)
 	}
 	if (!line)
 		ft_minishell_input(minishell);
-	ft_add_history(line);
+	ft_add_history(line, minishell->history);
 	ast = ft_prep_exec(line, minishell);
 	ft_exec_line(ast, minishell);
 }

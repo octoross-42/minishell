@@ -12,61 +12,69 @@
 
 #include "minishell.h"
 
-bool	ft_fill_env_from_envp(t_env *env, char *envp)
+bool	ft_parse_envp(char **name, char **value, char *envp)
 {
 	int	i;
 
 	i = 0;
 	while (envp[i] && envp[i] != '=')
-		i++;
-	if (envp[i] != '=')
-		return (ft_fail(ERR_PARSING_ENV, NULL), false);
-	env->name = ft_strndup(envp, i ++);
-	if (!env->name)
-		return (ft_fail(ERR_MALLOC, "no env"), false);
-	env->value = ft_strdup(&envp[i]);
-	if (!env->value)
-		return (ft_fail(ERR_MALLOC, "no env"), false);
+		i ++;
+	*name = ft_strndup(envp, i);
+	if (!(*name))
+		return (ft_fail(ERR_MALLOC, "no new env"), false);
+	if (envp[i] == '=')
+	{
+		*value = ft_strdup(envp + i + 1);
+		if (!(*value))
+		{
+			free(name);
+			ft_fail(ERR_MALLOC, "no new env");
+			return (false);
+		}
+	}
+	else
+		*value = NULL;
 	return (true);
 }
 
-bool	ft_new_env_from_envp(t_env **env, t_env **last, char *envp)
+bool	ft_new_env_from_envp(t_env **env, char *envp)
 {
 	t_env	*new;
 
 	new = (t_env *)malloc(sizeof(t_env));
 	if (!new)
-		return (ft_fail(ERR_MALLOC, "no env"), ft_clear_env(*env), false);
-	new->previous = *last;
+		return (ft_fail(ERR_MALLOC, "no new env"), false);
+	new->next = NULL;
+	if (!ft_parse_envp(&(new->name), &(new->value), envp))
+		return (free(new), false);
 	if (!(*env))
+	{
+		new->previous = new;
 		*env = new;
+	}
 	else
-		(*last)->next = new;
-	(*last) = new;
-	(*last)->next = NULL;
-	if (!ft_fill_env_from_envp(*last, envp))
-		return (ft_clear_env(*env), false);
+	{
+		new->previous = (*env)->previous;
+		(*env)->previous->next = new;
+		(*env)->previous = new;
+	}
 	return (true);
 }
 
 t_env	*ft_env_of_envp(char **envp)
 {
 	t_env	*env;
-	t_env	*last;
 	int		i;
 
 	if (!envp)
 		return (NULL);
 	env = NULL;
-	last = NULL;
 	i = 0;
 	while (envp[i])
 	{
-		if (!ft_new_env_from_envp(&env, &last, envp[i++]))
-			return (NULL);
+		if (!ft_new_env_from_envp(&env, envp[i++]))
+			return (env);
 	}
-	if (env)
-		env->previous = last;
 	return (env);
 }
 
