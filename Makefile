@@ -20,6 +20,8 @@ DISPLAY_SRCS = src/display/banner.c \
 EXECUTION_SRCS = src/execution/cmd.c \
 	src/execution/exec.c \
 	src/execution/pipe.c \
+	src/execution/wait_pipe.c \
+	src/execution/here_doc.c \
 	src/execution/redir.c \
 	src/execution/argv/arg_of.c \
 	src/execution/argv/argv.c \
