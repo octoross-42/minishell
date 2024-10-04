@@ -19,7 +19,7 @@ char	*ft_get_cmd_path(char *cmd, t_minishell *mini)
 	char	*path;
 	int		i;
 
-	if (access(cmd, F_OK | X_OK) == 0)
+	if (cmd[0] && access(cmd, F_OK | X_OK) == 0)
 	{
 		path = ft_strdup(cmd);
 		if (!path)
@@ -28,7 +28,7 @@ char	*ft_get_cmd_path(char *cmd, t_minishell *mini)
 		return (path);
 	}
 	i = 0;
-	while (mini->path && mini->path[i])
+	while (cmd[0] && mini->path && mini->path[i])
 	{
 		path = ft_build_path(mini->path[i ++], cmd, 0);
 		if (!path)
