@@ -6,7 +6,7 @@
 /*   By: octoross <octoross@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/21 19:49:29 by octoross          #+#    #+#             */
-/*   Updated: 2024/10/04 21:45:26 by octoross         ###   ########.fr       */
+/*   Updated: 2024/10/05 01:09:58 by octoross         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,6 +30,10 @@ char	*ft_name_of_token(int token)
 		return ("APPEND");
 	if (token == CMD)
 		return ("CMD");
+	if (token == SUBSHELL)
+		return ("SUBSHELL");
+	if (token == END_SUBSHELL)
+		return ("END_SUBSHELL");
 	else
 		return (NULL);
 }
@@ -50,6 +54,10 @@ char	*ft_str_of_token(int token)
 		return ("<<");
 	if (token == APPEND)
 		return (">>");
+	if (token == SUBSHELL)
+		return ("(");
+	if (token == END_SUBSHELL)
+		return (")");
 	else
 		return (NULL);
 }

@@ -20,10 +20,10 @@ int	ft_nbr_args(char **s)
 
 	i = 0;
 	nbr_args = 0;
-	while ((*s)[i] && !ft_char_is_token((*s)[i]))
+	while ((*s)[i] && !ft_next_is_token(&((*s)[i])))
 	{
 		nbr_args ++;
-		while ((*s)[i] && !ft_isspace((*s)[i]) && !ft_char_is_token((*s)[i]))
+		while ((*s)[i] && !ft_isspace((*s)[i]) && !ft_next_is_token(&((*s)[i])))
 		{
 			if (ft_char_is_quote((*s)[i ++]))
 			{
@@ -68,7 +68,7 @@ int	ft_parse_cmd(char **s, t_lexer *lexer)
 	if (status != STATUS_OK)
 		return (status);
 	nbr_args = 0;
-	while (**s && !ft_char_is_token(**s))
+	while (**s && !ft_next_is_token(*s))
 	{
 		status = ft_parse_arg(s, &(args[nbr_args]));
 		if (status != STATUS_OK)

@@ -21,7 +21,7 @@ int	ft_parse_redir(char **s, t_lexer *lexer)
 		(*s)++;
 	if (!(**s))
 		return (ft_fail(ERR_SYNTAX, "newline"), STATUS_SYNTAX);
-	else if (ft_char_is_token(**s))
+	else if (ft_next_is_token(*s))
 	{
 		ft_fail(ERR_SYNTAX, ft_str_of_token(ft_get_next_token(*s)));
 		return (STATUS_SYNTAX);

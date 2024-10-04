@@ -19,7 +19,7 @@ int	ft_len_t_arg(char *s, char quote, int *status)
 
 	len = 0;
 	*status = STATUS_OK;
-	while (*s && !ft_isspace(*s) && !ft_char_is_token(*s))
+	while (*s && !ft_isspace(*s) && !ft_next_is_token(s))
 	{
 		if (ft_is_expand(*s, *(s + 1), quote))
 			return (len);
@@ -64,7 +64,7 @@ int	ft_fill_arg(char **s, t_arg *arg, char *quote)
 	char	*str;
 
 	str = arg->str;
-	while (**s && !ft_isspace(**s) && !ft_char_is_token(**s))
+	while (**s && !ft_isspace(**s) && !ft_next_is_token(*s))
 	{
 		if (ft_is_expand(**s, *(*s + 1), *quote))
 			return (STATUS_OK);
@@ -122,7 +122,7 @@ int	ft_parse_arg(char **s, t_arg **data)
 	*data = NULL;
 	last = NULL;
 	quote = 0;
-	while (**s && !ft_isspace(**s) && !ft_char_is_token(**s))
+	while (**s && !ft_isspace(**s) && !ft_next_is_token(*s))
 	{
 		status = ft_add_new_arg(&last, data);
 		if (status != STATUS_OK)

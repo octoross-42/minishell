@@ -6,27 +6,11 @@
 /*   By: octoross <octoross@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/18 13:58:38 by octoross          #+#    #+#             */
-/*   Updated: 2024/10/04 21:49:32 by octoross         ###   ########.fr       */
+/*   Updated: 2024/10/05 01:12:05 by octoross         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "lexer.h"
-
-void	ft_clear_lexer(t_lexer *lexer, int erase_data)
-{
-	if (!lexer)
-		return ;
-	if (lexer->next)
-		ft_clear_lexer(lexer->next, erase_data);
-	if (erase_data)
-	{
-		if (lexer->token == CMD)
-			ft_clear_args((t_arg **)(lexer->data), -1);
-		else if (ft_is_redir(lexer->token))
-			ft_clear_arg((t_arg *)lexer->data);
-	}
-	free(lexer);
-}
 
 static int	ft_set_lexer(char **s, t_lexer **lexer)
 {
@@ -49,37 +33,18 @@ static int	ft_set_lexer(char **s, t_lexer **lexer)
 		return (ft_fail(ERR_PROG, NULL), STATUS_PROG);
 }
 
-bool	ft_add_lexer(t_lexer **top, t_lexer **last)
-{
-	t_lexer	*new;
-
-	new = (t_lexer *)malloc(sizeof(t_lexer));
-	if (!new)
-	{
-		ft_clear_lexer(*top, 1);
-		ft_fail(ERR_MALLOC, "no parsing");
-		return (false);
-	}
-	new->data = NULL;
-	new->next = NULL;
-	new->previous = *last;
-	new->token = 0;
-	if (!(*top))
-		*top = new;
-	else
-		(*last)->next = new;
-	*last = new;
-	return (true);
-}
-
-int	ft_is_compatible(t_lexer *l, t_lexer *previous)
+int	ft_is_compatible(t_lexer *l, t_lexer *previous, bool subshell)
 {
 	if (!l)
 		return (ft_fail(ERR_PARSING, NULL), STATUS_PROG);
-	if (ft_is_separator(l->token) && !previous)
+	if (!subshell && (l->token == END_SUBSHELL) && ((char *)(l->data)))
+		return (ft_fail(ERR_SYNTAX, ")"), STATUS_SYNTAX);
+	if (!previous && (ft_is_separator(l->token) || (l->token == END_SUBSHELL)))
 		return (ft_fail(ERR_SYNTAX, ft_str_of_token(l->token)), STATUS_SYNTAX);
 	if (!previous)
 		return (STATUS_OK);
+	if ((previous->token == END_SUBSHELL) && (l->token == CMD))
+		return (ft_fail(ERR_SYNTAX, (((t_arg **)(l->data))[0])->str), STATUS_SYNTAX);
 	if ((l->token == CMD) && (previous->token == CMD))
 		return (ft_fail(ERR_PARSING, NULL), STATUS_PROG);
 	else if ((l->token == CMD) || (previous->token == CMD))
@@ -90,6 +55,22 @@ int	ft_is_compatible(t_lexer *l, t_lexer *previous)
 	else
 		return (STATUS_OK);
 }
+
+t_lexer	*ft_end_lexer(t_lexer *top, t_lexer *lexer, int *status, bool subshell)
+{
+	if (lexer && (ft_is_separator(lexer->token)
+		|| ((lexer->token != END_SUBSHELL) && subshell)
+		|| (lexer->token == SUBSHELL)))
+	{
+		ft_fail(ERR_SYNTAX, "newline");
+		ft_clear_lexer(top, 1);
+		*status = STATUS_SYNTAX;
+		return (NULL);
+	}
+	return (top);
+}
+
+#include "dev.h"
 
 t_lexer	*ft_lexer(char *line, int *status, bool subshell)
 {
@@ -110,15 +91,13 @@ t_lexer	*ft_lexer(char *line, int *status, bool subshell)
 		*status = ft_set_lexer(&line, &lexer);
 		if (*status != STATUS_OK)
 			return (ft_clear_lexer(top, 1), NULL);
-		*status = ft_is_compatible(lexer, lexer->previous);
+		*status = ft_is_compatible(lexer, lexer->previous, subshell);
 		if (*status != STATUS_OK)
 			return (ft_clear_lexer(top, 1), NULL);
-		if ((lexer->token == SUBSHELL) && subshell)
+		if ((lexer->token == END_SUBSHELL) && subshell)
 			return (top);
 	}
-	if (lexer && ft_is_separator(lexer->token))
-		return (ft_clear_lexer(top, 1), ft_fail(ERR_SYNTAX, "newline"), NULL);
-	return (top);
+	return (ft_end_lexer(top, lexer, status, subshell));
 }
 
 // #include "dev.h"
