@@ -35,14 +35,15 @@ int	ft_len_argv(t_arg **args, int len_args, \
 				return (ft_clear_args(args, len_args), -1);
 			len += len_wildcard;
 		}
-		else	
+		else
 			len ++;
 		i ++;
 	}
 	return (len);
 }
 
-char	**ft_init_argv(t_arg **args, int *len_args, t_wildcard_arg **wildcards, t_minishell *minishell)
+char	**ft_init_argv(t_arg **args, int *len_args, \
+	t_wildcard_arg **wildcards, t_minishell *minishell)
 {
 	int		len_argv;
 	char	**argv;

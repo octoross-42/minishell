@@ -50,7 +50,8 @@ int	ft_argv_add_wildcard(char **argv, t_wildcard_arg **wildcards)
 	return (i);
 }
 
-bool	ft_argv_add_arg(char **argv, t_arg **args, int i, t_minishell *minishell)
+bool	ft_argv_add_arg(char **argv, t_arg **args, int i, \
+	t_minishell *minishell)
 {
 	*argv = ft_arg_of(args[i], minishell);
 	if (!(*argv))

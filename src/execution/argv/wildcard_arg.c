@@ -78,7 +78,8 @@ int	ft_wildcard_len(t_wildcard *list)
 	return (len);
 }
 
-int	ft_add_new_wildcard_arg(t_arg *data, t_minishell *minishell, t_wildcard_arg **wildcards, t_wildcard_arg **last)
+int	ft_add_new_wildcard_arg(t_arg *data, t_minishell *minishell, \
+	t_wildcard_arg **wildcards, t_wildcard_arg **last)
 {
 	t_wildcard_arg	*new;
 	char			*arg;
