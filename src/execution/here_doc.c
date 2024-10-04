@@ -31,6 +31,9 @@ int	ft_reset_stds_for_readline(int *prev_stdout, t_minishell *minishell)
 
 int	ft_here_doc_stds(int prev_stdout, t_minishell *minishell)
 {
+	int	status;
+	int	here_doc_tmp;
+
 	if (prev_stdout >= 0)
 	{
 		status = ft_dup2_std(prev_stdout, OUT, minishell);
@@ -65,7 +68,6 @@ void	ft_read_here_doc(int here_doc_tmp, char *limiter)
 
 int	ft_here_doc(char *limiter, t_minishell *minishell)
 {
-	char	*line;
 	int		here_doc_tmp;
 	int		prev_stdout;
 	int		status;

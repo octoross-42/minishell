@@ -10,7 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "wildcard.h"
+#include "minishell.h"
 
 void	ft_clear_wildcard_arg(t_wildcard_arg *wildcards)
 {

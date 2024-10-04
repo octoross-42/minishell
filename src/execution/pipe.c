@@ -12,7 +12,7 @@
 
 #include "minishell.h"
 
-void	ft_child_pipefd(int pipefd[2], t_minishell *minishell)
+void	ft_child_pipefd(int pipefd[2], t_ast *ast, t_minishell *minishell)
 {
 	if (minishell->pipe_before)
 	{
@@ -40,7 +40,7 @@ void	ft_do_pipe_child(int pipefd[2], t_ast *ast, t_minishell *minishell)
 		free(minishell->wait_for_pids);
 		minishell->wait_for_pids = next;
 	}
-	ft_child_pipefd(pipefd, minishell);
+	ft_child_pipefd(pipefd, ast, minishell);
 	if (ast->token == PIPE)
 	{
 		ft_clear_node_ast(ast);

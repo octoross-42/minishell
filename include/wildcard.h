@@ -14,10 +14,9 @@
 
 # define WILDCARD_H
 
-# include "minishell.h"
-
 # include <dirent.h>
 # include <sys/stat.h>
+# include "utils.h"
 
 typedef struct s_str
 {
