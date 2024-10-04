@@ -14,7 +14,7 @@
 
 #include "minishell.h"
 
-char	*ft_get_cmd_path(char *cmd, t_minishell *minishell)
+char	*ft_get_cmd_path(char *cmd, t_minishell *mini)
 {
 	char	*path;
 	int		i;
@@ -23,31 +23,52 @@ char	*ft_get_cmd_path(char *cmd, t_minishell *minishell)
 	{
 		path = ft_strdup(cmd);
 		if (!path)
-			return (ft_fail(ERR_MALLOC, "no path for cmd"), minishell->status = STATUS_MALLOC, NULL);
+			return (ft_fail(ERR_MALLOC, "no path for cmd"), \
+				mini->status = STATUS_MALLOC, NULL);
 		return (path);
 	}
-	if (!minishell->path)
-			return (ft_fail(ERR_CMD, cmd), minishell->status = STATUS_CMD, NULL);
 	i = 0;
-	while (minishell->path[i])
+	while (mini->path && mini->path[i])
 	{
-		path = ft_build_path(minishell->path[i], cmd, 0);
+		path = ft_build_path(mini->path[i ++], cmd, 0);
 		if (!path)
-			return (ft_fail(ERR_MALLOC, "no path for cmd"), minishell->status = STATUS_MALLOC, NULL);
+			return (ft_fail(ERR_MALLOC, "no path for cmd"), \
+				mini->status = STATUS_MALLOC, NULL);
 		if (access(path, F_OK | X_OK) == 0)
 			return (path);
 		free(path);
-		i ++;
 	}
 	ft_fail(ERR_CMD, cmd);
-	minishell->status = STATUS_CMD;
+	mini->status = STATUS_CMD;
 	return (NULL);
+}
+
+void	ft_execve(char **argv, t_ast *next, t_minishell *minishell)
+{
+	char	*path;
+	char	**envp;
+
+	path = ft_get_cmd_path(argv[0], minishell);
+	if (!path)
+	{
+		ft_clear_ast(next);
+		ft_free_until((void **)argv, -1);
+		ft_exit_minishell(minishell, minishell->status);
+	}
+	envp = ft_envp_of_env(minishell->env);
+	ft_clear_minishell(minishell);
+	execve(path, argv, envp);
+	free(path);
+	ft_free_until((void **)argv, -1);
+	ft_free_until((void **)envp, -1);
+	ft_reset_stds(minishell);
+	perror("minishell : execve");
+	minishell->status = STATUS_EXECVE;
+	exit(minishell->status);
 }
 
 void	ft_cmd(char **argv, t_ast *next, t_minishell *minishell)
 {
-	char	*path;
-	char	**envp;
 	int		status;
 
 	minishell->last_cmd = fork();
@@ -58,25 +79,7 @@ void	ft_cmd(char **argv, t_ast *next, t_minishell *minishell)
 		return ;
 	}
 	if (!minishell->last_cmd)
-	{
-		path = ft_get_cmd_path(argv[0], minishell);
-		if (!path)
-		{
-			ft_clear_ast(next);
-			ft_free_until((void **)argv, -1);
-			ft_exit_minishell(minishell, minishell->status);
-		}
-		envp = ft_envp_of_env(minishell->env);
-		ft_clear_minishell(minishell);
-		execve(path, argv, envp);
-		perror("minishell : execve");
-		ft_free_until((void **)envp, -1);
-		ft_free_until((void **)argv, -1);
-		free(path);
-		ft_reset_stds(minishell);
-		minishell->status = STATUS_EXECVE;
-		exit(minishell->status);
-	}
+		ft_execve(argv, next, minishell);
 	waitpid(minishell->last_cmd, &status, 0);
 	minishell->status = WEXITSTATUS(status);
 	// TODO WEXISTATUS si exit normal
@@ -86,7 +89,7 @@ void	ft_exec_cmd(t_ast *ast, t_minishell *minishell)
 {
 	t_ast	*next;
 	char	**argv;
-	
+
 	next = ast->left;
 	argv = ft_argv_of((t_arg **)ast->data, minishell);
 	free(ast);
