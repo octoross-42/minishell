@@ -6,7 +6,7 @@
 /*   By: octoross <octoross@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/16 15:31:32 by octoross          #+#    #+#             */
-/*   Updated: 2024/10/04 20:56:48 by octoross         ###   ########.fr       */
+/*   Updated: 2024/10/04 21:24:05 by octoross         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,7 +69,7 @@ t_ast	*ft_prep_exec(char *line, t_minishell *minishell)
 	t_lexer	*lexer;
 	t_ast	*ast;
 
-	lexer = ft_lexer(line, &(minishell->parsing_status));
+	lexer = ft_lexer(line, &(minishell->parsing_status), 0);
 	free(line);
 	if (minishell->parsing_status != STATUS_OK)
 		minishell->status = minishell->parsing_status;

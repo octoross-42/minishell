@@ -6,7 +6,7 @@
 /*   By: octoross <octoross@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/18 13:58:38 by octoross          #+#    #+#             */
-/*   Updated: 2024/10/04 02:34:59 by octoross         ###   ########.fr       */
+/*   Updated: 2024/10/04 21:49:32 by octoross         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,22 +28,25 @@ void	ft_clear_lexer(t_lexer *lexer, int erase_data)
 	free(lexer);
 }
 
-static int	ft_set_lexer(char **s, t_lexer *lexer)
+static int	ft_set_lexer(char **s, t_lexer **lexer)
 {
-	lexer->token = ft_get_next_token(*s);
-	if ((lexer->token == OR) || (lexer->token == AND))
+	(*lexer)->token = ft_get_next_token(*s);
+	if (((*lexer)->token == OR) || ((*lexer)->token == AND))
 		return (*s = *s + 2, STATUS_OK);
-	else if (lexer->token == PIPE)
+	else if ((*lexer)->token == PIPE)
 		return (*s = *s + 1, STATUS_OK);
-	else if (lexer->token == CMD)
-		return (ft_parse_cmd(s, lexer));
-	else if ((lexer->token == INPUT) || (lexer->token == OUTPUT))
-		(*s)++;
-	else if ((lexer->token == HERE_DOC) || (lexer->token == APPEND))
-		*s += 2;
+	else if ((*lexer)->token == CMD)
+		return (ft_parse_cmd(s, *lexer));
+	else if (((*lexer)->token == INPUT) || ((*lexer)->token == OUTPUT))
+		return ((*s)++, ft_parse_redir(s, *lexer));
+	else if (((*lexer)->token == HERE_DOC) || ((*lexer)->token == APPEND))
+		return (*s += 2), ft_parse_redir(s, *lexer);
+	else if ((*lexer)->token == SUBSHELL)
+		return ((*s)++, ft_parse_subshell(s, lexer));
+	else if ((*lexer)->token == END_SUBSHELL)
+		return ((*s)++, (*lexer)->data = *s, STATUS_OK);
 	else
 		return (ft_fail(ERR_PROG, NULL), STATUS_PROG);
-	return (ft_parse_redir(s, lexer));
 }
 
 bool	ft_add_lexer(t_lexer **top, t_lexer **last)
@@ -88,7 +91,7 @@ int	ft_is_compatible(t_lexer *l, t_lexer *previous)
 		return (STATUS_OK);
 }
 
-t_lexer	*ft_lexer(char *line, int *status)
+t_lexer	*ft_lexer(char *line, int *status, bool subshell)
 {
 	t_lexer	*top;
 	t_lexer	*lexer;
@@ -104,12 +107,14 @@ t_lexer	*ft_lexer(char *line, int *status)
 			return (top);
 		if (!ft_add_lexer(&top, &lexer))
 			return (*status = STATUS_MALLOC, NULL);
-		*status = ft_set_lexer(&line, lexer);
+		*status = ft_set_lexer(&line, &lexer);
 		if (*status != STATUS_OK)
 			return (ft_clear_lexer(top, 1), NULL);
 		*status = ft_is_compatible(lexer, lexer->previous);
 		if (*status != STATUS_OK)
 			return (ft_clear_lexer(top, 1), NULL);
+		if ((lexer->token == SUBSHELL) && subshell)
+			return (top);
 	}
 	if (lexer && ft_is_separator(lexer->token))
 		return (ft_clear_lexer(top, 1), ft_fail(ERR_SYNTAX, "newline"), NULL);

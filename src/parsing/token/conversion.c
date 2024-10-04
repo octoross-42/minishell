@@ -6,7 +6,7 @@
 /*   By: octoross <octoross@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/21 19:49:29 by octoross          #+#    #+#             */
-/*   Updated: 2024/10/02 20:50:30 by octoross         ###   ########.fr       */
+/*   Updated: 2024/10/04 21:45:26 by octoross         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,7 +78,11 @@ int	ft_token_of_str(char *token)
 
 int	ft_get_next_token(char *s)
 {
-	if (!ft_strncmp(s, "||", 2))
+	if (!ft_strncmp(s, "(", 1))
+		return (SUBSHELL);
+	else if (!ft_strncmp(s, ")", 1))
+		return (END_SUBSHELL);
+	else if (!ft_strncmp(s, "||", 2))
 		return (OR);
 	else if (!ft_strncmp(s, "&&", 2))
 		return (AND);
