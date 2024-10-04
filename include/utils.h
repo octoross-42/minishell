@@ -6,7 +6,7 @@
 /*   By: octoross <octoross@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/09 20:26:55 by octoross          #+#    #+#             */
-/*   Updated: 2024/10/04 19:42:59 by octoross         ###   ########.fr       */
+/*   Updated: 2024/10/04 21:22:20 by octoross         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,11 +23,12 @@
 # define OR 2
 # define AND 3
 # define SUBSHELL 4
-# define INPUT 5
-# define OUTPUT 6
-# define HERE_DOC 7
-# define APPEND 8
-# define CMD 9
+# define END_SUBSHELL 5
+# define INPUT 6
+# define OUTPUT 7
+# define HERE_DOC 8
+# define APPEND 9
+# define CMD 10
 
 bool	ft_token_good(void);
 

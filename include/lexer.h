@@ -53,11 +53,12 @@ typedef struct s_lexer
 	struct s_lexer	*previous;
 }	t_lexer;
 
+int		ft_parse_subshell(char **s, t_lexer **lexer);
 int		ft_parse_redir(char **s, t_lexer *lexer);
 int		ft_parse_arg(char **s, t_arg **data);
 int		ft_parse_cmd(char **s, t_lexer *lexer);
 void	ft_clear_lexer(t_lexer *lexer, int erase_data);
-t_lexer	*ft_lexer(char *line, int *status);
+t_lexer	*ft_lexer(char *line, int *status, bool subshell);
 
 bool	ft_is_separator(int token);
 bool	ft_is_redir(int token);
