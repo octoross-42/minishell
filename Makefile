@@ -34,6 +34,7 @@ PARSING_SRCS = src/parsing/ast/ast_add.c \
 	src/parsing/token/conversion.c \
 	src/parsing/lexer/parse_expand.c \
 	src/parsing/lexer/lexer.c \
+	src/parsing/lexer/parse_subshell.c \
 	src/parsing/lexer/parse_arg.c \
 	src/parsing/lexer/parse_arg_utils.c \
 	src/parsing/lexer/parse_redir.c \
