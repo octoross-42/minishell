@@ -6,7 +6,7 @@
 /*   By: octoross <octoross@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/09 20:34:55 by octoross          #+#    #+#             */
-/*   Updated: 2024/10/04 02:45:49 by octoross         ###   ########.fr       */
+/*   Updated: 2024/10/04 12:55:28 by octoross         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -113,5 +113,10 @@ char			*ft_file_arg(t_arg *data, t_minishell *minishell);
 int	ft_fill_argv_wildcard(char **argv, t_wildcard *wildcard);
 int	ft_argv_add_wildcard(char **argv, t_wildcard_arg **wildcards);
 bool	ft_argv_add_arg(char **argv, t_arg **args, int i, t_minishell *minishell);
+
+void	ft_add_pid_to_wait(pid_t pid, t_minishell *minishell);
+void	ft_last_pipe_wait(t_minishell *minishell);
+
+int	ft_here_doc(char *limiter, t_minishell *minishell);
 
 #endif
