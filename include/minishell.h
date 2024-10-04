@@ -6,7 +6,7 @@
 /*   By: octoross <octoross@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/09 20:34:55 by octoross          #+#    #+#             */
-/*   Updated: 2024/10/02 22:21:26 by octoross         ###   ########.fr       */
+/*   Updated: 2024/10/04 02:45:49 by octoross         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,6 +28,7 @@
 # include <sys/wait.h>
 # include <readline/readline.h>
 # include <readline/history.h>
+
 
 typedef struct s_env
 {
@@ -61,6 +62,13 @@ typedef struct s_minishell
 	t_pid		*wait_for_pids;
 }	t_minishell;
 
+# define IN 1
+# define OUT 0
+
+int		ft_dup2_std(int fd, bool in, t_minishell *minishell);
+void	ft_reset_stds(t_minishell *minishell);
+
+
 void	ft_expand(t_arg *arg, t_minishell *minishell);
 void	ft_add_history(char *line);
 
@@ -86,5 +94,24 @@ void	print_echo(char **arg);
 void	print_env(t_env *ep);
 int		print_wd(t_env *ep);
 int		change_dir(char **arg, t_env *env);
+
+typedef struct s_wildcard_arg
+{
+	void					*data;
+	bool					is_single;
+	struct s_wildcard_arg	*next;
+}	t_wildcard_arg;
+
+void	ft_clear_wildcard_arg(t_wildcard_arg *wildcards);
+bool	ft_add_wildcard_arg(void *data, t_wildcard_arg **wildcards, t_wildcard_arg **last);
+
+t_wildcard_arg	*ft_wilcard_arg(char *arg);
+int	ft_add_new_wildcard_arg(t_arg *data, t_minishell *minishell, t_wildcard_arg **wildcards, t_wildcard_arg **last);
+char			*ft_file_arg(t_arg *data, t_minishell *minishell);
+
+
+int	ft_fill_argv_wildcard(char **argv, t_wildcard *wildcard);
+int	ft_argv_add_wildcard(char **argv, t_wildcard_arg **wildcards);
+bool	ft_argv_add_arg(char **argv, t_arg **args, int i, t_minishell *minishell);
 
 #endif

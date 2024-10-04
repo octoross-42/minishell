@@ -23,20 +23,24 @@ void	ft_clear_arg(t_arg *arg)
 	free(arg);
 }
 
-void	ft_clear_args(t_arg **args)
+void	ft_clear_args(t_arg **args, int until)
 {
 	int	i;
 
-	i = 0;
 	if (!args)
 		return ;
-	if (!(args[i]))
+	i = 0;
+	while (i < until)
 	{
-		free(args);
-		return ;
+		if (args[i])
+			ft_clear_arg(args[i ++]);
 	}
-	while (args[i])
-		ft_clear_arg(args[i ++]);
+	if (until < 0)
+	{
+		i = 0;
+		while (args[i])
+			ft_clear_arg(args[i ++]);
+	}
 	free(args);
 }
 

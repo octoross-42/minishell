@@ -6,7 +6,7 @@
 /*   By: octoross <octoross@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/21 22:21:09 by octoross          #+#    #+#             */
-/*   Updated: 2024/09/28 21:06:02 by octoross         ###   ########.fr       */
+/*   Updated: 2024/10/03 16:00:03 by octoross         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 # define AST_H
 
-# include "lexer.h"
+# include "lexer.h"	
 
 typedef struct s_ast
 {

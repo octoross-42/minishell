@@ -21,7 +21,11 @@ EXECUTION_SRCS = src/execution/cmd.c \
 	src/execution/exec.c \
 	src/execution/pipe.c \
 	src/execution/redir.c \
-	src/execution/argv.c
+	src/execution/argv/arg_of.c \
+	src/execution/argv/argv.c \
+	src/execution/argv/fill_argv.c \
+	src/execution/argv/wildcard_arg.c \
+	src/execution/argv/file_arg.c
 PARSING_SRCS = src/parsing/ast/ast_add.c \
 	src/parsing/ast/ast.c \
 	src/parsing/token/token_is.c \
@@ -52,7 +56,6 @@ UTILS_SRCS = src/utils/char.c \
 	src/utils/gnl/gnl_utils.c
 WILDCARD_SRCS = src/wildcard/wildcard.c \
 	src/wildcard/wildcard_utils.c \
-	src/wildcard/wildcards_utils.c \
 	src/wildcard/fit_wildcard.c
 MAIN_SRCS = src/main.c
 DEV_SRCS = dev/print.c

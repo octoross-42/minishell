@@ -52,15 +52,5 @@ void		ft_add_wildcard(t_wildcard **wildcard, t_wildcard *new);
 void		ft_clear_wildcard(t_wildcard *wildcard);
 int			ft_len_wildcard(t_wildcard *wildcard);
 t_wildcard	*ft_wildcard(char *regex, char *path);
-char		**ft_argv_wildcard(t_wildcard *wildcard);
-
-typedef struct s_wildcards
-{
-	char				**files;
-	struct s_wildcards	*next;
-}	t_wildcards;
-
-void	ft_clear_wildcards(t_wildcards *wildcards);
-bool	ft_add_wildcards(char **argv, t_wildcards **wildcards, t_wildcards **last);
 
 #endif

@@ -37,7 +37,7 @@ typedef struct s_arg
 }	t_arg;
 
 void	ft_clear_arg(t_arg *arg);
-void	ft_clear_args(t_arg **args);
+void	ft_clear_args(t_arg **args, int until);
 int		ft_add_new_arg(t_arg **last, t_arg **top);
 
 bool	ft_is_expand(char c, char next, char quote);

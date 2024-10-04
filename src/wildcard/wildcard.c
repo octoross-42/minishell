@@ -127,25 +127,3 @@ t_wildcard	*ft_wildcard(char *regex, char *path)
 		free(data.path);
 	return (wildcard);
 }
-
-// int	main(int argc, char **argv)
-// {
-// 	t_wildcard	*wildcard;
-// 	int			i;
-// 	char		**argv_wildcard;
-
-// 	if (argc < 2)
-// 		return (1);
-// 	wildcard = ft_wildcard(argv[1], NULL);
-// 	argv_wildcard = ft_argv_wildcard(wildcard);
-// 	if (!argv_wildcard)
-// 		return (1);
-// 	i = 0;
-// 	while (argv_wildcard[i])
-// 	{
-// 		printf("%s\n", argv_wildcard[i]);
-// 		free(argv_wildcard[i ++]);
-// 	}
-// 	free(argv_wildcard);
-// 	return (0);
-// }
