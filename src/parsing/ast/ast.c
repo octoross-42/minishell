@@ -6,7 +6,7 @@
 /*   By: octoross <octoross@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/09 15:25:03 by octoross          #+#    #+#             */
-/*   Updated: 2024/10/04 02:34:45 by octoross         ###   ########.fr       */
+/*   Updated: 2024/10/05 17:48:49 by octoross         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@ static t_ast	*ft_new_ast(t_lexer *lexer)
 	if (!ast)
 		return (NULL);
 	ast->token = lexer->token;
-	if (ft_is_separator(ast->token))
+	if (ft_is_sep_or_sub(ast->token))
 		ast->data = NULL;
 	else
 		ast->data = lexer->data;
@@ -66,7 +66,7 @@ void	ft_clear_ast(t_ast *ast)
 	ft_clear_node_ast(ast);
 }
 
-int	ft_add_new_ast(t_ast *new, t_ast **current, t_ast **top)
+int	ft_add_new_ast(t_ast *new, t_lexer **last, t_ast **current, t_ast **top)
 {
 	int	status;
 
@@ -78,17 +78,19 @@ int	ft_add_new_ast(t_ast *new, t_ast **current, t_ast **top)
 		*current = new;
 		if (new->token == CMD)
 			(*current)->cmd = true;
+		if (new->token == SUBSHELL)
+			return (ft_subshell_token(new, last, current));
 	}
 	else
 	{
-		status = ft_add_ast(new, current, top);
+		status = ft_add_ast(new, last, current, top);
 		if (status != STATUS_OK)
 			return (ft_clear_ast(*top), status);
 	}
 	return (STATUS_OK);
 }
 
-t_ast	*ft_ast(t_lexer *lexer, int *status)
+t_ast	*ft_ast(t_lexer *lexer, int *status, t_lexer **last)
 {
 	t_ast	*new;
 	t_ast	*current;
@@ -99,6 +101,8 @@ t_ast	*ft_ast(t_lexer *lexer, int *status)
 	*status = STATUS_OK;
 	while (lexer)
 	{
+		if (lexer->token == END_SUBSHELL)
+			return (top);
 		new = ft_new_ast(lexer);
 		if (!new)
 		{
@@ -106,10 +110,12 @@ t_ast	*ft_ast(t_lexer *lexer, int *status)
 			ft_fail(ERR_MALLOC, "no parsing");
 			return (ft_clear_ast(top), NULL);
 		}
-		*status = ft_add_new_ast(new, &current, &top);
+		*status = ft_add_new_ast(new, &lexer, &current, &top);
 		if (*status != STATUS_OK)
 			return (NULL);
 		lexer = lexer->next;
+		if (last)
+			*last = lexer;
 	}
 	return (top);
 }

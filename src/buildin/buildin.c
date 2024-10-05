@@ -31,13 +31,13 @@ bool	ft_is_buildin(char *cmd)
 	return (false);
 }
 
-void	ft_buildin(char **argv, t_minishell *minishell)
+void	ft_buildin(char **argv, t_ast *next, t_minishell *minishell)
 {
 	int	status;
 
 	status = STATUS_OK;
 	if (!ft_strcmp(argv[0], "exit"))
-		ft_exit(argv, minishell);
+		ft_exit(argv, next, minishell);
 	if (!ft_strcmp(argv[0], "echo"))
 		print_echo(argv);
 	if (!ft_strcmp(argv[0], "env"))

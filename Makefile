@@ -20,21 +20,21 @@ DISPLAY_SRCS = src/display/banner.c \
 EXECUTION_SRCS = src/execution/cmd.c \
 	src/execution/exec.c \
 	src/execution/pipe.c \
-	src/execution/wait_pipe.c \
+	src/execution/wait.c \
 	src/execution/here_doc.c \
-	src/execution/redir.c \
-	src/execution/argv/arg_of.c \
-	src/execution/argv/argv.c \
-	src/execution/argv/fill_argv.c \
-	src/execution/argv/wildcard_arg.c \
-	src/execution/argv/file_arg.c
+	src/execution/redir.c
+ARGV_SRCS = src/argv/arg_of.c \
+	src/argv/argv.c \
+	src/argv/fill_argv.c \
+	src/argv/wildcard_arg.c \
+	src/argv/file_arg.c
 PARSING_SRCS = src/parsing/ast/ast_add.c \
 	src/parsing/ast/ast.c \
 	src/parsing/token/token_is.c \
 	src/parsing/token/conversion.c \
 	src/parsing/lexer/parse_expand.c \
 	src/parsing/lexer/lexer.c \
-	src/parsing/lexer/parse_subshell.c \
+	src/parsing/lexer/lexer_utils.c \
 	src/parsing/lexer/parse_arg.c \
 	src/parsing/lexer/parse_arg_utils.c \
 	src/parsing/lexer/parse_redir.c \
@@ -68,6 +68,7 @@ MAIN_SRCS = src/main.c
 DEV_SRCS = dev/print.c
 
 SRCS = $(DISPLAY_SRCS) \
+	$(ARGV_SRCS) \
 	$(EXECUTION_SRCS) \
 	$(PARSING_SRCS) \
 	$(MINISHELL_SRCS) \

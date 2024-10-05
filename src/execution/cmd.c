@@ -12,8 +12,6 @@
 
 #include "minishell.h"
 
-#include "minishell.h"
-
 char	*ft_get_cmd_path(char *cmd, t_minishell *mini)
 {
 	char	*path;
@@ -64,6 +62,7 @@ void	ft_execve(char **argv, t_ast *next, t_minishell *minishell)
 	ft_reset_stds(minishell);
 	perror("minishell : execve");
 	minishell->status = STATUS_EXECVE;
+	printf("exit : %d\n", minishell->status);
 	exit(minishell->status);
 }
 
@@ -99,7 +98,7 @@ void	ft_exec_cmd(t_ast *ast, t_minishell *minishell)
 		return ;
 	}
 	if (ft_is_buildin(argv[0]))
-		ft_buildin(argv, minishell);
+		ft_buildin(argv, next, minishell);
 	else
 		ft_cmd(argv, next, minishell);
 	ft_free_until((void **)argv, -1);

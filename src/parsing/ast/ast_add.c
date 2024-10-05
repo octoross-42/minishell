@@ -6,7 +6,7 @@
 /*   By: octoross <octoross@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/13 16:26:57 by octoross          #+#    #+#             */
-/*   Updated: 2024/09/30 21:40:05 by octoross         ###   ########.fr       */
+/*   Updated: 2024/10/05 21:12:48 by octoross         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,10 @@ int	ft_append_ast(t_ast *new, t_ast **current)
 	else if (!(*current)->right)
 		(*current)->right = new;
 	else
+	{
+		printf("miam\n");
 		return (ft_fail(ERR_PARSING, NULL), STATUS_PROG);
+	}
 	*current = new;
 	if ((*current)->token == CMD)
 	{
@@ -43,7 +46,7 @@ int	ft_pipe_token(t_ast *new, t_ast **current, t_ast **top)
 
 	ast = *current;
 	while (ast && ast->parent
-		&& !ft_is_separator(ast->parent->token))
+		&& !ft_is_sep_or_sub(ast->parent->token))
 		ast = ast->parent;
 	if (!ast->parent)
 		*top = new;
@@ -75,7 +78,10 @@ int	ft_output_token(t_ast *new, t_ast **current, t_ast **top)
 			else if ((*current)->parent->right == *current)
 				(*current)->parent->right = new;
 			else
+			{
+				printf("makes no sense\n");
 				return (ft_fail(ERR_PARSING, NULL), STATUS_PROG);
+			}
 			new->parent = (*current)->parent;
 		}
 		new->left = (*current);
@@ -86,9 +92,26 @@ int	ft_output_token(t_ast *new, t_ast **current, t_ast **top)
 		return (ft_append_ast(new, current));
 }
 
-int	ft_add_ast(t_ast *new, t_ast **current, t_ast **top)
+int	ft_subshell_token(t_ast *new, t_lexer **last, t_ast **current)
 {
-	if (new->token == PIPE)
+	int		status;
+
+	new->left = ft_ast((*last)->next, &status, last);
+	if (status != STATUS_OK)
+		return (status);
+	if (!(new->left))
+		return (ft_fail(ERR_PARSING, NULL), STATUS_PROG);
+	new->cmd = new->left->cmd;
+	if (new != *current)
+		return (ft_append_ast(new, current));
+	return (STATUS_OK);
+}
+
+int	ft_add_ast(t_ast *new, t_lexer **last, t_ast **current, t_ast **top)
+{
+	if (new->token == SUBSHELL)
+		return (ft_subshell_token(new, last, current));
+	else if (new->token == PIPE)
 		return (ft_pipe_token(new, current, top));
 	else if (ft_is_output(new->token))
 		return (ft_output_token(new, current, top));

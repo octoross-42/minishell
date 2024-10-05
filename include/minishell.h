@@ -6,7 +6,7 @@
 /*   By: octoross <octoross@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/09 20:34:55 by octoross          #+#    #+#             */
-/*   Updated: 2024/10/04 20:22:50 by octoross         ###   ########.fr       */
+/*   Updated: 2024/10/05 22:07:32 by octoross         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,10 +14,15 @@
 
 # define MINISHELL_H
 
-# include "utils.h"
-# include "gnl.h"
+# include "argv.h"
 # include "ast.h"
+# include "buildin.h"
 # include "display.h"
+# include "err.h"
+# include "gnl.h"
+# include "lexer.h"
+# include "token.h"
+# include "utils.h"
 # include "wildcard.h"
 
 # include <errno.h>
@@ -30,6 +35,11 @@
 # include <readline/readline.h>
 # include <readline/history.h>
 
+typedef struct s_minishell t_minishell;
+
+void	ft_add_history(char *line, int history);
+void	ft_load_history(t_minishell *minishell);
+
 typedef struct s_env
 {
 	char			*name;
@@ -38,15 +48,24 @@ typedef struct s_env
 	struct s_env	*next;
 }	t_env;
 
+bool	ft_parse_envp(char **name, char **value, char *envp);
+int		ft_add_env(t_env **env, char *name, char *value);
+char	*ft_get_env_value(char *name, t_env *env);
 char	**ft_envp_of_env(t_env *env);
 t_env	*ft_env_of_envp(char **envp);
 void	ft_clear_env(t_env *env);
+char	*ft_getcwd(t_env **env);
 
 typedef struct s_pid
 {
 	pid_t			pid;
 	struct s_pid	*next;
 }	t_pid;
+
+void	ft_add_pid_to_wait(pid_t pid, t_minishell *minishell);
+void	ft_last_pipe_wait(t_minishell *minishell);
+void	ft_waitpid(pid_t pid, t_minishell *minishell, \
+	bool register_status);
 
 typedef struct s_minishell
 {
@@ -64,26 +83,11 @@ typedef struct s_minishell
 	t_pid		*wait_for_pids;
 }	t_minishell;
 
-# define IN 1
-# define OUT 0
-
-int		ft_dup2_std(int fd, bool in, t_minishell *minishell);
-void	ft_reset_stds(t_minishell *minishell);
-
-
-void	ft_expand(t_arg *arg, t_minishell *minishell);
-void	ft_add_history(char *line, int history);
-
-bool	ft_is_buildin(char *cmd);
-void	ft_buildin(char **argv, t_minishell *minishell);
-
 void	ft_clear_minishell(t_minishell *minishell);
 void	ft_exit_minishell(t_minishell *minishell, int status);
 
-char	*ft_arg_of(t_arg *arg, t_minishell *minishell);
-char	**ft_argv_of(t_arg **args, t_minishell *minishell);
-
 void	ft_do_pipe(t_ast *ast, t_minishell *minishell);
+int		ft_here_doc(char *limiter, t_minishell *minishell);
 void	ft_redir(t_ast *ast, t_minishell *minishell);
 void	ft_exec_cmd(t_ast *ast, t_minishell *minishell);
 void	ft_exec_ast(t_ast *ast, t_minishell *minishell);
@@ -91,45 +95,12 @@ void	ft_exec_line(t_ast *ast, t_minishell *minishell);
 void	ft_minishell_input(t_minishell *minishell);
 void	ft_init_minishell(char **envp);
 
+# define IN 1
+# define OUT 0
+# define HERE_DOC_FILE "/tmp/here_doc.tmp"
+# define HISTORY_FILE ".minishell_history"
 
-void	print_echo(char **arg);
-void	print_env(t_env *ep, bool export);
-int		print_wd(t_env **ep);
-int		change_dir(char **arg, t_env **env);
-
-typedef struct s_wildcard_arg
-{
-	void					*data;
-	bool					is_single;
-	struct s_wildcard_arg	*next;
-}	t_wildcard_arg;
-
-void	ft_clear_wildcard_arg(t_wildcard_arg *wildcards);
-bool	ft_add_wildcard_arg(void *data, t_wildcard_arg **wildcards, t_wildcard_arg **last);
-
-t_wildcard_arg	*ft_wilcard_arg(char *arg);
-int	ft_add_new_wildcard_arg(t_arg *data, t_minishell *minishell, t_wildcard_arg **wildcards, t_wildcard_arg **last);
-char			*ft_file_arg(t_arg *data, t_minishell *minishell);
-
-
-int		ft_fill_argv_wildcard(char **argv, t_wildcard *wildcard);
-int		ft_argv_add_wildcard(char **argv, t_wildcard_arg **wildcards);
-bool	ft_argv_add_arg(char **argv, t_arg **args, int i, t_minishell *minishell);
-
-void	ft_add_pid_to_wait(pid_t pid, t_minishell *minishell);
-void	ft_last_pipe_wait(t_minishell *minishell);
-
-int		ft_here_doc(char *limiter, t_minishell *minishell);
-char	*ft_getcwd(t_env **env);
-
-int		ft_add_env(t_env **env, char *name, char *value);
-char	*ft_get_env_value(char *name, t_env *env);
-
-void	ft_load_history(t_minishell *minishell);
-bool	ft_parse_envp(char **name, char **value, char *envp);
-int		ft_export(char **arg, t_minishell *minishell);
-char	**ft_get_path(char *env_path);
-void	unset_var(char **arg, t_minishell *minishell);
-void	ft_exit(char **argv, t_minishell *minishell);
+int		ft_dup2_std(int fd, bool in, t_minishell *minishell);
+void	ft_reset_stds(t_minishell *minishell);
 
 #endif

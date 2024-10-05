@@ -6,7 +6,7 @@
 /*   By: octoross <octoross@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/09 20:26:55 by octoross          #+#    #+#             */
-/*   Updated: 2024/10/04 21:22:20 by octoross         ###   ########.fr       */
+/*   Updated: 2024/10/05 22:04:34 by octoross         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,57 +18,6 @@
 # include <stdbool.h>
 # include <stdlib.h>
 # include <unistd.h>
-
-# define PIPE 1
-# define OR 2
-# define AND 3
-# define SUBSHELL 4
-# define END_SUBSHELL 5
-# define INPUT 6
-# define OUTPUT 7
-# define HERE_DOC 8
-# define APPEND 9
-# define CMD 10
-
-bool	ft_token_good(void);
-
-# define STATUS_OK 0
-# define STATUS_PROG 1
-# define STATUS_REDIR 1
-# define STATUS_BUILDIN 1
-# define STATUS_SYNTAX 2
-# define STATUS_FORK 71
-# define STATUS_CHDIR 71
-# define STATUS_DUP 71
-# define STATUS_DUP2 71
-# define STATUS_PIPE 71
-# define STATUS_OPEN 66
-# define STATUS_CMD 126
-# define STATUS_EXECVE 127
-# define STATUS_MALLOC 137
-
-# define ERR_MALLOC "malloc failed : %s\n"
-# define ERR_REDIR "ambiguous redirection\n"
-# define ERR_HERE_DOC "warning: here-document delimited by end-of-file (wanted `%s')\n"
-# define ERR_FAIL "%s failed\n"
-# define ERR_FORK "fork failed\n"
-# define ERR_PIPE "Pipe failed\n"
-# define ERR_DUP "dup failed\n"
-# define ERR_DUP2 "dup2 failed\n"
-# define ERR_CMD "%s: command not found\n"
-# define ERR_EXPAND "%s not expanded : malloc failed\n"
-# define ERR_ENV "Warning : No env retrieved\n"
-# define ERR_PARSING_ENV "Error : env is badly parsed\n"
-# define ERR_PROG "Bad programming happenned :(\n"
-# define ERR_TOKEN "Bad tokens\n"
-# define ERR_HISTORY "could not load history\n"
-# define ERR_HISTORY_WRITE "warning : cannot save history for next session\n"
-
-# define ERR_TMA "%s: too many arguments\n"
-# define ERR_CD "cd: specify a path\n"
-
-# define HERE_DOC_FILE "/tmp/here_doc.tmp"
-# define HISTORY_FILE ".minishell_history"
 
 size_t	ft_strlen(const char *s);
 size_t	ft_ptrslen(void **s);
@@ -85,19 +34,11 @@ bool	ft_isname(char c);
 
 char	*ft_itoa(int n);
 int		ft_atoi(const char *nptr);
-
-void	ft_fail(char *err, void *err_value);
-void	ft_free_until(void **data, int n);
-
 char	**ft_split(char const *s, char c);
 
-bool	ft_char_is_quote(char c);
-bool	ft_char_is_token(char c);
-char	*ft_str_of_token(int token);
-char	*ft_name_of_token(int token);
-int		ft_token_of_str(char *token);
-int		ft_get_next_token(char *s);
-
+void	ft_free_until(void **data, int n);
 char	*ft_build_path(char const *path, char const *file, int slash);
+void	ft_fail(char *err, void *err_value);
+char	**ft_get_path(char *env_path);
 
 #endif

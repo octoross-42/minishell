@@ -12,8 +12,9 @@
 
 #include "minishell.h"
 
-void	ft_exit(char **argv, t_minishell *minishell)
+void	ft_exit(char **argv, t_ast *next, t_minishell *minishell)
 {
 	ft_free_until((void **)argv, -1);
+	ft_clear_ast(next);
 	ft_exit_minishell(minishell, minishell->status);
 }

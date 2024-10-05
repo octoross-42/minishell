@@ -17,6 +17,7 @@
 # include <dirent.h>
 # include <sys/stat.h>
 # include "utils.h"
+# include "err.h"
 
 typedef struct s_str
 {
@@ -34,17 +35,17 @@ typedef struct s_wildcard_data
 	char	*name;
 	int		end_name;
 	char	*path;
-} t_wildcard_data;
+} 			t_wildcard_data;
 
-bool	ft_check_ends(t_wildcard_data *data);
-bool	ft_fit_wildcard(t_wildcard_data data);
+bool		ft_check_ends(t_wildcard_data *data);
+bool		ft_fit_wildcard(t_wildcard_data data);
 
 typedef struct s_wildcard
 {
 	char				*file;
 	struct s_wildcard	*next;
 	struct s_wildcard	*last;
-}	t_wildcard;
+}			t_wildcard;
 
 t_wildcard	*ft_new_wildcard(t_wildcard_data data);
 void		ft_add_wildcard(t_wildcard **wildcard, t_wildcard *new);

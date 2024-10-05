@@ -6,12 +6,11 @@
 /*   By: octoross <octoross@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/09 20:30:08 by octoross          #+#    #+#             */
-/*   Updated: 2024/10/04 12:29:55 by octoross         ###   ########.fr       */
+/*   Updated: 2024/10/05 21:41:45 by octoross         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "utils.h"
-#include "lexer.h"
 
 void	ft_free_until(void **data, int n)
 {

@@ -27,7 +27,7 @@ void	ft_reset_stds(t_minishell *minishell)
 	minishell->std_out = -1;
 }
 
-void	ft_separator(t_ast *ast, t_minishell *minishell)
+void	ft_do_separator(t_ast *ast, t_minishell *minishell)
 {
 	t_ast	*next;
 	int		token;
@@ -43,6 +43,34 @@ void	ft_separator(t_ast *ast, t_minishell *minishell)
 		ft_clear_ast(next);
 }
 
+void	ft_do_subshell(t_ast *ast, t_minishell *minishell)
+{
+	pid_t	pid;
+	t_ast	*left;
+	t_ast	*right;
+
+	pid = fork();
+	if (pid < 0)
+	{
+		ft_clear_ast(ast);
+		ft_fail(ERR_FORK, NULL);
+		minishell->status = STATUS_FORK;
+		return ;
+	}
+	left = ast->left;
+	right = ast->right;
+	free(ast);
+	if (!pid)
+	{
+		ft_clear_ast(right);
+		ft_exec_ast(left, minishell);
+		ft_exit_minishell(minishell, minishell->status);
+	}
+	ft_clear_ast(left);
+	ft_waitpid(pid, minishell, true);
+	ft_exec_ast(right, minishell);
+}
+
 void	ft_exec_ast(t_ast *ast, t_minishell *minishell)
 {
 	if (!ast)
@@ -50,18 +78,21 @@ void	ft_exec_ast(t_ast *ast, t_minishell *minishell)
 		ft_reset_stds(minishell);
 		return ;
 	}
-	if ((ast->token == PIPE) || minishell->pipe_before)
+	if (ast->token == SUBSHELL)
+		ft_do_subshell(ast, minishell);
+	else if ((ast->token == PIPE) || minishell->pipe_before)
 		ft_do_pipe(ast, minishell);
 	else if (ft_is_redir(ast->token))
 		ft_redir(ast, minishell);
 	else if (ast->token == CMD)
 		ft_exec_cmd(ast, minishell);
 	else if (ft_is_separator(ast->token))
-		ft_separator(ast, minishell);
+		ft_do_separator(ast, minishell);
 	else
 	{
 		ft_fail(ERR_PARSING, NULL);
-		ft_exit_minishell(minishell, STATUS_PROG);
+		ft_clear_minishell(minishell);
+		ft_reset_stds(minishell);
 	}
 }
 

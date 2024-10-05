@@ -6,7 +6,7 @@
 /*   By: octoross <octoross@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/15 20:51:11 by octoross          #+#    #+#             */
-/*   Updated: 2024/10/04 19:30:56 by octoross         ###   ########.fr       */
+/*   Updated: 2024/10/05 21:20:59 by octoross         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,15 +14,15 @@
 
 bool	ft_token_good(void)
 {
-	if ((PIPE == OR) || (PIPE == AND) || (PIPE == SUBSHELL)
+	if ((PIPE == OR) || (PIPE == AND) || (PIPE == SUBSHELL) || (PIPE == END_SUBSHELL)
 		|| (PIPE == INPUT) || (PIPE == OUTPUT) || (PIPE == APPEND)
 		|| (PIPE == HERE_DOC) || (PIPE == CMD))
 		return (false);
-	if ((OR == AND) || (OR == SUBSHELL)
+	if ((OR == AND) || (OR == SUBSHELL) || (PIPE == END_SUBSHELL)
 		|| (OR == INPUT) || (OR == OUTPUT) || (OR == APPEND)
 		|| (OR == HERE_DOC) || (OR == CMD))
 		return (false);
-	if ((AND == SUBSHELL)
+	if ((AND == SUBSHELL) || (PIPE == END_SUBSHELL)
 		|| (AND == INPUT) || (AND == OUTPUT) || (AND == APPEND)
 		|| (AND == HERE_DOC) || (AND == CMD))
 		return (false);

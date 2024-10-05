@@ -46,3 +46,15 @@ void	ft_last_pipe_wait(t_minishell *minishell)
 		minishell->status = STATUS_OK;
 	minishell->wait_for_pids = NULL;
 }
+
+void	ft_waitpid(pid_t pid, t_minishell *minishell, \
+	bool register_status)
+{
+	int	status;
+
+	waitpid(pid, &status, 0);
+	if (register_status)
+	{
+		minishell->status = WEXITSTATUS(status);
+	}
+}
