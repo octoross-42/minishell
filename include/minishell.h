@@ -6,7 +6,7 @@
 /*   By: octoross <octoross@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/09 20:34:55 by octoross          #+#    #+#             */
-/*   Updated: 2024/10/05 22:15:28 by octoross         ###   ########.fr       */
+/*   Updated: 2024/10/05 22:22:39 by octoross         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -93,7 +93,7 @@ void	ft_exec_cmd(t_ast *ast, t_minishell *minishell);
 void	ft_exec_ast(t_ast *ast, t_minishell *minishell);
 void	ft_exec_line(t_ast *ast, t_minishell *minishell);
 void	ft_minishell_input(t_minishell *minishell);
-void	ft_init_minishell(char **envp);
+int		ft_init_minishell(char **envp);
 
 # define IN 1
 # define OUT 0

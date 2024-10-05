@@ -43,7 +43,7 @@
 # define ERR_ENV "Warning : No env retrieved\n"
 # define ERR_PARSING_ENV "Error : env is badly parsed\n"
 # define ERR_PROG "Bad programming happenned :(\n"
-# define ERR_TOKEN "Bad tokens\n"
+# define ERR_TOKEN "bad tokens\n"
 # define ERR_HISTORY "could not load history\n"
 # define ERR_HISTORY_WRITE "warning : cannot save history for next session\n"
 
