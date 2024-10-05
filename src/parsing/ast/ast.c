@@ -6,19 +6,20 @@
 /*   By: octoross <octoross@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/09 15:25:03 by octoross          #+#    #+#             */
-/*   Updated: 2024/10/05 17:48:49 by octoross         ###   ########.fr       */
+/*   Updated: 2024/10/05 22:28:12 by octoross         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ast.h"
 
-static t_ast	*ft_new_ast(t_lexer *lexer)
+static t_ast	*ft_new_ast(t_lexer *lexer, int *status)
 {
 	t_ast	*ast;
 
 	ast = (t_ast *)malloc(sizeof(t_ast));
 	if (!ast)
-		return (NULL);
+		return (*status = STATUS_MALLOC, \
+			ft_fail(ERR_MALLOC, "no parsing"), NULL);
 	ast->token = lexer->token;
 	if (ft_is_sep_or_sub(ast->token))
 		ast->data = NULL;
@@ -103,13 +104,9 @@ t_ast	*ft_ast(t_lexer *lexer, int *status, t_lexer **last)
 	{
 		if (lexer->token == END_SUBSHELL)
 			return (top);
-		new = ft_new_ast(lexer);
+		new = ft_new_ast(lexer, status);
 		if (!new)
-		{
-			*status = STATUS_MALLOC;
-			ft_fail(ERR_MALLOC, "no parsing");
 			return (ft_clear_ast(top), NULL);
-		}
 		*status = ft_add_new_ast(new, &lexer, &current, &top);
 		if (*status != STATUS_OK)
 			return (NULL);

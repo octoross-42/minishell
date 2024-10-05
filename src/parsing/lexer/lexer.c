@@ -6,7 +6,7 @@
 /*   By: octoross <octoross@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/18 13:58:38 by octoross          #+#    #+#             */
-/*   Updated: 2024/10/05 21:13:01 by octoross         ###   ########.fr       */
+/*   Updated: 2024/10/05 22:29:54 by octoross         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,17 +24,11 @@ static int	ft_set_lexer(char **s, t_lexer *lexer, int *subshell)
 	else if ((lexer->token == INPUT) || (lexer->token == OUTPUT))
 		return ((*s)++, ft_parse_redir(s, lexer));
 	else if ((lexer->token == HERE_DOC) || (lexer->token == APPEND))
-		return (*s += 2), ft_parse_redir(s, lexer);
+		return ((*s += 2), ft_parse_redir(s, lexer));
 	else if (lexer->token == SUBSHELL)
-	{
-		(*subshell)++;
-		return ((*s)++, STATUS_OK);
-	}
+		return ((*subshell)++, (*s)++, STATUS_OK);
 	else if (lexer->token == END_SUBSHELL)
-	{
-		(*subshell)--;
-		return ((*s)++, STATUS_OK);
-	}
+		return ((*subshell)--, (*s)++, STATUS_OK);
 	else
 		return (ft_fail(ERR_PROG, NULL), STATUS_PROG);
 }
@@ -45,15 +39,13 @@ int	ft_is_compatible(t_lexer *l, t_lexer *previous, int subshell)
 		return (ft_fail(ERR_PARSING, NULL), STATUS_PROG);
 	if (subshell < 0)
 		return (ft_fail(ERR_SYNTAX, ")"), STATUS_SYNTAX);
-	
 	if (!previous && (ft_is_separator(l->token)))
 		return (ft_fail(ERR_SYNTAX, ft_str_of_token(l->token)), STATUS_SYNTAX);
 	if (!previous)
 		return (STATUS_OK);
-	
 	if ((previous->token == END_SUBSHELL) && (l->token == CMD))
-		return (ft_fail(ERR_SYNTAX, (((t_arg **)(l->data))[0])->str), STATUS_SYNTAX);
-	
+		return (ft_fail(ERR_SYNTAX, (((t_arg **)(l->data))[0])->str), \
+			STATUS_SYNTAX);
 	if (!ft_is_separator(previous->token) && (l->token == SUBSHELL))
 		return (ft_fail(ERR_SYNTAX, "("), STATUS_SYNTAX);
 	if ((l->token == CMD) && (previous->token == CMD))
@@ -78,6 +70,8 @@ t_lexer	*ft_end_lexer(t_lexer *top, t_lexer *lexer, int *status, int subshell)
 	}
 	return (top);
 }
+
+// TODO merge commandes entre redir mettre redir avant cmd
 
 t_lexer	*ft_lexer(char *line, int *status)
 {

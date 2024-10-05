@@ -12,7 +12,6 @@
 
 #include "lexer.h"
 
-
 void	ft_clear_lexer(t_lexer *lexer, int erase_data)
 {
 	if (!lexer)

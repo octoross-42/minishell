@@ -6,7 +6,7 @@
 /*   By: octoross <octoross@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/15 20:51:11 by octoross          #+#    #+#             */
-/*   Updated: 2024/10/05 21:20:59 by octoross         ###   ########.fr       */
+/*   Updated: 2024/10/05 22:24:21 by octoross         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,35 +14,36 @@
 
 bool	ft_token_good(void)
 {
-	if ((PIPE == OR) || (PIPE == AND) || (PIPE == SUBSHELL) || (PIPE == END_SUBSHELL)
-		|| (PIPE == INPUT) || (PIPE == OUTPUT) || (PIPE == APPEND)
-		|| (PIPE == HERE_DOC) || (PIPE == CMD))
-		return (false);
-	if ((OR == AND) || (OR == SUBSHELL) || (PIPE == END_SUBSHELL)
-		|| (OR == INPUT) || (OR == OUTPUT) || (OR == APPEND)
-		|| (OR == HERE_DOC) || (OR == CMD))
-		return (false);
-	if ((AND == SUBSHELL) || (PIPE == END_SUBSHELL)
-		|| (AND == INPUT) || (AND == OUTPUT) || (AND == APPEND)
-		|| (AND == HERE_DOC) || (AND == CMD))
-		return (false);
-	if ((SUBSHELL == INPUT) || (SUBSHELL == OUTPUT) || (SUBSHELL == APPEND)
-		|| (SUBSHELL == HERE_DOC) || (SUBSHELL == CMD))
-		return (false);
-	if ((INPUT == OUTPUT) || (INPUT == APPEND) || (INPUT == HERE_DOC)
-		|| (INPUT == CMD))
-		return (false);
-	if ((OUTPUT == APPEND) || (OUTPUT == HERE_DOC) || (OUTPUT == CMD))
-		return (false);
-	if ((APPEND == HERE_DOC) || (APPEND == CMD))
-		return (false);
-	return (HERE_DOC != CMD);
+	int	tokens[10];
+	int	i;
+	int	j;
+
+	tokens[0] = SUBSHELL;
+	tokens[1] = END_SUBSHELL;
+	tokens[2] = PIPE;
+	tokens[3] = OR;
+	tokens[4] = AND;
+	tokens[5] = INPUT;
+	tokens[6] = HERE_DOC;
+	tokens[7] = OUTPUT;
+	tokens[8] = APPEND;
+	tokens[9] = CMD;
+	i = 0;
+	while (i < 10)
+	{
+		j = (i ++) + 1;
+		while (j < 10)
+		{
+			if (tokens[i - 1] == tokens[j ++])
+				return (false);
+		}
+	}
+	return (true);
 }
 
 int	main(int argc, char **argv, char **envp)
 {
 	(void)argc;
 	(void)argv;
-	ft_init_minishell(envp);
-	return (0);
+	return (ft_init_minishell(envp));
 }

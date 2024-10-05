@@ -72,12 +72,12 @@ void	ft_set_from_env_minishell(t_minishell *minishell)
 	}
 }
 
-void	ft_init_minishell(char **envp)
+int	ft_init_minishell(char **envp)
 {
 	t_minishell	minishell;
 
 	if (!ft_token_good())
-		ft_fail(ERR_TOKEN, NULL);
+		return (ft_fail(ERR_TOKEN, NULL), 1);
 	minishell.env = ft_env_of_envp(envp);
 	if (!minishell.env)
 		ft_fail(ERR_ENV, NULL);
@@ -89,4 +89,5 @@ void	ft_init_minishell(char **envp)
 	minishell.parsing_status = STATUS_OK;
 	ft_print_banner();
 	ft_minishell_input(&minishell);
+	return (0);
 }
