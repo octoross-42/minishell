@@ -35,7 +35,7 @@ typedef struct s_wildcard_data
 	char	*name;
 	int		end_name;
 	char	*path;
-} 			t_wildcard_data;
+}			t_wildcard_data;
 
 bool		ft_check_ends(t_wildcard_data *data);
 bool		ft_fit_wildcard(t_wildcard_data data);

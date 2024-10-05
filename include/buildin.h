@@ -14,9 +14,9 @@
 
 # define BUILDIN_H
 
-typedef struct s_ast t_ast;
-typedef struct s_env t_env;
-typedef struct s_minishell t_minishell;
+typedef struct s_ast		t_ast;
+typedef struct s_env		t_env;
+typedef struct s_minishell	t_minishell;
 
 bool	ft_is_buildin(char *cmd);
 void	ft_buildin(char **argv, t_ast *next, t_minishell *minishell);

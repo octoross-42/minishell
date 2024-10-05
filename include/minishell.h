@@ -6,7 +6,7 @@
 /*   By: octoross <octoross@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/09 20:34:55 by octoross          #+#    #+#             */
-/*   Updated: 2024/10/05 22:07:32 by octoross         ###   ########.fr       */
+/*   Updated: 2024/10/05 22:15:28 by octoross         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,7 @@
 # include <readline/readline.h>
 # include <readline/history.h>
 
-typedef struct s_minishell t_minishell;
+typedef struct s_minishell	t_minishell;
 
 void	ft_add_history(char *line, int history);
 void	ft_load_history(t_minishell *minishell);
