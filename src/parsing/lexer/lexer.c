@@ -6,7 +6,7 @@
 /*   By: octoross <octoross@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/18 13:58:38 by octoross          #+#    #+#             */
-/*   Updated: 2024/10/05 22:29:54 by octoross         ###   ########.fr       */
+/*   Updated: 2024/10/06 17:49:59 by octoross         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,7 +71,14 @@ t_lexer	*ft_end_lexer(t_lexer *top, t_lexer *lexer, int *status, int subshell)
 	return (top);
 }
 
-// TODO merge commandes entre redir mettre redir avant cmd
+void	ft_init_lexer(t_lexer **lexer, t_lexer **top, \
+	int *subshell, int *status)
+{
+	*lexer = NULL;
+	*top = NULL;
+	*subshell = 0;
+	*status = STATUS_OK;
+}
 
 t_lexer	*ft_lexer(char *line, int *status)
 {
@@ -79,10 +86,7 @@ t_lexer	*ft_lexer(char *line, int *status)
 	t_lexer	*lexer;
 	int		subshell;
 
-	lexer = NULL;
-	top = NULL;
-	subshell = 0;
-	*status = STATUS_OK;
+	ft_init_lexer(&lexer, &top, &subshell, status);
 	while (line && line[0])
 	{
 		while (ft_isspace(*line))
@@ -92,6 +96,9 @@ t_lexer	*ft_lexer(char *line, int *status)
 		if (!ft_add_lexer(&top, &lexer))
 			return (*status = STATUS_MALLOC, NULL);
 		*status = ft_set_lexer(&line, lexer, &subshell);
+		if (*status != STATUS_OK)
+			return (ft_clear_lexer(top, 1), NULL);
+		*status = ft_merge_cmds_between_redir(&lexer);
 		if (*status != STATUS_OK)
 			return (ft_clear_lexer(top, 1), NULL);
 		*status = ft_is_compatible(lexer, lexer->previous, subshell);
