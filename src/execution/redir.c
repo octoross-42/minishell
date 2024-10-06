@@ -21,18 +21,18 @@ int	ft_dup2_std(int fd, bool in, t_minishell *minishell)
 		if (minishell->std_in < 0)
 			minishell->std_in = dup(STDIN_FILENO);
 		if (minishell->std_in < 0)
-			return (ft_fail(ERR_DUP, NULL), STATUS_DUP);
+			return (ft_fail(ERR_FAIL, "dup"), STATUS_DUP);
 		if (dup2(fd, STDIN_FILENO) < 0)
-			return (close(fd), ft_fail(ERR_DUP2, NULL), STATUS_DUP2);
+			return (close(fd), ft_fail(ERR_FAIL, "dup2"), STATUS_DUP2);
 	}
 	else
 	{
 		if (minishell->std_out < 0)
 			minishell->std_out = dup(STDOUT_FILENO);
 		if (minishell->std_out < 0)
-			return (ft_fail(ERR_DUP, NULL), STATUS_DUP);
+			return (ft_fail(ERR_FAIL, "dup"), STATUS_DUP);
 		if (dup2(fd, STDOUT_FILENO) < 0)
-			return (close(fd), ft_fail(ERR_DUP2, NULL), STATUS_DUP2);
+			return (close(fd), ft_fail(ERR_FAIL, "dup2"), STATUS_DUP2);
 	}
 	close(fd);
 	return (STATUS_OK);

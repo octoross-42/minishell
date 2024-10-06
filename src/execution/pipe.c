@@ -15,9 +15,7 @@
 void	ft_child_pipefd(int pipefd[2], t_ast *ast, t_minishell *minishell)
 {
 	if (minishell->pipe_before)
-	{
 		ft_dup2_std(minishell->pipe, IN, minishell);
-	}
 	if (ast->token == PIPE)
 	{
 		ft_dup2_std(pipefd[1], OUT, minishell);
@@ -87,14 +85,14 @@ void	ft_do_pipe(t_ast *ast, t_minishell *minishell)
 
 	if ((ast->token == PIPE) && (pipe(pipefd) == -1))
 	{
-		ft_fail(ERR_PIPE, NULL);
+		ft_fail(ERR_FAIL, "pipe");
 		minishell->status = STATUS_PIPE;
 		return ;
 	}
 	pid = fork();
 	if (pid == -1)
 	{
-		ft_fail(ERR_FORK, NULL);
+		ft_fail(ERR_FAIL, "fork");
 		minishell->status = STATUS_FORK;
 		return ;
 	}

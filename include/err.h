@@ -36,10 +36,6 @@
 # define ERR_HERE_DOC "warning: here-document delimited by end-of-file \
 (wanted `%s')\n"
 # define ERR_FAIL "%s failed\n"
-# define ERR_FORK "fork failed\n"
-# define ERR_PIPE "Pipe failed\n"
-# define ERR_DUP "dup failed\n"
-# define ERR_DUP2 "dup2 failed\n"
 # define ERR_CMD "%s: command not found\n"
 # define ERR_EXPAND "%s not expanded : malloc failed\n"
 # define ERR_ENV "Warning : No env retrieved\n"

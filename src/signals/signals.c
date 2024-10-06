@@ -62,5 +62,4 @@ void	ft_setup_signals(void (*ft_handle_sig)(int))
 	sigemptyset(&sa.sa_mask);
 	sigaction(SIGINT, &sa, NULL);
 	sigaction(SIGQUIT, &sa, NULL);
-
 }

@@ -62,7 +62,6 @@ void	ft_execve(char **argv, t_ast *next, t_minishell *minishell)
 	ft_reset_stds(minishell);
 	perror("minishell : execve");
 	minishell->status = STATUS_EXECVE;
-	printf("exit : %d\n", minishell->status);
 	exit(minishell->status);
 }
 
@@ -73,7 +72,7 @@ void	ft_cmd(char **argv, t_ast *next, t_minishell *minishell)
 	minishell->last_cmd = fork();
 	if (minishell->last_cmd == -1)
 	{
-		ft_fail(ERR_FORK, NULL);
+		ft_fail(ERR_FAIL, "fork");
 		minishell->status = STATUS_FORK;
 		return ;
 	}

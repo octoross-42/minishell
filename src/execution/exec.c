@@ -14,15 +14,10 @@
 
 void	ft_reset_stds(t_minishell *minishell)
 {
-	// TODO faire fail les dup2
 	if (minishell->std_in != -1)
-	{
 		ft_dup2_std(minishell->std_in, IN, minishell);
-	}
 	if (minishell->std_out != -1)
-	{
 		ft_dup2_std(minishell->std_out, OUT, minishell);
-	}
 	minishell->std_in = -1;
 	minishell->std_out = -1;
 }
@@ -53,7 +48,7 @@ void	ft_do_subshell(t_ast *ast, t_minishell *minishell)
 	if (pid < 0)
 	{
 		ft_clear_ast(ast);
-		ft_fail(ERR_FORK, NULL);
+		ft_fail(ERR_FAIL, "fork");
 		minishell->status = STATUS_FORK;
 		return ;
 	}
