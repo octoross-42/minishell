@@ -20,8 +20,10 @@ extern int	g_sig;
 # define SIG_QUIT 1
 # define SIG_INT 2
 
-void	ft_setup_here_doc_signals(void);
-void	ft_setup_input_signals(void);
-void 	ft_setup_exec_signals(void);
+int		ft_exit_status(int status);
+void	ft_input_signals(int sig);
+void	ft_exec_signals(int sig);
+void	ft_here_doc_signals(int sig);
+void 	ft_setup_signals(void (*ft_handle_sig)(int));
 
 #endif

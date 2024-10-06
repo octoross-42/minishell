@@ -6,7 +6,7 @@
 /*   By: octoross <octoross@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/16 15:31:32 by octoross          #+#    #+#             */
-/*   Updated: 2024/10/06 15:56:00 by octoross         ###   ########.fr       */
+/*   Updated: 2024/10/06 16:17:59 by octoross         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -92,7 +92,7 @@ void	ft_minishell_input(t_minishell *minishell)
 	t_ast	*ast;
 	
 	g_sig = NO_SIG;
-	ft_setup_input_signals();
+	ft_setup_signals(&ft_input_signals);
 	prompt = ft_get_prompt(&(minishell->env));
 	if (!prompt)
 		line = readline("🐳 minishell> ");

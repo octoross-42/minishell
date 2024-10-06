@@ -23,8 +23,11 @@ int	ft_export(char **arg, t_minishell *minishell)
 	arg ++;
 	while (*arg)
 	{
-		if (!ft_parse_envp(&name, &value, *arg))
-			return (STATUS_MALLOC);
+		status = ft_parse_envp(&name, &value, *arg);
+		if (status == STATUS_EXPORT)
+			return (ft_fail(ERR_EXPORT, *arg), STATUS_EXPORT);
+		if (status != STATUS_OK)
+			return (status);
 		status = ft_add_env(&(minishell->env), name, value);
 		if (status != STATUS_OK)
 			return (status);

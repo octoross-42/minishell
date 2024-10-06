@@ -26,17 +26,6 @@ void	ft_input_signals(int sig)
 	}
 }
 
-void ft_setup_input_signals(void)
-{
-    struct sigaction sa;
-
-    sa.sa_handler = &ft_input_signals;
-    sa.sa_flags = SA_RESTART;
-    sigemptyset(&sa.sa_mask);
-    sigaction(SIGINT, &sa, NULL);
-    sigaction(SIGQUIT, &sa, NULL);
-}
-
 void	ft_exec_signals(int sig)
 {
 	if (sig == SIGINT)
@@ -46,17 +35,6 @@ void	ft_exec_signals(int sig)
 		rl_replace_line("", 0);
 		rl_on_new_line();
 	}
-}
-
-void ft_setup_exec_signals(void)
-{
-    struct sigaction sa;
-
-    sa.sa_handler = &ft_exec_signals;
-    sa.sa_flags = SA_RESTART;
-    sigemptyset(&sa.sa_mask);
-    sigaction(SIGINT, &sa, NULL);
-    sigaction(SIGQUIT, &sa, NULL);
 }
 
 void	ft_here_doc_signals(int sig)
@@ -69,11 +47,11 @@ void	ft_here_doc_signals(int sig)
 	}
 }
 
-void ft_setup_here_doc_signals(void)
+void ft_setup_signals(void (*ft_handle_sig)(int))
 {
     struct sigaction sa;
 
-    sa.sa_handler = &ft_here_doc_signals;
+    sa.sa_handler = ft_handle_sig;
     sa.sa_flags = SA_RESTART;
     sigemptyset(&sa.sa_mask);
     sigaction(SIGINT, &sa, NULL);

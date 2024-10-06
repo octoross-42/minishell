@@ -12,16 +12,20 @@
 
 #include "minishell.h"
 
-bool	ft_parse_envp(char **name, char **value, char *envp)
+int	ft_parse_envp(char **name, char **value, char *envp)
 {
 	int	i;
 
 	i = 0;
-	while (envp[i] && envp[i] != '=')
+	if (ft_isdigit(envp[i]))
+		return (STATUS_EXPORT);
+	while (ft_isname(envp[i]) && (envp[i] != '='))
 		i ++;
+	if (envp[i] && (envp[i] != '=') && !ft_isname(envp[i]))
+		return (STATUS_EXPORT);
 	*name = ft_strndup(envp, i);
 	if (!(*name))
-		return (ft_fail(ERR_MALLOC, "no new env"), false);
+		return (ft_fail(ERR_MALLOC, "no new env"), STATUS_MALLOC);
 	if (envp[i] == '=')
 	{
 		*value = ft_strdup(envp + i + 1);
@@ -29,12 +33,12 @@ bool	ft_parse_envp(char **name, char **value, char *envp)
 		{
 			free(name);
 			ft_fail(ERR_MALLOC, "no new env");
-			return (false);
+			return (STATUS_MALLOC);
 		}
 	}
 	else
 		*value = NULL;
-	return (true);
+	return (STATUS_OK);
 }
 
 bool	ft_new_env_from_envp(t_env **env, char *envp)
@@ -45,7 +49,7 @@ bool	ft_new_env_from_envp(t_env **env, char *envp)
 	if (!new)
 		return (ft_fail(ERR_MALLOC, "no new env"), false);
 	new->next = NULL;
-	if (!ft_parse_envp(&(new->name), &(new->value), envp))
+	if (ft_parse_envp(&(new->name), &(new->value), envp) != STATUS_OK)
 		return (free(new), false);
 	if (!(*env))
 	{

@@ -16,6 +16,7 @@
 
 # define STATUS_OK 0
 # define STATUS_PROG 1
+# define STATUS_EXPORT 1
 # define STATUS_REDIR 1
 # define STATUS_BUILDIN 1
 # define STATUS_SYNTAX 2
@@ -30,6 +31,7 @@
 # define STATUS_MALLOC 137
 
 # define ERR_MALLOC "malloc failed : %s\n"
+# define ERR_EXPORT "export : `%s': not a valid identifier\n"
 # define ERR_REDIR "ambiguous redirection\n"
 # define ERR_HERE_DOC "warning: here-document delimited by end-of-file \
 (wanted `%s')\n"

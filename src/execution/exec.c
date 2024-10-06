@@ -73,7 +73,7 @@ void	ft_do_subshell(t_ast *ast, t_minishell *minishell)
 
 void	ft_exec_ast(t_ast *ast, t_minishell *minishell)
 {
-	ft_setup_exec_signals();
+	ft_setup_signals(&ft_exec_signals);
 	if (!ast || (g_sig == SIG_INT))
 	{
 		if (ast)

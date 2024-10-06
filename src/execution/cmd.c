@@ -80,8 +80,7 @@ void	ft_cmd(char **argv, t_ast *next, t_minishell *minishell)
 	if (!minishell->last_cmd)
 		ft_execve(argv, next, minishell);
 	waitpid(minishell->last_cmd, &status, 0);
-	minishell->status = WEXITSTATUS(status);
-	// TODO WEXISTATUS si exit normal
+	minishell->status = ft_exit_status(status);
 }
 
 void	ft_exec_cmd(t_ast *ast, t_minishell *minishell)

@@ -6,7 +6,7 @@
 /*   By: octoross <octoross@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/30 22:10:23 by octoross          #+#    #+#             */
-/*   Updated: 2024/10/04 21:01:41 by octoross         ###   ########.fr       */
+/*   Updated: 2024/10/06 17:09:14 by octoross         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,8 +33,8 @@ void	print_env(t_env *ep, bool export)
 				if (export)
 					write(STDOUT_FILENO, "\"", 1);
 			}
+			write(STDOUT_FILENO, "\n", 1);
 		}
-		write(STDOUT_FILENO, "\n", 1);
 		cur = cur->next;
 	}
 }

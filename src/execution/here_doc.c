@@ -54,7 +54,7 @@ void	ft_read_here_doc(int here_doc_tmp, char *limiter)
 
 	// TODO fail dup et dup2
 	dup_stdin = dup(STDIN_FILENO);
-	ft_setup_here_doc_signals();
+	ft_setup_signals(&ft_here_doc_signals);
 	line = readline("> ");
 	while (line && ft_strcmp(line, limiter) && (g_sig != SIG_INT))
 	{

@@ -12,6 +12,15 @@
 
 #include "minishell.h"
 
+int	ft_exit_status(int status)
+{
+	if (WIFEXITED(status))
+		return (WEXITSTATUS(status));
+	if (WIFSIGNALED(status))
+		return (WTERMSIG(status) + 128);
+	return (STATUS_OK);
+}
+
 void	ft_add_pid_to_wait(pid_t pid, t_minishell *minishell)
 {
 	t_pid	*new;
@@ -33,7 +42,7 @@ void	ft_last_pipe_wait(t_minishell *minishell)
 	if (minishell->last_cmd != -1)
 	{
 		waitpid(minishell->last_cmd, &status, 0);
-		minishell->status = WEXITSTATUS(status);
+		minishell->status = ft_exit_status(status);
 		while (minishell->wait_for_pids)
 		{
 			waitpid(minishell->wait_for_pids->pid, NULL, 0);
@@ -55,6 +64,6 @@ void	ft_waitpid(pid_t pid, t_minishell *minishell, \
 	waitpid(pid, &status, 0);
 	if (register_status)
 	{
-		minishell->status = WEXITSTATUS(status);
+		minishell->status = ft_exit_status(status);
 	}
 }
