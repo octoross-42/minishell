@@ -87,6 +87,13 @@ int	ft_init_minishell(char **envp)
 	ft_set_from_env_minishell(&minishell);
 	minishell.status = STATUS_OK;
 	minishell.parsing_status = STATUS_OK;
+	minishell.pipe_before = false;
+	minishell.last_cmd = -1;
+	minishell.wait_for_pids = NULL;
+	minishell.pipe = -1;
+	minishell.pipe_before = false;
+	minishell.std_in = -1;
+	minishell.std_out = -1;
 	ft_print_banner();
 	ft_minishell_input(&minishell);
 	return (0);

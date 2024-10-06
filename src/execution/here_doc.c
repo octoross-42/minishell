@@ -43,16 +43,20 @@ int	ft_here_doc_stds(int prev_stdout, t_minishell *minishell)
 	here_doc_tmp = open(HERE_DOC_FILE, O_RDONLY);
 	if (here_doc_tmp < 0)
 		return (perror(HERE_DOC_FILE), STATUS_OPEN);
-	// unlink(HERE_DOC_FILE);
+	unlink(HERE_DOC_FILE);
 	return (ft_dup2_std(here_doc_tmp, IN, minishell));
 }
 
 void	ft_read_here_doc(int here_doc_tmp, char *limiter)
 {
 	char	*line;
+	int		dup_stdin;
 
+	// TODO fail dup et dup2
+	dup_stdin = dup(STDIN_FILENO);
+	ft_setup_here_doc_signals();
 	line = readline("> ");
-	while (line && ft_strcmp(line, limiter))
+	while (line && ft_strcmp(line, limiter) && (g_sig != SIG_INT))
 	{
 		write(here_doc_tmp, line, ft_strlen(line));
 		write(here_doc_tmp, "\n", 1);
@@ -60,9 +64,12 @@ void	ft_read_here_doc(int here_doc_tmp, char *limiter)
 		line = readline("> ");
 	}
 	close(here_doc_tmp);
+	if (g_sig == SIG_INT)
+		dup2(dup_stdin, STDIN_FILENO);
+	close(dup_stdin);
 	if (line)
 		free(line);
-	else
+	else if (g_sig != SIG_INT)
 		ft_fail(ERR_HERE_DOC, limiter);
 }
 

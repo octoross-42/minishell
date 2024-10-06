@@ -73,8 +73,11 @@ void	ft_do_subshell(t_ast *ast, t_minishell *minishell)
 
 void	ft_exec_ast(t_ast *ast, t_minishell *minishell)
 {
-	if (!ast)
+	ft_setup_exec_signals();
+	if (!ast || (g_sig == SIG_INT))
 	{
+		if (ast)
+			ft_clear_ast(ast);
 		ft_reset_stds(minishell);
 		return ;
 	}
@@ -98,6 +101,7 @@ void	ft_exec_ast(t_ast *ast, t_minishell *minishell)
 
 void	ft_exec_line(t_ast *ast, t_minishell *minishell)
 {
+	g_sig = NO_SIG;
 	if (!ast)
 		ft_minishell_input(minishell);
 	minishell->pipe_before = false;

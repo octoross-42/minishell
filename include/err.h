@@ -32,7 +32,7 @@
 # define ERR_MALLOC "malloc failed : %s\n"
 # define ERR_REDIR "ambiguous redirection\n"
 # define ERR_HERE_DOC "warning: here-document delimited by end-of-file \
-			(wanted `%s')\n"
+(wanted `%s')\n"
 # define ERR_FAIL "%s failed\n"
 # define ERR_FORK "fork failed\n"
 # define ERR_PIPE "Pipe failed\n"

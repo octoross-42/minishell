@@ -15,6 +15,7 @@ CFLAGS	= -Wall -Wextra -Werror -MMD -g3
 INCLUDE	= include/
 LFLAGS	= -lreadline
 
+SIGNALS_SRCS = src/signals/signals.c
 DISPLAY_SRCS = src/display/banner.c \
 	src/display/input.c
 EXECUTION_SRCS = src/execution/cmd.c \
@@ -67,7 +68,8 @@ WILDCARD_SRCS = src/wildcard/wildcard.c \
 MAIN_SRCS = src/main.c
 DEV_SRCS = dev/print.c
 
-SRCS = $(DISPLAY_SRCS) \
+SRCS = $(SIGNALS_SRCS) \
+	$(DISPLAY_SRCS) \
 	$(ARGV_SRCS) \
 	$(EXECUTION_SRCS) \
 	$(PARSING_SRCS) \

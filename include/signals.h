@@ -1,21 +1,27 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   exit.c                                             :+:      :+:    :+:   */
+/*   signals.h                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: octoross <octoross@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/10/04 19:52:05 by octoross          #+#    #+#             */
-/*   Updated: 2024/10/04 19:52:05 by octoross         ###   ########.fr       */
+/*   Created: 2024/10/06 03:09:25 by octoross          #+#    #+#             */
+/*   Updated: 2024/10/06 03:09:25 by octoross         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
+#ifndef SIGNALS_H
 
-void	ft_exit(char **argv, t_ast *next, t_minishell *minishell)
-{
-	write(STDOUT_FILENO, "exit\n", 5);
-	ft_free_until((void **)argv, -1);
-	ft_clear_ast(next);
-	ft_exit_minishell(minishell, STATUS_OK);
-}
+# define SIGNALS_H
+
+extern int	g_sig;
+
+# define NO_SIG 0
+# define SIG_QUIT 1
+# define SIG_INT 2
+
+void	ft_setup_here_doc_signals(void);
+void	ft_setup_input_signals(void);
+void 	ft_setup_exec_signals(void);
+
+#endif

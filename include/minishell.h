@@ -6,7 +6,7 @@
 /*   By: octoross <octoross@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/09 20:34:55 by octoross          #+#    #+#             */
-/*   Updated: 2024/10/05 22:22:39 by octoross         ###   ########.fr       */
+/*   Updated: 2024/10/06 13:48:37 by octoross         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +23,7 @@
 # include "lexer.h"
 # include "token.h"
 # include "utils.h"
+# include "signals.h"
 # include "wildcard.h"
 
 # include <errno.h>
