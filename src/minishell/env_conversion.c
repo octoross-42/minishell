@@ -17,7 +17,7 @@ int	ft_parse_envp(char **name, char **value, char *envp)
 	int	i;
 
 	i = 0;
-	if (ft_isdigit(envp[i]))
+	if (ft_isdigit(envp[i]) || !ft_isname(envp[i]))
 		return (STATUS_EXPORT);
 	while (ft_isname(envp[i]) && (envp[i] != '='))
 		i ++;
