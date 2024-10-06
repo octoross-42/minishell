@@ -36,3 +36,26 @@ void	ft_exit_minishell(t_minishell *minishell, int status)
 	ft_reset_stds(minishell);
 	exit(status);
 }
+
+void	ft_change_shlvl(t_minishell *minishell)
+{
+	t_env	*env;
+	char	*shlvl_str;
+	char	*str;
+
+	(minishell->shlvl)++;
+	env = minishell->env;
+	shlvl_str = ft_itoa(minishell->shlvl);
+	if (!shlvl_str)
+	{
+		ft_fail(ERR_MALLOC, "shlvl didnt change in PATH");
+		return ;
+	}
+	str = ft_strdup("SHLVL");
+	if (!str)
+	{
+		ft_fail(ERR_MALLOC, "shlvl didnt change in PATH");
+		return ;
+	}
+	ft_add_env(&(minishell->env), str, shlvl_str);
+}

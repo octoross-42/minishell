@@ -62,6 +62,7 @@ void	ft_do_subshell(t_ast *ast, t_minishell *minishell)
 	free(ast);
 	if (!pid)
 	{
+		ft_change_shlvl(minishell);
 		ft_clear_ast(right);
 		ft_exec_ast(left, minishell);
 		ft_exit_minishell(minishell, minishell->status);

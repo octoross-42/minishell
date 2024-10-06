@@ -24,6 +24,12 @@ void	ft_input_signals(int sig)
 		rl_redisplay();
 		g_sig = SIG_INT;
 	}
+	else if (sig == SIGQUIT)
+	{
+		write(STDOUT_FILENO, "\33[2K\r", 5);
+		rl_on_new_line();
+		rl_redisplay();
+	}
 }
 
 void	ft_exec_signals(int sig)
@@ -56,4 +62,5 @@ void	ft_setup_signals(void (*ft_handle_sig)(int))
 	sigemptyset(&sa.sa_mask);
 	sigaction(SIGINT, &sa, NULL);
 	sigaction(SIGQUIT, &sa, NULL);
+
 }

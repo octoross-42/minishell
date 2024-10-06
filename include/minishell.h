@@ -49,6 +49,7 @@ typedef struct s_env
 	struct s_env	*next;
 }	t_env;
 
+void	ft_change_shlvl(t_minishell *minishell);
 int		ft_parse_envp(char **name, char **value, char *envp);
 int		ft_add_env(t_env **env, char *name, char *value);
 char	*ft_get_env_value(char *name, t_env *env);
