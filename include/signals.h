@@ -24,6 +24,6 @@ int		ft_exit_status(int status);
 void	ft_input_signals(int sig);
 void	ft_exec_signals(int sig);
 void	ft_here_doc_signals(int sig);
-void 	ft_setup_signals(void (*ft_handle_sig)(int));
+void	ft_setup_signals(void (*ft_handle_sig)(int));
 
 #endif

@@ -47,13 +47,13 @@ void	ft_here_doc_signals(int sig)
 	}
 }
 
-void ft_setup_signals(void (*ft_handle_sig)(int))
+void	ft_setup_signals(void (*ft_handle_sig)(int))
 {
-    struct sigaction sa;
+	struct sigaction	sa;
 
-    sa.sa_handler = ft_handle_sig;
-    sa.sa_flags = SA_RESTART;
-    sigemptyset(&sa.sa_mask);
-    sigaction(SIGINT, &sa, NULL);
-    sigaction(SIGQUIT, &sa, NULL);
+	sa.sa_handler = ft_handle_sig;
+	sa.sa_flags = SA_RESTART;
+	sigemptyset(&sa.sa_mask);
+	sigaction(SIGINT, &sa, NULL);
+	sigaction(SIGQUIT, &sa, NULL);
 }
